@@ -1,0 +1,63 @@
+/* ============================================================
+   Physio — Color Tokens
+   Brand: clean medical teal + deep navy ink on airy neutrals.
+   ============================================================ */
+:root {
+  /* --- Brand teal scale --- */
+  --teal-50:  #e9f8f6;
+  --teal-100: #c9efeb;
+  --teal-200: #9ce3db;
+  --teal-300: #5fd3c7;
+  --teal-400: #2ec3b4;
+  --teal-500: #16b5a7;  /* primary brand */
+  --teal-600: #109b8e;  /* hover */
+  --teal-700: #0c7d73;  /* active / deep */
+  --teal-800: #0a6359;
+
+  /* --- Ink / navy (headings, dark surfaces) --- */
+  --ink-900: #14202e;   /* darkest — footer, headings */
+  --ink-800: #1c2a3a;
+  --ink-700: #25364a;
+  --ink-600: #324559;
+
+  /* --- Neutrals --- */
+  --white:    #ffffff;
+  --gray-50:  #f5f7f9;  /* alt section background */
+  --gray-100: #eef1f4;
+  --gray-200: #e2e7ec;  /* hairline borders */
+  --gray-300: #cbd3da;
+  --gray-400: #9aa6b2;  /* muted text, icons */
+  --gray-500: #6b7884;  /* body text */
+  --gray-600: #4b5560;
+
+  /* --- Semantic status --- */
+  --success: #2faa6a;
+  --warning: #e0a526;
+  --danger:  #d9534f;
+  --info:    #2b8cbe;
+
+  /* ============================================================
+     Semantic aliases — reference these in components
+     ============================================================ */
+  --color-primary:        var(--teal-500);
+  --color-primary-hover:  var(--teal-600);
+  --color-primary-active: var(--teal-700);
+  --color-primary-soft:   var(--teal-50);
+  --color-on-primary:     var(--white);
+
+  --text-heading: var(--ink-900);
+  --text-body:    var(--gray-500);
+  --text-muted:   var(--gray-400);
+  --text-on-dark: var(--white);
+  --text-link:    var(--teal-600);
+
+  --surface-page:    var(--white);
+  --surface-alt:     var(--gray-50);
+  --surface-card:    var(--white);
+  --surface-dark:    var(--ink-900);
+  --surface-primary: var(--teal-500);
+
+  --border-subtle: var(--gray-200);
+  --border-strong: var(--gray-300);
+  --border-focus:  var(--teal-500);
+}

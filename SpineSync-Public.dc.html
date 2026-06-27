@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
+  <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #fff; }
+    a { transition: color .15s; }
+    .lift { transition: transform .2s, box-shadow .2s; }
+    .lift:hover { transform: translateY(-5px); box-shadow: 0 14px 34px rgba(20,32,46,.13) !important; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .hero-img-col { display: none !important; }
+      .g-3 { grid-template-columns: repeat(2,1fr) !important; }
+      .g-2 { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .footer-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .nav-links { display: none !important; }
+      .nav-burger { display: flex !important; }
+      .detail-grid { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 600px) {
+      .g-3 { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .footer-grid { grid-template-columns: 1fr !important; }
+      .util-hide { display: none !important; }
+      .booking-form-row { grid-template-columns: 1fr !important; }
+      .modal-slots { grid-template-columns: repeat(2,1fr) !important; }
+    }
+  </style>
+</helmet>
+
+<div style="font-family:'Open Sans',sans-serif">
+
+<!-- UTILITY BAR -->
+<div style="background:#14202e;border-bottom:1px solid rgba(255,255,255,.07)">
+  <div style="max-width:1170px;margin:0 auto;padding:0 30px;height:40px;display:flex;align-items:center;justify-content:space-between">
+    <div class="util-hide" style="display:flex;align-items:center;gap:22px">
+      <span style="display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.6)"><i class="fa-solid fa-phone" style="color:#16b5a7;font-size:11px"></i>+44 (0)20 7946 0321</span>
+      <span style="display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.6)"><i class="fa-solid fa-clock" style="color:#16b5a7;font-size:11px"></i>Mon–Fri 8am–8pm · Sat 9am–4pm</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;margin-left:auto">
+      <sc-if value="{{ isPublicLoggedIn }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="display:flex;align-items:center;gap:7px"><div style="width:22px;height:22px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-user" style="font-size:9px;color:#fff"></i></div><span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:#fff">{{ publicUserName }}</span></div>
+          <a href="SpineSync-Patient-Portal.dc.html" style="font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:#16b5a7;text-decoration:none">My Portal</a>
+          <button onClick="{{ doPublicLogout }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);padding:0">Sign Out</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isPublicLoggedOut }}" hint-placeholder-val="{{ boolTrue }}">
+        <div style="display:flex;align-items:center;gap:18px">
+          <a href="SpineSync-Patient-Portal.dc.html" style="display:flex;align-items:center;gap:7px;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:#fff;text-decoration:none"><i class="fa-solid fa-circle-user" style="color:#16b5a7;font-size:12px"></i>Patient Login</a>
+          <span style="width:1px;height:14px;background:rgba(255,255,255,.15)"></span>
+          <a href="SpineSync-Admin-Dashboard.dc.html" style="display:flex;align-items:center;gap:7px;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,.6);text-decoration:none"><i class="fa-solid fa-user-shield" style="font-size:12px"></i>Staff Login</a>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav style="position:sticky;top:0;z-index:200;background:#fff;border-bottom:1px solid #e2e7ec;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+  <div style="max-width:1170px;margin:0 auto;padding:0 30px;display:flex;align-items:center;justify-content:space-between;height:72px">
+    <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:9px;background:none;border:none;cursor:pointer;padding:0">
+      <div style="width:34px;height:34px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-heart-pulse" style="font-size:14px;color:#fff"></i></div>
+      <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:20px;color:#14202e;letter-spacing:-.01em">Spine<span style="color:#16b5a7">Sync</span></span>
+    </button>
+    <div class="nav-links" style="display:flex;align-items:center;gap:28px">
+      <sc-for list="{{ navLinks }}" as="lk" hint-placeholder-count="6">
+        <button onClick="{{ lk.onSelect }}" style="{{ lk.style }}">{{ lk.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="nav-links"><x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" onClick="{{ openBooking }}" hint-size="auto,42px">Book Appointment</x-import></div>
+      <button class="nav-burger" onClick="{{ toggleMenu }}" style="display:none;width:42px;height:42px;border-radius:8px;border:1px solid #e2e7ec;background:#fff;cursor:pointer;align-items:center;justify-content:center"><i class="fa-solid fa-bars" style="font-size:16px;color:#14202e"></i></button>
+    </div>
+  </div>
+  <sc-if value="{{ mobileMenu }}" hint-placeholder-val="{{ boolFalse }}">
+    <div style="border-top:1px solid #e2e7ec;background:#fff;padding:10px 30px 18px;display:flex;flex-direction:column">
+      <sc-for list="{{ navLinks }}" as="lk" hint-placeholder-count="6">
+        <button onClick="{{ lk.onSelect }}" style="text-align:left;background:none;border:none;border-top:1px solid #f0f3f5;cursor:pointer;font-family:Poppins,sans-serif;font-size:15px;font-weight:600;color:#14202e;padding:13px 0">{{ lk.label }}</button>
+      </sc-for>
+      <button onClick="{{ openBookingMobile }}" style="margin-top:12px;background:#16b5a7;border:none;border-radius:999px;padding:13px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;cursor:pointer">Book Appointment</button>
+    </div>
+  </sc-if>
+</nav>
+
+<!-- ════════════════ HOME ════════════════ -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ boolTrue }}">
+<div>
+  <!-- HERO -->
+  <section style="background:#14202e;padding:96px 30px;position:relative;overflow:hidden">
+    <div style="position:absolute;right:0;top:0;width:55%;height:100%;background:radial-gradient(ellipse at 80% 50%,rgba(22,181,167,.13) 0%,transparent 65%);pointer-events:none"></div>
+    <div class="hero-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:55% 1fr;gap:64px;align-items:center;position:relative">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(22,181,167,.12);border:1px solid rgba(22,181,167,.25);border-radius:999px;padding:5px 14px;margin-bottom:22px"><div style="width:6px;height:6px;border-radius:50%;background:#16b5a7"></div><span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#16b5a7">Expert Spine Care · London</span></div>
+        <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(34px,4.5vw,54px);line-height:1.12;color:#fff;margin:0 0 22px;letter-spacing:-.025em">Move Better,<br>Live Without Pain</h1>
+        <p style="font-size:17px;line-height:1.8;color:rgba(255,255,255,.68);margin:0 0 38px;max-width:490px">Personalised spine and physiotherapy care delivered by expert practitioners who take time to understand your unique recovery journey.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:36px">
+          <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" size="lg" onClick="{{ openBooking }}" hint-size="auto,52px">Book Your Assessment</x-import>
+          <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" size="lg" onClick="{{ goServices }}" hint-size="auto,52px">Our Services</x-import>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding-top:32px;border-top:1px solid rgba(255,255,255,.09)">
+          <div style="display:flex"><div style="width:30px;height:30px;border-radius:50%;background:#16b5a7;border:2px solid #14202e;margin-right:-8px"></div><div style="width:30px;height:30px;border-radius:50%;background:#2d7dd2;border:2px solid #14202e;margin-right:-8px"></div><div style="width:30px;height:30px;border-radius:50%;background:#8b5cf6;border:2px solid #14202e"></div></div>
+          <div><div style="display:flex;gap:2px;margin-bottom:3px"><i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i></div><span style="font-size:13px;color:rgba(255,255,255,.5)">3,200+ patients recovered and pain-free</span></div>
+        </div>
+      </div>
+      <div class="hero-img-col">
+        <div style="background:rgba(22,181,167,.07);border-radius:20px;padding:28px;border:1px solid rgba(22,181,167,.14);position:relative">
+          <div style="background:rgba(255,255,255,.05);border-radius:14px;padding:22px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="width:42px;height:42px;background:rgba(22,181,167,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-calendar-check" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">Next Available Slot</div><div style="font-size:12px;color:rgba(255,255,255,.45)">Today · 2:30 PM with Dr. Mitchell</div></div></div>
+            <button onClick="{{ openBooking }}" style="width:100%;background:#16b5a7;border:none;border-radius:8px;padding:11px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em">Reserve This Slot</button>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border-radius:14px;padding:22px">
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:14px">Your Recovery Progress</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px"><div style="flex:1;height:8px;background:#16b5a7;border-radius:4px"></div><div style="flex:1;height:8px;background:#16b5a7;border-radius:4px;opacity:.85"></div><div style="flex:1;height:8px;background:#16b5a7;border-radius:4px;opacity:.6"></div><div style="flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px"></div><div style="flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px"></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;color:rgba(255,255,255,.35)">Start</span><span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#16b5a7">60% Complete</span><span style="font-size:11px;color:rgba(255,255,255,.35)">Goal</span></div>
+          </div>
+          <div style="position:absolute;bottom:-18px;left:-22px;background:#fff;border-radius:12px;padding:13px 16px;box-shadow:0 8px 28px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;background:rgba(22,181,167,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:15px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">98% Satisfied</div><div style="font-size:11px;color:#6b7884">Patient satisfaction rate</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section style="padding:96px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="OUR TREATMENTS" title="Comprehensive Spine &amp; Physio Care" intro="From acute injury to long-term pain management, our evidence-based treatment plans are tailored to your goals and your life." hint-size="100%,auto"></x-import>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px">
+        <sc-for list="{{ serviceCards }}" as="svc" hint-placeholder-count="6">
+          <button onClick="{{ svc.onOpen }}" class="lift" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:12px;padding:30px 26px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(22,181,167,.1);display:flex;align-items:center;justify-content:center;margin-bottom:20px"><i class="{{ svc.icon }}" style="font-size:24px;color:#16b5a7"></i></div>
+            <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:9px">{{ svc.label }}</div>
+            <div style="font-size:14px;line-height:1.7;color:#6b7884;margin-bottom:16px">{{ svc.blurb }}</div>
+            <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">Find out more <i class="fa-solid fa-arrow-right" style="margin-left:5px;font-size:11px"></i></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <section style="padding:96px 30px;background:#fff">
+    <div class="detail-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
+      <div style="position:relative">
+        <div style="background:#f0faf9;border-radius:20px;height:420px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(22,181,167,.15)"><div style="text-align:center"><div style="width:68px;height:68px;background:rgba(22,181,167,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fa-solid fa-stethoscope" style="font-size:28px;color:#16b5a7"></i></div><span style="font-family:Poppins,sans-serif;color:#6b7884;font-size:12px;text-transform:uppercase;letter-spacing:.06em">Clinic Photography</span></div></div>
+        <div style="position:absolute;bottom:24px;right:-14px;background:#16b5a7;border-radius:14px;padding:18px 22px;text-align:center;box-shadow:0 8px 28px rgba(22,181,167,.4)"><div style="font-family:Poppins,sans-serif;font-size:36px;font-weight:700;color:#fff;line-height:1">12+</div><div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:4px">Years of Care</div></div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-size:12px;color:#16b5a7;margin-bottom:12px">ABOUT SPINESYNC</div>
+        <h2 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(26px,2.8vw,38px);line-height:1.2;color:#14202e;margin:0 0 18px;letter-spacing:-.015em">A clinic built around your recovery</h2>
+        <p style="font-size:16px;line-height:1.8;color:#6b7884;margin:0 0 26px">We take the time to understand you — your history, your goals and your day-to-day — so every plan fits your life, not just your diagnosis.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+          <div style="display:flex;align-items:flex-start;gap:12px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px"></i><span style="font-size:15px;line-height:1.65;color:#6b7884">Fully accredited practitioners with specialist spine training</span></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px"></i><span style="font-size:15px;line-height:1.65;color:#6b7884">Most patients seen within 48 hours of referral</span></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px"></i><span style="font-size:15px;line-height:1.65;color:#6b7884">Ongoing digital progress tracking via the SpineSync portal</span></div>
+        </div>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" onClick="{{ goAbout }}" hint-size="auto,46px">More About Us</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section style="background:#16b5a7;padding:56px 30px">
+    <div class="stats-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center">
+      <div><div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">3,200+</div><div style="font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Patients Treated</div></div>
+      <div><div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">98%</div><div style="font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Satisfaction Rate</div></div>
+      <div><div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">12+</div><div style="font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Years Experience</div></div>
+      <div><div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">48h</div><div style="font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Max Wait Time</div></div>
+    </div>
+  </section>
+
+  <!-- TEAM PREVIEW -->
+  <section style="padding:96px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="MEET THE TEAM" title="Expert practitioners, dedicated to your care" hint-size="100%,auto"></x-import>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px">
+        <sc-for list="{{ teamCards }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.onOpen }}" class="lift" style="text-align:left;background:#fff;border-radius:14px;border:1px solid #e2e7ec;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;cursor:pointer;padding:0">
+            <div style="height:200px;background:{{ m.grad }};display:flex;align-items:center;justify-content:center"><div style="width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-user-doctor" style="font-size:36px;color:#fff"></i></div></div>
+            <div style="padding:22px;text-align:center">
+              <div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">{{ m.name }}</div>
+              <div style="font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">{{ m.role }}</div>
+              <div style="font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:14px">{{ m.short }}</div>
+              <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View Profile <i class="fa-solid fa-arrow-right" style="margin-left:4px;font-size:11px"></i></span>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section style="background:#14202e;padding:96px 30px">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="PATIENT STORIES" title="Real results, real recovery" on-dark="{{ boolTrue }}" hint-size="100%,auto"></x-import>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px">
+        <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+          <div style="background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08);padding:30px">
+            <i class="fa-solid fa-quote-left" style="font-size:22px;color:#16b5a7;margin-bottom:16px;display:block"></i>
+            <p style="font-size:15px;line-height:1.8;color:rgba(255,255,255,.72);margin:0 0 22px">{{ t.quote }}</p>
+            <div style="display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;border-radius:50%;background:rgba(22,181,167,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-user" style="color:#16b5a7;font-size:15px"></i></div><div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#fff">{{ t.name }}</div><div style="font-size:12px;color:rgba(255,255,255,.35)">{{ t.role }}</div></div><div style="display:flex;gap:2px"><i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i><i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i></div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG PREVIEW -->
+  <section style="padding:96px 30px;background:#fff">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px;flex-wrap:wrap;gap:16px">
+        <div><div style="font-family:Poppins,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-size:12px;color:#16b5a7;margin-bottom:10px">FROM THE BLOG</div><h2 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(26px,2.8vw,36px);line-height:1.2;color:#14202e;margin:0;letter-spacing:-.015em">Tips &amp; insights for your recovery</h2></div>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" onClick="{{ goBlog }}" hint-size="auto,44px">View All Articles</x-import>
+      </div>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <sc-for list="{{ blogPreview }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.onOpen }}" class="lift" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:14px;overflow:hidden;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="height:170px;background:{{ p.grad }};position:relative"><span style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 12px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:{{ p.catColor }}">{{ p.cat }}</span></div>
+            <div style="padding:22px"><div style="font-size:12px;color:#6b7884;margin-bottom:10px">{{ p.date }} · {{ p.read }}</div><div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e;line-height:1.35;margin-bottom:10px">{{ p.title }}</div><div style="font-size:14px;color:#6b7884;line-height:1.6">{{ p.excerpt }}</div></div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING CTA -->
+  <section style="padding:84px 30px;background:#f0faf9;border-top:1px solid rgba(22,181,167,.12)">
+    <div style="max-width:760px;margin:0 auto;text-align:center">
+      <h2 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(26px,3vw,38px);line-height:1.2;color:#14202e;margin:0 0 14px;letter-spacing:-.02em">Ready to start your recovery?</h2>
+      <p style="font-size:16px;line-height:1.7;color:#6b7884;margin:0 0 30px">Most patients are seen within 48 hours. Book your assessment and our team will confirm promptly.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" size="lg" onClick="{{ openBooking }}" hint-size="auto,52px">Book Your Assessment</x-import><x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" size="lg" onClick="{{ goContact }}" hint-size="auto,52px">Contact Us</x-import></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ SERVICES LIST ════════════════ -->
+<sc-if value="{{ isServices }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-family:'Open Sans',sans-serif;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">Services</span></div>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:#fff;margin:0 0 12px;letter-spacing:-.02em">Our Treatments</h1>
+      <p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.62);margin:0;max-width:560px">Evidence-based care across six specialisms, each tailored to your diagnosis, your goals and your life.</p>
+    </div>
+  </div>
+  <section style="padding:72px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto" class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+        <sc-for list="{{ serviceCards }}" as="svc" hint-placeholder-count="6">
+          <button onClick="{{ svc.onOpen }}" class="lift" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:12px;padding:30px 26px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(22,181,167,.1);display:flex;align-items:center;justify-content:center;margin-bottom:20px"><i class="{{ svc.icon }}" style="font-size:24px;color:#16b5a7"></i></div>
+            <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:9px">{{ svc.label }}</div>
+            <div style="font-size:14px;line-height:1.7;color:#6b7884;margin-bottom:16px">{{ svc.blurb }}</div>
+            <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">Find out more <i class="fa-solid fa-arrow-right" style="margin-left:5px;font-size:11px"></i></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ SERVICE DETAIL ════════════════ -->
+<sc-if value="{{ isService }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:16px;flex-wrap:wrap"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><button onClick="{{ goServices }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Services</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">{{ selService.label }}</span></div>
+      <div style="display:flex;align-items:center;gap:18px"><div style="width:64px;height:64px;border-radius:50%;background:rgba(22,181,167,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="{{ selService.icon }}" style="font-size:26px;color:#16b5a7"></i></div><h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(28px,3.4vw,42px);color:#fff;margin:0;letter-spacing:-.02em">{{ selService.label }}</h1></div>
+    </div>
+  </div>
+  <section style="padding:64px 30px;background:#fff">
+    <div class="detail-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start">
+      <div>
+        <p style="font-size:18px;line-height:1.8;color:#14202e;margin:0 0 30px;font-weight:500">{{ selService.intro }}</p>
+        <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:16px">What to expect</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:40px">
+          <sc-for list="{{ selService.expect }}" as="ex" hint-placeholder-count="4">
+            <div style="display:flex;align-items:flex-start;gap:13px"><div style="width:28px;height:28px;border-radius:50%;background:#f0faf9;color:#16b5a7;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ ex.n }}</div><span style="font-size:15px;line-height:1.65;color:#6b7884;padding-top:3px">{{ ex.text }}</span></div>
+          </sc-for>
+        </div>
+        <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:16px">Key benefits</div>
+        <div class="g-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:40px">
+          <sc-for list="{{ selService.benefits }}" as="b" hint-placeholder-count="4">
+            <div style="display:flex;align-items:flex-start;gap:11px;background:#f5f7f9;border-radius:10px;padding:15px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:2px"></i><span style="font-size:14px;line-height:1.55;color:#14202e">{{ b }}</span></div>
+          </sc-for>
+        </div>
+        <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:16px">Common questions</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ serviceFaqs }}" as="f" hint-placeholder-count="3">
+            <div style="border:1px solid #e2e7ec;border-radius:10px;overflow:hidden">
+              <button onClick="{{ f.onToggle }}" style="width:100%;text-align:left;background:#fff;border:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;justify-content:between;gap:12px"><span style="flex:1;font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ f.q }}</span><i class="{{ f.chevron }}" style="font-size:13px;color:#16b5a7"></i></button>
+              <sc-if value="{{ f.open }}" hint-placeholder-val="{{ boolFalse }}"><div style="padding:0 18px 16px;font-size:14px;line-height:1.7;color:#6b7884">{{ f.a }}</div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position:sticky;top:96px;display:flex;flex-direction:column;gap:18px">
+        <div style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:14px;padding:24px">
+          <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:16px">At a glance</div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Session length</span><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ selService.duration }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Typical course</span><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ selService.course }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Price from</span><span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#16b5a7">{{ selService.price }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;color:#6b7884">First appt</span><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#16b5a7">Within 48h</span></div>
+          <button onClick="{{ bookThisService }}" style="width:100%;margin-top:16px;background:#16b5a7;border:none;border-radius:999px;padding:13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.35)">Book This Treatment</button>
+        </div>
+        <button onClick="{{ selService.onPrac }}" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:14px;padding:20px;cursor:pointer" class="lift">
+          <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:14px">Your practitioner</div>
+          <div style="display:flex;align-items:center;gap:13px"><div style="width:52px;height:52px;border-radius:50%;background:{{ selService.pracGrad }};display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-user-doctor" style="font-size:20px;color:#fff"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">{{ selService.pracName }}</div><div style="font-size:12px;color:#16b5a7;font-weight:600">{{ selService.pracRole }}</div></div></div>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ TEAM LIST ════════════════ -->
+<sc-if value="{{ isTeam }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">Team</span></div>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:#fff;margin:0 0 12px;letter-spacing:-.02em">Meet Our Team</h1>
+      <p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.62);margin:0;max-width:560px">A multidisciplinary team of accredited specialists working together on your recovery.</p>
+    </div>
+  </div>
+  <section style="padding:72px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto" class="g-3">
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <sc-for list="{{ teamCards }}" as="m" hint-placeholder-count="3">
+          <button onClick="{{ m.onOpen }}" class="lift" style="text-align:left;background:#fff;border-radius:14px;border:1px solid #e2e7ec;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;cursor:pointer;padding:0">
+            <div style="height:210px;background:{{ m.grad }};display:flex;align-items:center;justify-content:center"><div style="width:92px;height:92px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-user-doctor" style="font-size:38px;color:#fff"></i></div></div>
+            <div style="padding:24px;text-align:center">
+              <div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e;margin-bottom:3px">{{ m.name }}</div>
+              <div style="font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px">{{ m.role }}</div>
+              <div style="font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:16px">{{ m.short }}</div>
+              <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View Profile <i class="fa-solid fa-arrow-right" style="margin-left:4px;font-size:11px"></i></span>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ MEMBER DETAIL ════════════════ -->
+<sc-if value="{{ isMember }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:{{ selMember.grad }};padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.7);margin-bottom:22px;flex-wrap:wrap"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><button onClick="{{ goTeam }}" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0">Team</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#fff">{{ selMember.name }}</span></div>
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap"><div style="width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.2);border:4px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-user-doctor" style="font-size:42px;color:#fff"></i></div><div><h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(28px,3.4vw,42px);color:#fff;margin:0 0 6px;letter-spacing:-.02em">{{ selMember.name }}</h1><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,.9);text-transform:uppercase;letter-spacing:.05em">{{ selMember.role }}</div></div></div>
+    </div>
+  </div>
+  <section style="padding:64px 30px;background:#fff">
+    <div class="detail-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:start">
+      <div>
+        <sc-for list="{{ memberBio }}" as="para" hint-placeholder-count="2">
+          <p style="font-size:16px;line-height:1.85;color:#14202e;margin:0 0 20px">{{ para.text }}</p>
+        </sc-for>
+        <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin:32px 0 16px">Approach to care</div>
+        <p style="font-size:16px;line-height:1.85;color:#6b7884;margin:0 0 32px">{{ selMember.approach }}</p>
+        <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:16px">Treatments offered</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <sc-for list="{{ memberTreats }}" as="tr" hint-placeholder-count="3">
+            <button onClick="{{ tr.onOpen }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#16b5a7">{{ tr.label }} <i class="fa-solid fa-arrow-right" style="font-size:10px;margin-left:3px"></i></button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="position:sticky;top:96px;display:flex;flex-direction:column;gap:18px">
+        <div style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:14px;padding:24px">
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:14px">Specialties</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+            <sc-for list="{{ memberSpecs }}" as="sp" hint-placeholder-count="2">
+              <span style="background:#fff;border:1px solid #e2e7ec;border-radius:999px;padding:6px 13px;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;color:#14202e">{{ sp }}</span>
+            </sc-for>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:12px">Qualifications</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ memberQuals }}" as="q" hint-placeholder-count="3">
+              <div style="display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-graduation-cap" style="color:#16b5a7;font-size:13px;margin-top:3px"></i><span style="font-size:13px;line-height:1.5;color:#6b7884">{{ q }}</span></div>
+            </sc-for>
+          </div>
+          <button onClick="{{ openBooking }}" style="width:100%;margin-top:20px;background:#16b5a7;border:none;border-radius:999px;padding:13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.35)">Book with {{ selMember.firstName }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ BLOG LIST ════════════════ -->
+<sc-if value="{{ isBlog }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">Blog</span></div>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:#fff;margin:0 0 12px;letter-spacing:-.02em">Tips &amp; Insights</h1>
+      <p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.62);margin:0;max-width:560px">Practical guidance from our team to help you move better and recover with confidence.</p>
+    </div>
+  </div>
+  <section style="padding:56px 30px 72px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:36px">
+        <sc-for list="{{ blogCats }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onSelect }}" style="{{ c.style }}">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ hasPosts }}" hint-placeholder-val="{{ boolTrue }}">
+        <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+          <sc-for list="{{ blogList }}" as="p" hint-placeholder-count="6">
+            <button onClick="{{ p.onOpen }}" class="lift" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:14px;overflow:hidden;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+              <div style="height:180px;background:{{ p.grad }};position:relative"><span style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 12px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:{{ p.catColor }}">{{ p.cat }}</span></div>
+              <div style="padding:22px"><div style="font-size:12px;color:#6b7884;margin-bottom:10px">{{ p.date }} · {{ p.read }}</div><div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e;line-height:1.35;margin-bottom:10px">{{ p.title }}</div><div style="font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:14px">{{ p.excerpt }}</div><span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">Read Article <i class="fa-solid fa-arrow-right" style="margin-left:4px;font-size:11px"></i></span></div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noPosts }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="text-align:center;padding:60px 24px;background:#fff;border:1px dashed #cbd3da;border-radius:14px"><i class="fa-solid fa-newspaper" style="font-size:32px;color:#cbd3da;display:block;margin-bottom:14px"></i><div style="font-size:15px;color:#6b7884">No articles in this category yet.</div></div>
+      </sc-if>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ BLOG DETAIL ════════════════ -->
+<sc-if value="{{ isPost }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="height:300px;background:{{ selPost.grad }};position:relative;display:flex;align-items:flex-end">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(20,32,46,.1),rgba(20,32,46,.7))"></div>
+    <div style="max-width:820px;margin:0 auto;padding:0 30px 40px;position:relative;width:100%">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.7);margin-bottom:16px"><button onClick="{{ goBlog }}" style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0">Blog</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#fff">{{ selPost.cat }}</span></div>
+      <span style="display:inline-block;background:rgba(255,255,255,.92);border-radius:999px;padding:5px 14px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:{{ selPost.catColor }};margin-bottom:16px">{{ selPost.cat }}</span>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(26px,3.2vw,40px);color:#fff;margin:0;line-height:1.2;letter-spacing:-.02em">{{ selPost.title }}</h1>
+    </div>
+  </div>
+  <article style="max-width:760px;margin:0 auto;padding:40px 30px 64px">
+    <div style="display:flex;align-items:center;gap:12px;padding-bottom:28px;border-bottom:1px solid #e2e7ec;margin-bottom:32px">
+      <div style="width:44px;height:44px;border-radius:50%;background:{{ selPost.authorGrad }};display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-user-doctor" style="font-size:17px;color:#fff"></i></div>
+      <div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ selPost.author }}</div><div style="font-size:12px;color:#6b7884">{{ selPost.date }} · {{ selPost.read }}</div></div>
+      <button onClick="{{ selPost.onAuthor }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:999px;padding:8px 16px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View Profile</button>
+    </div>
+    <sc-for list="{{ postBody }}" as="blk" hint-placeholder-count="4">
+      <div style="{{ blk.style }}">{{ blk.text }}</div>
+    </sc-for>
+    <div style="margin-top:40px;padding:24px;background:#f0faf9;border:1px solid rgba(22,181,167,.15);border-radius:14px;text-align:center">
+      <div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e;margin-bottom:8px">Have a question about your spine health?</div>
+      <p style="font-size:14px;color:#6b7884;margin:0 0 18px">Our team is here to help. Book an assessment and we'll create a plan tailored to you.</p>
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" onClick="{{ openBooking }}" hint-size="auto,46px">Book an Assessment</x-import>
+    </div>
+  </article>
+
+  <!-- ── COMMENTS ── -->
+  <section style="background:#fff;padding:48px 30px;border-top:1px solid #e2e7ec">
+    <div style="max-width:760px;margin:0 auto">
+      <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:22px">Comments <span style="font-size:15px;font-weight:500;color:#6b7884">({{ commentCount }})</span></div>
+      <sc-if value="{{ commentPosted }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:12px;padding:16px 18px;margin-bottom:22px;display:flex;align-items:center;gap:11px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px"></i><span style="font-size:14px;color:#14202e">Your comment has been submitted and is pending review. Thank you!</span></div>
+      </sc-if>
+      <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:32px">
+        <sc-for list="{{ postComments }}" as="c" hint-placeholder-count="2">
+          <div style="display:flex;gap:14px">
+            <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">{{ c.initials }}</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ c.name }}</span><span style="font-size:12px;color:#6b7884">{{ c.date }}</span></div>
+              <div style="font-size:14px;line-height:1.7;color:#4a5663">{{ c.text }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:14px;padding:24px">
+        <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:16px">Leave a comment</div>
+        <sc-if value="{{ isPublicLoggedOut }}" hint-placeholder-val="{{ boolTrue }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Name *</label><input value="{{ newCommentName }}" onInput="{{ setNewCommentName }}" placeholder="Your name" style="{{ commentNameStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email (optional)</label><input value="{{ newCommentEmail }}" onInput="{{ setNewCommentEmail }}" type="email" placeholder="you@email.com" style="width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none" /></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isPublicLoggedIn }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.15);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-circle-user" style="color:#16b5a7;font-size:14px"></i><span style="font-size:13px;color:#6b7884">Commenting as <strong style="color:#14202e">{{ publicUserName }}</strong></span></div>
+        </sc-if>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><label style="font-size:12px;font-weight:600;color:#14202e">Comment *</label><span style="font-size:11px;color:#6b7884">{{ commentCharCount }}/512</span></div>
+          <textarea value="{{ newComment }}" onInput="{{ setNewComment }}" rows="4" placeholder="Share your thoughts…" maxlength="512" style="{{ commentAreaStyle }}"></textarea>
+        </div>
+        <sc-if value="{{ commentErr }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-bottom:10px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please fill in all required fields.</div></sc-if>
+        <button onClick="{{ submitComment }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.3);margin-top:10px">Post Comment</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#f5f7f9;padding:56px 30px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#14202e;margin-bottom:24px">Related articles</div>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <sc-for list="{{ relatedPosts }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.onOpen }}" class="lift" style="text-align:left;background:#fff;border:1px solid #e2e7ec;border-radius:14px;overflow:hidden;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="height:150px;background:{{ p.grad }};position:relative"><span style="position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92);border-radius:999px;padding:4px 11px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:{{ p.catColor }}">{{ p.cat }}</span></div>
+            <div style="padding:20px"><div style="font-size:11px;color:#6b7884;margin-bottom:8px">{{ p.date }}</div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;line-height:1.35">{{ p.title }}</div></div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ ABOUT ════════════════ -->
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">About</span></div>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:#fff;margin:0 0 12px;letter-spacing:-.02em">About SpineSync</h1>
+      <p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.62);margin:0;max-width:600px">A modern spine and physiotherapy clinic built around one idea: care that fits your life.</p>
+    </div>
+  </div>
+  <section style="padding:64px 30px;background:#fff">
+    <div style="max-width:760px;margin:0 auto">
+      <p style="font-size:17px;line-height:1.85;color:#14202e;margin:0 0 20px">SpineSync was founded in 2014 by a small team of chiropractors and physiotherapists who believed recovery should be personal, evidence-based and genuinely supportive. Over twelve years we've grown into a multidisciplinary clinic on Harley Street — but our principle hasn't changed.</p>
+      <p style="font-size:16px;line-height:1.85;color:#6b7884;margin:0 0 20px">We take time to understand each patient's history, goals and day-to-day life, then build a plan around them. Our integrated digital portal lets you track progress, follow your exercise programme and stay connected with your care team between sessions.</p>
+      <div class="g-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:40px 0">
+        <div style="background:#f5f7f9;border-radius:12px;padding:24px;text-align:center"><i class="fa-solid fa-heart" style="font-size:24px;color:#16b5a7;margin-bottom:12px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:6px">Patient-first</div><div style="font-size:13px;line-height:1.6;color:#6b7884">Every plan is built around you, not just your diagnosis.</div></div>
+        <div style="background:#f5f7f9;border-radius:12px;padding:24px;text-align:center"><i class="fa-solid fa-flask" style="font-size:24px;color:#16b5a7;margin-bottom:12px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:6px">Evidence-based</div><div style="font-size:13px;line-height:1.6;color:#6b7884">Treatments grounded in the latest clinical research.</div></div>
+        <div style="background:#f5f7f9;border-radius:12px;padding:24px;text-align:center"><i class="fa-solid fa-people-group" style="font-size:24px;color:#16b5a7;margin-bottom:12px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:6px">Multidisciplinary</div><div style="font-size:13px;line-height:1.6;color:#6b7884">A connected team across every stage of recovery.</div></div>
+      </div>
+      <div style="text-align:center;margin-top:36px"><x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" onClick="{{ goTeam }}" hint-size="auto,46px">Meet the Team</x-import></div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ boolFalse }}">
+<div>
+  <div style="background:#14202e;padding:64px 30px 56px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px"><button onClick="{{ goHome }}" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:13px;padding:0">Home</button><i class="fa-solid fa-chevron-right" style="font-size:9px"></i><span style="color:#16b5a7">Contact</span></div>
+      <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(30px,3.6vw,44px);color:#fff;margin:0 0 12px;letter-spacing:-.02em">Get in Touch</h1>
+      <p style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.62);margin:0;max-width:560px">Questions, referrals or ready to book — we'd love to hear from you.</p>
+    </div>
+  </div>
+  <section style="padding:64px 30px;background:#fff">
+    <div class="detail-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:340px 1fr;gap:48px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:44px;height:44px;border-radius:10px;background:#f0faf9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-location-dot" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:3px">Visit us</div><div style="font-size:14px;line-height:1.6;color:#6b7884">12 Harley Street<br>London W1G 9PQ</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:44px;height:44px;border-radius:10px;background:#f0faf9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-phone" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:3px">Call us</div><div style="font-size:14px;line-height:1.6;color:#6b7884">+44 (0)20 7946 0321</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:44px;height:44px;border-radius:10px;background:#f0faf9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-envelope" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:3px">Email</div><div style="font-size:14px;line-height:1.6;color:#6b7884">hello@spinesync.co.uk</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:14px"><div style="width:44px;height:44px;border-radius:10px;background:#f0faf9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-clock" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:3px">Opening hours</div><div style="font-size:14px;line-height:1.6;color:#6b7884">Mon–Fri 8am–8pm<br>Sat 9am–4pm · Sun closed</div></div></div>
+        <div style="height:160px;border-radius:12px;background:linear-gradient(135deg,#dceeed,#f0faf9);border:1px solid #e2e7ec;display:flex;align-items:center;justify-content:center;margin-top:6px"><span style="font-family:Poppins,sans-serif;font-size:12px;color:#6b7884;text-transform:uppercase;letter-spacing:.06em"><i class="fa-solid fa-map-location-dot" style="margin-right:7px;color:#16b5a7"></i>Map</span></div>
+      </div>
+      <div style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:16px;padding:32px">
+        <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="text-align:center;padding:36px 12px"><div style="width:64px;height:64px;border-radius:50%;background:#f0faf9;display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><i class="fa-solid fa-circle-check" style="font-size:30px;color:#16b5a7"></i></div><div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:8px">Message sent</div><p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 20px">Thanks for reaching out — our team will reply within one working day.</p><button onClick="{{ resetContact }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">Send Another</button></div>
+        </sc-if>
+        <sc-if value="{{ contactForm }}" hint-placeholder-val="{{ boolTrue }}">
+          <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:18px">Send us a message</div>
+          <div class="booking-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div><input value="{{ cName }}" onInput="{{ setCName }}" placeholder="Your name *" style="{{ cNameStyle }}" /><sc-if value="{{ ecName }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">Required</span></sc-if></div>
+            <div><input value="{{ cEmail }}" onInput="{{ setCEmail }}" placeholder="Email *" style="{{ cEmailStyle }}" /><sc-if value="{{ ecEmail }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">{{ ecEmailMsg }}</span></sc-if></div>
+          </div>
+          <input value="{{ cSubject }}" onInput="{{ setCSubject }}" placeholder="Subject" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;margin-bottom:14px" />
+          <textarea value="{{ cMsg }}" onInput="{{ setCMsg }}" rows="5" placeholder="How can we help? *" style="{{ cMsgStyle }}"></textarea>
+          <sc-if value="{{ ecMsg }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c;display:block;margin-bottom:8px">Please enter a message</span></sc-if>
+          <button onClick="{{ submitContact }}" style="width:100%;margin-top:6px;background:#16b5a7;border:none;border-radius:999px;padding:14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.35)">Send Message</button>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+</div>
+</sc-if>
+
+<!-- FOOTER -->
+<footer style="background:#14202e;padding:60px 30px 28px">
+  <div style="max-width:1170px;margin:0 auto">
+    <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.09)">
+      <div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px"><div style="width:30px;height:30px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-heart-pulse" style="font-size:13px;color:#fff"></i></div><span style="font-family:Poppins,sans-serif;font-weight:700;font-size:17px;color:#fff">Spine<span style="color:#16b5a7">Sync</span></span></div>
+        <p style="font-size:14px;line-height:1.75;color:rgba(255,255,255,.45);margin:0 0 22px;max-width:240px">Expert spine and physiotherapy care tailored to your recovery.</p>
+        <div style="display:flex;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-facebook-f" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div><div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-instagram" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div><div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-linkedin-in" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div></div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Explore</div>
+        <div style="display:flex;flex-direction:column;gap:11px;align-items:flex-start">
+          <button onClick="{{ goServices }}" style="background:none;border:none;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);padding:0;font-family:'Open Sans',sans-serif">Services</button>
+          <button onClick="{{ goTeam }}" style="background:none;border:none;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);padding:0;font-family:'Open Sans',sans-serif">Our Team</button>
+          <button onClick="{{ goBlog }}" style="background:none;border:none;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);padding:0;font-family:'Open Sans',sans-serif">Blog</button>
+          <button onClick="{{ goAbout }}" style="background:none;border:none;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);padding:0;font-family:'Open Sans',sans-serif">About Us</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Account</div>
+        <div style="display:flex;flex-direction:column;gap:11px"><a href="SpineSync-Patient-Portal.dc.html" style="font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Patient Portal</a><a href="SpineSync-Admin-Dashboard.dc.html" style="font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Staff Login</a></div>
+        <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin:22px 0 12px">Contact</div>
+        <button onClick="{{ goContact }}" style="background:none;border:none;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);padding:0;font-family:'Open Sans',sans-serif">Contact Us</button>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Reach Us</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-phone" style="font-size:12px;color:#16b5a7;margin-top:3px"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">+44 (0)20 7946 0321</span></div>
+          <div style="display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-location-dot" style="font-size:12px;color:#16b5a7;margin-top:3px"></i><span style="font-size:13px;color:rgba(255,255,255,.45)">12 Harley Street, London W1G 9PQ</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <span style="font-size:13px;color:rgba(255,255,255,.28)">© 2026 SpineSync Ltd. All rights reserved.</span>
+      <div style="display:flex;gap:20px"><a href="#" style="font-size:13px;color:rgba(255,255,255,.28);text-decoration:none">Privacy Policy</a><a href="#" style="font-size:13px;color:rgba(255,255,255,.28);text-decoration:none">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════ BOOKING MODAL ═══════════ -->
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ boolFalse }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;animation:overlayIn .2s ease">
+    <div onClick="{{ stop }}" style="width:100%;max-width:620px;background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .28s cubic-bezier(.16,1,.3,1)">
+      <div style="padding:22px 26px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-calendar-check" style="font-size:14px;color:#fff"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Book an Appointment</div><div style="font-size:12px;color:#6b7884">{{ stepLabel }}</div></div></div>
+        <button onClick="{{ closeModal }}" style="width:34px;height:34px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:15px;color:#6b7884"></i></button>
+      </div>
+      <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ boolTrue }}">
+        <div style="display:flex;gap:6px;padding:16px 26px 0"><div style="flex:1;height:5px;border-radius:3px;background:{{ p1 }}"></div><div style="flex:1;height:5px;border-radius:3px;background:{{ p2 }}"></div><div style="flex:1;height:5px;border-radius:3px;background:{{ p3 }}"></div><div style="flex:1;height:5px;border-radius:3px;background:{{ p4 }}"></div></div>
+      </sc-if>
+      <div style="padding:24px 26px 28px">
+        <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ boolTrue }}">
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:12px">Choose a treatment</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px">
+            <sc-for list="{{ services }}" as="svc" hint-placeholder-count="6"><button onClick="{{ svc.onSelect }}" style="{{ svc.style }}"><i class="{{ svc.icon }}" style="font-size:16px"></i><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;text-align:left;flex:1">{{ svc.label }}</span><i class="{{ svc.check }}" style="font-size:14px"></i></button></sc-for>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:12px">Preferred practitioner</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ practitioners }}" as="prac" hint-placeholder-count="4"><button onClick="{{ prac.onSelect }}" style="{{ prac.style }}">{{ prac.name }}</button></sc-for></div>
+          <sc-if value="{{ step1Error }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-top:10px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please choose a treatment to continue.</div></sc-if>
+        </sc-if>
+        <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:10px;padding:11px 14px;margin-bottom:18px;display:flex;align-items:center;gap:9px"><i class="fa-solid fa-circle-info" style="color:#16b5a7;font-size:13px"></i><span style="font-size:13px;color:#14202e">{{ summaryChip }}</span></div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:12px">Select a day</div>
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px"><sc-for list="{{ days }}" as="day" hint-placeholder-count="7"><button onClick="{{ day.onSelect }}" disabled="{{ day.disabled }}" style="{{ day.style }}"><span style="font-size:11px;font-weight:600;text-transform:uppercase">{{ day.dow }}</span><span style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700">{{ day.date }}</span><span style="font-size:10px">{{ day.mon }}</span></button></sc-for></div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:12px">Available times</div>
+          <sc-if value="{{ hasSlots }}" hint-placeholder-val="{{ boolTrue }}"><div class="modal-slots" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"><sc-for list="{{ slots }}" as="slot" hint-placeholder-count="8"><button onClick="{{ slot.onSelect }}" disabled="{{ slot.taken }}" style="{{ slot.style }}">{{ slot.time }}</button></sc-for></div></sc-if>
+          <sc-if value="{{ noSlots }}" hint-placeholder-val="{{ boolFalse }}"><div style="text-align:center;padding:24px;background:#f5f7f9;border-radius:10px;color:#6b7884;font-size:13px"><i class="fa-solid fa-calendar-xmark" style="font-size:22px;color:#cbd3da;display:block;margin-bottom:8px"></i>No slots left for this day — please try another.</div></sc-if>
+          <sc-if value="{{ step2Error }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-top:12px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please choose a day and time slot.</div></sc-if>
+        </sc-if>
+        <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:10px;padding:11px 14px;margin-bottom:18px;display:flex;align-items:center;gap:9px"><i class="fa-solid fa-calendar-check" style="color:#16b5a7;font-size:13px"></i><span style="font-size:13px;color:#14202e">{{ fullSummary }}</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">First name *</label><input value="{{ first }}" onInput="{{ setFirst }}" style="{{ stFirst }}" /><sc-if value="{{ eFirst }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">Required</span></sc-if></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Last name *</label><input value="{{ last }}" onInput="{{ setLast }}" style="{{ stLast }}" /><sc-if value="{{ eLast }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">Required</span></sc-if></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email *</label><input type="email" value="{{ email }}" onInput="{{ setEmail }}" style="{{ stEmail }}" /><sc-if value="{{ eEmail }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">{{ eEmailMsg }}</span></sc-if></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone *</label><input type="tel" value="{{ phone }}" onInput="{{ setPhone }}" style="{{ stPhone }}" /><sc-if value="{{ ePhone }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c">{{ ePhoneMsg }}</span></sc-if></div>
+          </div>
+          <label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Notes (optional)</label>
+          <textarea value="{{ note }}" onInput="{{ setNote }}" rows="2" placeholder="Anything we should know?" style="width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;resize:vertical;margin-bottom:14px"></textarea>
+          <button onClick="{{ toggleConsent }}" style="display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;padding:0;text-align:left"><div style="{{ consentBox }}"><i class="fa-solid fa-check" style="font-size:11px;color:#fff"></i></div><span style="font-size:13px;color:#6b7884">I agree to be contacted about this appointment. *</span></button>
+          <sc-if value="{{ eConsent }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:11px;color:#e74c3c;margin-top:6px;margin-left:30px">Please confirm to continue.</div></sc-if>
+        </sc-if>
+        <!-- ── STEP 4: PAYMENT ── -->
+        <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:10px;padding:14px 16px;margin-bottom:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:13px;color:#6b7884">{{ serviceLabel }} · {{ practitioner }}</span><span style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e">{{ bookingPrice }}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:#6b7884">{{ whenLabel }}</span><span style="font-size:12px;color:#27ae60;display:flex;align-items:center;gap:5px"><i class="fa-solid fa-shield-halved" style="font-size:11px"></i>Secure via Stripe</span></div>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:12px">Card details</div>
+          <div style="margin-bottom:12px">
+            <label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Card number</label>
+            <div style="position:relative"><i class="fa-solid fa-credit-card" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ cardNum }}" onInput="{{ setCardNum }}" placeholder="1234 5678 9012 3456" maxlength="19" style="{{ cardNumStyle }}" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Expiry</label><input value="{{ cardExpiry }}" onInput="{{ setCardExpiry }}" placeholder="MM / YY" maxlength="7" style="{{ cardExpiryStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">CVV</label><input value="{{ cardCvv }}" onInput="{{ setCardCvv }}" placeholder="123" maxlength="3" style="{{ cardCvvStyle }}" /></div>
+          </div>
+          <sc-if value="{{ payError }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-bottom:10px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please enter valid card details to continue.</div></sc-if>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 0"><i class="fa-brands fa-stripe" style="font-size:22px;color:#6772e5"></i><span style="font-size:11px;color:#6b7884">Payments processed securely by Stripe. We never store your card details.</span></div>
+        </sc-if>
+        <!-- ── STEP 5: CONFIRMATION ── -->
+        <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="text-align:center;padding:8px 0 6px">
+            <div style="width:68px;height:68px;border-radius:50%;background:#f0faf9;display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><i class="fa-solid fa-circle-check" style="font-size:32px;color:#16b5a7"></i></div>
+            <div style="font-family:Poppins,sans-serif;font-size:21px;font-weight:700;color:#14202e;margin-bottom:8px">Booking Confirmed</div>
+            <p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 20px;max-width:380px;margin-left:auto;margin-right:auto">Thanks, {{ firstOr }}. Payment received. We'll send a confirmation email shortly.</p>
+            <div style="background:#f5f7f9;border-radius:12px;padding:18px;text-align:left;max-width:380px;margin:0 auto 22px">
+              <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:13px;color:#6b7884">Reference</span><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#16b5a7">{{ refNo }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Treatment</span><span style="font-size:13px;font-weight:600;color:#14202e">{{ serviceLabel }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Practitioner</span><span style="font-size:13px;font-weight:600;color:#14202e">{{ practitioner }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">When</span><span style="font-size:13px;font-weight:600;color:#14202e">{{ whenLabel }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #e2e7ec"><span style="font-size:13px;color:#6b7884">Paid</span><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#27ae60">{{ bookingPrice }} via Stripe</span></div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding:18px 26px;border-top:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <sc-if value="{{ showBack }}" hint-placeholder-val="{{ boolFalse }}"><button onClick="{{ back }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;display:flex;align-items:center;gap:7px"><i class="fa-solid fa-arrow-left" style="font-size:12px"></i>Back</button></sc-if>
+        <sc-if value="{{ hideBack }}" hint-placeholder-val="{{ boolTrue }}"><span></span></sc-if>
+        <button onClick="{{ primaryAction }}" style="{{ primaryStyle }}">{{ primaryLabel }}</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    page: 'home', serviceId: null, memberId: null, postId: null, blogCat: 'All',
+    mobileMenu: false, openFaq: null,
+    // contact
+    cName: '', cEmail: '', cSubject: '', cMsg: '', cErrors: false, contactSent: false,
+    // booking modal
+    modalOpen: false, step: 1, service: null, practitioner: 'No preference',
+    dayIdx: null, slot: null, first: '', last: '', email: '', phone: '', note: '', consent: false,
+    submitting: false, showErrors: false, step1Error: false, step2Error: false, refNo: null,
+    // login state (read from localStorage on mount)
+    loggedIn: false, loggedInUser: null,
+    // payment step
+    cardNum: '', cardExpiry: '', cardCvv: '', payError: false, paying: false,
+    // blog comments
+    comments: {
+      p1: [{ id:'c1', name:'James H.', text:'Really useful article. A few of these habits have made a noticeable difference to my back already.', date:'25 Jun 2026' }],
+      p2: [{ id:'c2', name:'Sophie L.', text:'Such an important point about not rushing return to sport. I was cleared too soon once and reinjured myself — wish I\'d read this first.', date:'22 Jun 2026' }],
+    },
+    newComment: '', newCommentName: '', newCommentEmail: '', commentErr: false, commentPosted: false,
+  };
+
+  SERVICES = [
+    { id: 'chiro', label: 'Chiropractic Care', icon: 'fa-solid fa-bone', pracId: 'mitchell',
+      blurb: 'Targeted spinal adjustments to restore alignment, reduce nerve pressure and relieve pain at the source.',
+      intro: 'Our chiropractic care uses precise, hands-on spinal adjustments to restore healthy alignment, ease nerve pressure and relieve pain — addressing the root cause rather than masking symptoms.',
+      duration: '30–45 min', course: '6–8 sessions',
+      expect: ['A full spinal and postural assessment at your first visit.', 'A clear diagnosis and a plan explained in plain language.', 'Gentle, targeted adjustments tailored to your comfort.', 'Home advice and exercises to support each session.'],
+      benefits: ['Reduced back and neck pain', 'Improved joint mobility', 'Less reliance on pain medication', 'Better posture and alignment'],
+      faqs: [{ q: 'Does an adjustment hurt?', a: 'Most patients feel relief, not pain. Adjustments are gentle and tailored to your comfort — we always explain each step first.' }, { q: 'How many sessions will I need?', a: 'Most patients see meaningful improvement within 6–8 sessions, though your plan is reviewed continuously based on progress.' }] },
+    { id: 'pt', label: 'Physical Therapy', icon: 'fa-solid fa-hand-holding-medical', pracId: 'okafor',
+      blurb: 'Evidence-based rehabilitation programmes designed to rebuild strength, mobility and function after injury.',
+      intro: 'Physical therapy rebuilds strength, mobility and confidence after injury or surgery through structured, evidence-based rehabilitation that progresses safely at your pace.',
+      duration: '45 min', course: '8–12 sessions',
+      expect: ['A movement and strength assessment to set a baseline.', 'A progressive exercise programme built around your goals.', 'Hands-on manual therapy where helpful.', 'Regular progress reviews and plan adjustments.'],
+      benefits: ['Restored strength and function', 'Faster, safer recovery', 'Reduced risk of re-injury', 'Personalised exercise programme'],
+      faqs: [{ q: 'Will I get exercises to do at home?', a: 'Yes — your home programme is delivered through the SpineSync portal, with sets, reps and video guidance you can follow anytime.' }, { q: 'Do I need a referral?', a: 'No referral is required. You can book directly and most patients are seen within 48 hours.' }] },
+    { id: 'sports', label: 'Sports Rehabilitation', icon: 'fa-solid fa-dumbbell', pracId: 'okafor',
+      blurb: 'Get back to peak performance faster with sport-specific recovery protocols and injury prevention strategies.',
+      intro: 'Sports rehabilitation gets you back to peak performance safely, with sport-specific protocols, strength reconditioning and return-to-play testing led by a specialist physiotherapist.',
+      duration: '45–60 min', course: '6–10 sessions',
+      expect: ['A sport-specific assessment of your injury and demands.', 'A phased return-to-sport plan with clear milestones.', 'Strength, power and conditioning reconditioning.', 'Objective return-to-play testing before you resume.'],
+      benefits: ['Sport-specific recovery', 'Objective return-to-play criteria', 'Injury-prevention strategies', 'Performance reconditioning'],
+      faqs: [{ q: 'When can I return to my sport?', a: 'We use objective testing — not just time — to clear you. This protects you from re-injury and is tailored to your sport.' }, { q: 'Do you work with my coach?', a: 'With your consent, we can liaise with your coach or club to align your rehab with training loads.' }] },
+    { id: 'posture', label: 'Posture Correction', icon: 'fa-solid fa-person-walking', pracId: 'mitchell',
+      blurb: 'Address the root causes of postural imbalances with targeted corrective exercises and ergonomic guidance.',
+      intro: 'Posture correction tackles the root causes of imbalance — from desk-based strain to muscular weakness — with corrective exercise, hands-on therapy and practical ergonomic guidance.',
+      duration: '30–45 min', course: '6–8 sessions',
+      expect: ['A detailed postural and ergonomic assessment.', 'Targeted corrective exercises for weak or tight areas.', 'Workstation and daily-habit recommendations.', 'Progress photos and measurable check-ins.'],
+      benefits: ['Reduced desk-related strain', 'Stronger postural muscles', 'Ergonomic workspace advice', 'Lasting habit change'],
+      faqs: [{ q: 'Can posture really be changed?', a: 'Yes. With targeted exercise and small daily-habit changes, most patients see measurable improvement within weeks.' }, { q: 'Is this useful for desk workers?', a: 'Absolutely — desk-based strain is one of the most common reasons patients come to us, and ergonomic advice is built in.' }] },
+    { id: 'pain', label: 'Pain Management', icon: 'fa-solid fa-bed-pulse', pracId: 'nair',
+      blurb: 'Multi-modal approaches to chronic and acute pain, helping you move more freely and live more fully.',
+      intro: 'Our pain management programme combines manual therapy, graded exercise and education to help you move more freely and reduce both acute and persistent pain over time.',
+      duration: '45 min', course: 'Ongoing review',
+      expect: ['A thorough pain history and contributing-factor review.', 'A multi-modal plan blending therapy and movement.', 'Education to understand and self-manage your pain.', 'Regular reviews to adapt the approach.'],
+      benefits: ['Reduced chronic pain', 'Improved daily function', 'Self-management skills', 'Less medication reliance'],
+      faqs: [{ q: 'I have chronic pain — can you help?', a: 'Yes. Persistent pain often needs a multi-modal approach combining movement, manual therapy and education, which is exactly what this programme offers.' }, { q: 'Will I have to stop my medication?', a: 'We never advise changing medication without your GP. Many patients find they rely on it less as function improves.' }] },
+    { id: 'postop', label: 'Post-Surgery Recovery', icon: 'fa-solid fa-stethoscope', pracId: 'nair',
+      blurb: 'Specialist post-operative rehabilitation to restore function safely and reduce your recovery time after surgery.',
+      intro: 'Post-surgery rehabilitation guides you safely from the early stages of recovery back to full function, following surgical protocols and progressing at a pace that protects your results.',
+      duration: '45 min', course: '10–16 sessions',
+      expect: ['A review of your surgery and consultant protocol.', 'A staged plan respecting healing timelines.', 'Gradual restoration of movement and strength.', 'Close monitoring and consultant liaison.'],
+      benefits: ['Safe, protocol-led recovery', 'Restored movement and strength', 'Reduced complication risk', 'Confidence to return to activity'],
+      faqs: [{ q: 'How soon after surgery should I start?', a: 'It depends on your procedure and surgeon\u2019s guidance. We follow your consultant\u2019s protocol and start as soon as it\u2019s safe.' }, { q: 'Will you coordinate with my surgeon?', a: 'Yes — with your consent we liaise with your surgical team to keep your rehab aligned with their plan.' }] },
+  ];
+
+  TEAM = [
+    { id: 'mitchell', name: 'Dr. Sarah Mitchell', firstName: 'Dr. Mitchell', role: 'Lead Chiropractor', initials: 'SM',
+      grad: 'linear-gradient(135deg,#0a4f47 0%,#16b5a7 100%)',
+      short: 'Specialist in spinal disc conditions and chronic back pain with 10 years of clinical experience.',
+      bio: ['Dr. Sarah Mitchell leads our chiropractic team and has spent over a decade helping patients overcome chronic back and neck pain. She is known for a calm, thorough approach and for explaining every step in language patients understand.', 'After training in the UK and completing advanced certification in spinal rehabilitation, Sarah founded the chiropractic arm of SpineSync with a focus on combining hands-on care with active rehabilitation.'],
+      specs: ['Spinal disc conditions', 'Chronic back pain'],
+      quals: ['MChiro, University of South Wales', 'Advanced Certification in Spinal Rehabilitation', 'Member, British Chiropractic Association'],
+      approach: 'Sarah believes lasting recovery comes from pairing precise hands-on care with exercise and education — so patients leave not just feeling better, but understanding how to stay that way.',
+      treats: ['chiro', 'posture'] },
+    { id: 'okafor', name: 'Dr. James Okafor', firstName: 'Dr. Okafor', role: 'Sports Physiotherapist', initials: 'JO',
+      grad: 'linear-gradient(135deg,#14202e 0%,#2d5a8e 100%)',
+      short: 'Sports injury specialist helping athletes return to peak performance safely and with confidence.',
+      bio: ['Dr. James Okafor is our lead sports physiotherapist, working with everyone from weekend runners to competitive athletes. He combines rigorous rehabilitation science with a genuine understanding of what it takes to return to sport.', 'James has supported athletes through hundreds of return-to-play journeys, using objective testing to clear patients safely and reduce the risk of re-injury.'],
+      specs: ['Sports injuries', 'Rehabilitation'],
+      quals: ['MSc Sports Physiotherapy, UCL', 'BSc (Hons) Physiotherapy', 'HCPC Registered Physiotherapist'],
+      approach: 'James uses measurable, objective milestones rather than guesswork — patients return to their sport only when their body is genuinely ready, protecting the progress they\u2019ve worked for.',
+      treats: ['pt', 'sports'] },
+    { id: 'nair', name: 'Dr. Priya Nair', firstName: 'Dr. Nair', role: 'Rehabilitation Specialist', initials: 'PN',
+      grad: 'linear-gradient(135deg,#4a1f6e 0%,#7c5cbf 100%)',
+      short: 'Post-surgical rehabilitation expert focused on safe, structured recovery and long-term outcomes.',
+      bio: ['Dr. Priya Nair specialises in post-surgical and complex rehabilitation, guiding patients safely from the earliest stages of recovery back to full, confident function.', 'She works closely with surgical teams to ensure every rehabilitation plan respects healing timelines and protects the results of surgery, while keeping patients motivated throughout.'],
+      specs: ['Post-operative recovery', 'Pain management'],
+      quals: ['MSc Neuro-Musculoskeletal Rehabilitation', 'BSc (Hons) Physiotherapy', 'HCPC Registered Physiotherapist'],
+      approach: 'Priya is meticulous about safety and pacing. She breaks recovery into clear, achievable stages so patients always know what comes next — and why it matters.',
+      treats: ['pain', 'postop'] },
+  ];
+
+  CATCOLORS = { 'Back Pain': '#16b5a7', 'Sports': '#14202e', 'Wellness': '#9A65A5', 'Recovery': '#f9a828' };
+  CATGRAD = { 'Back Pain': 'linear-gradient(135deg,#0a4f47,#16b5a7)', 'Sports': 'linear-gradient(135deg,#14202e,#2d5a8e)', 'Wellness': 'linear-gradient(135deg,#4a1f6e,#9A65A5)', 'Recovery': 'linear-gradient(135deg,#b9740f,#f9a828)' };
+
+  POSTS = [
+    { id: 'p1', title: '5 Daily Habits to Protect Your Lower Back', cat: 'Back Pain', date: '22 Jun 2026', read: '5 min read', authorId: 'mitchell',
+      excerpt: 'Small, consistent changes to how you sit, lift and move can dramatically reduce your risk of lower back pain.',
+      body: ['Lower back pain is one of the most common reasons patients come to SpineSync — and much of it is preventable. The good news is that a few small, consistent habits can make a remarkable difference over time.', 'Start with how you sit. If you work at a desk, keep your screen at eye level, your feet flat and your lower back supported. Set a reminder to stand and move every 30 minutes — movement is what keeps the spine healthy.', 'When lifting, hinge at the hips and bend your knees rather than rounding your back. Keep the load close to your body, and never twist while lifting. These principles apply whether you are picking up shopping or a child.', 'Finally, build a little daily movement into your routine — a short walk, some gentle stretching, or the exercises your practitioner prescribes. Consistency beats intensity every time when it comes to protecting your back.'] },
+    { id: 'p2', title: 'Returning to Sport After Injury: A Safe Timeline', cat: 'Sports', date: '18 Jun 2026', read: '6 min read', authorId: 'okafor',
+      excerpt: 'Rushing back too soon is the most common cause of re-injury. Here is how we approach return-to-play safely.',
+      body: ['One of the hardest parts of any sports injury is the wait. But returning before your body is ready is the single biggest cause of re-injury — and it can set you back further than the original problem.', 'At SpineSync we don\u2019t clear athletes based on time alone. We use objective testing — strength, control, and sport-specific movement — to confirm your body can handle the demands of your sport before you return.', 'A typical return follows phases: protect and restore range, rebuild strength, reintroduce sport-specific load, and finally test under realistic conditions. Each phase has clear criteria you must meet before progressing.', 'This approach takes patience, but it protects the months of work you\u2019ve put in. When you return, you return with confidence — and a much lower risk of facing the same injury again.'] },
+    { id: 'p3', title: 'Why Posture Matters More Than You Think', cat: 'Wellness', date: '12 Jun 2026', read: '4 min read', authorId: 'mitchell',
+      excerpt: 'Posture is not about standing rigidly straight — it is about how your body distributes load throughout the day.',
+      body: ['Posture has a reputation problem. Many people think it means standing rigidly upright, but in reality good posture is about variety and balance — how your body distributes load across the day.', 'The position that causes problems is usually the one you hold for too long. Hours hunched over a laptop load the same structures continuously, leading to stiffness, strain and, over time, pain.', 'The fix is rarely a single perfect posture. It\u2019s movement, supportive ergonomics, and strengthening the muscles that hold you up. Small changes — a better chair setup, regular position changes, targeted exercise — add up.', 'If you spend your day at a desk, a postural assessment can identify exactly where your strain is coming from and give you a practical plan to address it.'] },
+    { id: 'p4', title: 'Understanding Sciatica: Causes and Relief', cat: 'Back Pain', date: '6 Jun 2026', read: '7 min read', authorId: 'nair',
+      excerpt: 'That sharp, radiating pain down your leg has a cause — and in most cases, an effective non-surgical solution.',
+      body: ['Sciatica describes pain that radiates along the sciatic nerve — from the lower back, through the buttock and down the leg. It can range from a mild ache to a sharp, debilitating pain, and it understandably worries many patients.', 'In most cases sciatica is caused by pressure on the nerve, often from a disc issue or muscular tightness. The reassuring news is that the large majority of cases resolve with conservative, non-surgical treatment.', 'Treatment usually combines hands-on therapy to ease pressure, specific exercises to restore movement and strength, and education to help you avoid aggravating positions while you recover.', 'If you\u2019re experiencing radiating leg pain, an assessment can identify the source and start you on a targeted plan. Surgery is rarely the first step — and often never needed at all.'] },
+    { id: 'p5', title: 'Your First Physiotherapy Session: What to Expect', cat: 'Recovery', date: '1 Jun 2026', read: '4 min read', authorId: 'okafor',
+      excerpt: 'Nervous about your first appointment? Here is exactly what happens and how to make the most of it.',
+      body: ['If you\u2019ve never seen a physiotherapist before, your first session can feel like a step into the unknown. In reality it\u2019s a relaxed, conversational appointment focused entirely on understanding you.', 'We start by talking through your history — what brought you in, how it affects your daily life, and what you\u2019d like to get back to. This matters as much as the physical assessment.', 'Next comes a movement and strength assessment. We\u2019ll watch how you move, test specific areas, and explain what we find in plain language so you understand exactly what\u2019s going on.', 'You\u2019ll leave with a clear plan and usually a few exercises to begin straight away — delivered through the SpineSync portal so you can follow them with confidence at home.'] },
+    { id: 'p6', title: 'Strength Training for a Healthy Spine', cat: 'Wellness', date: '26 May 2026', read: '5 min read', authorId: 'nair',
+      excerpt: 'A strong, resilient spine is built — not rested into. Here is why progressive strength work is your best protection.',
+      body: ['For years, back pain advice centred on rest. We now know that the spine, like any part of the body, is built to move and load — and that progressive strength work is one of the best things you can do for it.', 'Strengthening the muscles around your spine and hips improves how your body absorbs and distributes load, reducing strain on the structures that tend to cause pain.', 'The key word is progressive. Start at a level that suits you and build gradually — too much too soon is counterproductive. A practitioner can guide the right starting point and progression for your situation.', 'You don\u2019t need a gym full of equipment, either. Many of the most effective spine-healthy exercises use only your bodyweight, and can be built into a short, consistent daily routine.'] },
+  ];
+
+  PRACS = ['No preference', 'Dr. Mitchell', 'Dr. Okafor', 'Dr. Nair'];
+  DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  ALL_SLOTS = ['8:00', '9:00', '10:00', '11:00', '1:30', '2:30', '3:30', '4:30'];
+  PRICES = { chiro: '£120', pt: '£95', sports: '£110', posture: '£85', pain: '£95', postop: '£120' };
+
+  TESTI = [
+    { quote: 'After two years of chronic lower back pain, I finally found relief. The team created a plan that worked around my lifestyle. I am back to hiking every weekend — pain-free.', name: 'Michael T.', role: 'Lumbar Disc Patient' },
+    { quote: 'Post-surgery, I was terrified of re-injuring myself. Dr. Nair built my confidence back step by step. Six months on and I feel stronger than before the surgery.', name: 'Rachel K.', role: 'Post-Op Recovery Patient' },
+    { quote: 'As a marathon runner, I needed my hip sorted quickly. Dr. Okafor had me back in training within six weeks. The whole team genuinely cares about your recovery.', name: 'David L.', role: 'Sports Rehab Patient' },
+  ];
+
+  buildDays() {
+    const out = []; const base = new Date(2026, 5, 26);
+    for (let i = 1; i <= 7; i++) { const d = new Date(base); d.setDate(base.getDate() + i); out.push({ date: d.getDate(), dow: this.DOW[d.getDay()], mon: this.MON[d.getMonth()], closed: d.getDay() === 0 }); }
+    return out;
+  }
+  slotsFor(idx) { if (idx == null) return []; return this.ALL_SLOTS.map((t, i) => ({ time: t, taken: (idx + i) % 3 === 0 })); }
+
+  nav(page, extra) { this.setState({ page, mobileMenu: false, openFaq: null, ...(extra || {}) }); }
+  componentDidUpdate(pp, ps) {
+    if (ps.page !== this.state.page || ps.serviceId !== this.state.serviceId || ps.memberId !== this.state.memberId || ps.postId !== this.state.postId) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }
+
+  open(step, presetService) {
+    const ex = { modalOpen: true, step: step || 1, mobileMenu: false, showErrors: false, step1Error: false, step2Error: false };
+    if (presetService) ex.service = presetService;
+    this.setState(ex);
+    if (typeof document !== 'undefined') document.body.style.overflow = 'hidden';
+  }
+  close() { this.setState({ modalOpen: false }); if (typeof document !== 'undefined') document.body.style.overflow = ''; }
+  componentDidMount() {
+    this._esc = (e) => { if (e.key === 'Escape' && this.state.modalOpen) this.close(); };
+    document.addEventListener('keydown', this._esc);
+    try { const u = localStorage.getItem('ss_user'); if (u) { const p = JSON.parse(u); this.setState({ loggedIn: true, loggedInUser: p }); } } catch(e) {}
+  }
+
+  doPublicLogout() {
+    try { localStorage.removeItem('ss_user'); } catch(e) {}
+    this.setState({ loggedIn: false, loggedInUser: null });
+  }
+
+  payAndBook() {
+    const s = this.state;
+    const numClean = s.cardNum.replace(/\s/g, '');
+    if (numClean.length < 16 || !s.cardExpiry.match(/^\d{2}\s*\/\s*\d{2}$/) || s.cardCvv.length < 3) {
+      this.setState({ payError: true }); return;
+    }
+    this.setState({ paying: true });
+    setTimeout(() => {
+      const refNo = 'SS-' + Math.floor(10000 + Math.random() * 89999);
+      this.setState({ paying: false, step: 5, refNo, payError: false });
+    }, 1200);
+  }
+
+  submitComment() {
+    const s = this.state;
+    const isLoggedIn = s.loggedIn;
+    const nameOk = isLoggedIn || s.newCommentName.trim().length > 0;
+    const textOk = s.newComment.trim().length > 0;
+    if (!nameOk || !textOk) { this.setState({ commentErr: true }); return; }
+    const name = isLoggedIn ? (s.loggedInUser ? s.loggedInUser.name : 'Patient') : s.newCommentName.trim();
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const newC = { id: 'c' + Date.now(), name, initials, text: s.newComment.trim(), date: 'Just now', pending: true };
+    const postId = s.postId || 'p1';
+    const existing = s.comments[postId] || [];
+    this.setState({
+      comments: { ...s.comments, [postId]: [...existing, newC] },
+      newComment: '', newCommentName: '', newCommentEmail: '', commentPosted: true, commentErr: false,
+    });
+  }
+  componentWillUnmount() { document.removeEventListener('keydown', this._esc); }
+
+  validateStep3() {
+    const s = this.state;
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim());
+    const phoneDigits = (s.phone.match(/\d/g) || []).length;
+    return { first: !s.first.trim(), last: !s.last.trim(), email: !s.email.trim() || !emailOk, emailEmpty: !s.email.trim(), phone: !s.phone.trim() || phoneDigits < 7, phoneEmpty: !s.phone.trim(), consent: !s.consent };
+  }
+  primary() {
+    const s = this.state;
+    if (s.step === 1) { if (!s.service) { this.setState({ step1Error: true }); return; } this.setState({ step: 2, step1Error: false }); }
+    else if (s.step === 2) { if (s.dayIdx == null || !s.slot) { this.setState({ step2Error: true }); return; } this.setState({ step: 3, step2Error: false }); }
+    else if (s.step === 3) { const e = this.validateStep3(); if (e.first || e.last || e.email || e.phone || e.consent) { this.setState({ showErrors: true }); return; } this.setState({ step: 4, showErrors: false }); }
+    else if (s.step === 4) { this.payAndBook(); }
+    else { this.close(); setTimeout(() => this.setState({ step: 1, service: null, practitioner: 'No preference', dayIdx: null, slot: null, first: '', last: '', email: '', phone: '', note: '', consent: false, showErrors: false, refNo: null, cardNum: '', cardExpiry: '', cardCvv: '', payError: false }), 250); }
+  }
+
+  validateContact() {
+    const s = this.state;
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.cEmail.trim());
+    return { name: !s.cName.trim(), email: !s.cEmail.trim() || !emailOk, emailEmpty: !s.cEmail.trim(), msg: !s.cMsg.trim() };
+  }
+  submitContact() {
+    const e = this.validateContact();
+    if (e.name || e.email || e.msg) { this.setState({ cErrors: true }); return; }
+    this.setState({ contactSent: true, cErrors: false });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const teal = '#16b5a7';
+    const navData = [
+      { label: 'Home', page: 'home', match: ['home'] },
+      { label: 'Services', page: 'services', match: ['services', 'service'] },
+      { label: 'Team', page: 'team', match: ['team', 'member'] },
+      { label: 'Blog', page: 'blog', match: ['blog', 'post'] },
+      { label: 'About', page: 'about', match: ['about'] },
+      { label: 'Contact', page: 'contact', match: ['contact'] },
+    ];
+    const navLinks = navData.map(n => {
+      const active = n.match.includes(s.page);
+      return { label: n.label, style: `background:none;border:none;cursor:pointer;padding:0;font-family:Poppins,sans-serif;font-size:14px;font-weight:${active ? 700 : 500};color:${active ? '#14202e' : '#6b7884'}`, onSelect: () => this.nav(n.page) };
+    });
+
+    const pracById = (id) => this.TEAM.find(t => t.id === id);
+    const serviceCards = this.SERVICES.map(sv => ({ label: sv.label, icon: sv.icon, blurb: sv.blurb, onOpen: () => this.nav('service', { serviceId: sv.id }) }));
+    const teamCards = this.TEAM.map(m => ({ name: m.name, role: m.role, short: m.short, grad: m.grad, onOpen: () => this.nav('member', { memberId: m.id }) }));
+
+    // selected service (fallback to list)
+    const selSvcObj = this.SERVICES.find(x => x.id === s.serviceId);
+    const sel = selSvcObj || this.SERVICES[0];
+    const selPrac = pracById(sel.pracId);
+    const selService = {
+      label: sel.label, icon: sel.icon, intro: sel.intro, duration: sel.duration, course: sel.course,
+      price: this.PRICES[sel.id] || '—',
+      expect: sel.expect.map((t, i) => ({ n: String(i + 1), text: t })),
+      benefits: sel.benefits,
+      pracName: selPrac.name, pracRole: selPrac.role, pracGrad: selPrac.grad,
+      onPrac: () => this.nav('member', { memberId: selPrac.id }),
+    };
+    const serviceFaqs = sel.faqs.map((f, i) => ({ q: f.q, a: f.a, open: s.openFaq === i, chevron: s.openFaq === i ? 'fa-solid fa-minus' : 'fa-solid fa-plus', onToggle: () => this.setState({ openFaq: s.openFaq === i ? null : i }) }));
+
+    // selected member
+    const selMObj = this.TEAM.find(x => x.id === s.memberId) || this.TEAM[0];
+    const selMember = { name: selMObj.name, firstName: selMObj.firstName, role: selMObj.role, grad: selMObj.grad, approach: selMObj.approach };
+    const memberBio = selMObj.bio.map(t => ({ text: t }));
+    const memberSpecs = selMObj.specs;
+    const memberQuals = selMObj.quals;
+    const memberTreats = selMObj.treats.map(id => { const sv = this.SERVICES.find(x => x.id === id); return { label: sv.label, onOpen: () => this.nav('service', { serviceId: id }) }; });
+
+    // blog
+    const cats = ['All', 'Back Pain', 'Sports', 'Wellness', 'Recovery'];
+    const blogCats = cats.map(c => ({ label: c, style: `padding:8px 18px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:1px solid ${s.blogCat === c ? teal : '#e2e7ec'};background:${s.blogCat === c ? teal : '#fff'};color:${s.blogCat === c ? '#fff' : '#6b7884'}`, onSelect: () => this.setState({ blogCat: c }) }));
+    const postCard = (p) => ({ title: p.title, cat: p.cat, catColor: this.CATCOLORS[p.cat], grad: this.CATGRAD[p.cat], date: p.date, read: p.read, excerpt: p.excerpt, onOpen: () => this.nav('post', { postId: p.id }) });
+    const filtered = s.blogCat === 'All' ? this.POSTS : this.POSTS.filter(p => p.cat === s.blogCat);
+    const blogList = filtered.map(postCard);
+    const blogPreview = this.POSTS.slice(0, 3).map(postCard);
+
+    // selected post
+    const selPObj = this.POSTS.find(x => x.id === s.postId) || this.POSTS[0];
+    const pAuthor = pracById(selPObj.authorId);
+    const selPost = { title: selPObj.title, cat: selPObj.cat, catColor: this.CATCOLORS[selPObj.cat], grad: this.CATGRAD[selPObj.cat], date: selPObj.date, read: selPObj.read, author: pAuthor.name, authorGrad: pAuthor.grad, onAuthor: () => this.nav('member', { memberId: pAuthor.id }) };
+    const postBody = selPObj.body.map((t, i) => ({ text: t, style: `font-size:${i === 0 ? '18px' : '16px'};line-height:1.85;color:${i === 0 ? '#14202e' : '#4a5663'};margin:0 0 22px;${i === 0 ? 'font-weight:500' : ''}` }));
+    const relatedPosts = this.POSTS.filter(p => p.id !== selPObj.id && p.cat === selPObj.cat).slice(0, 3);
+    const relatedFinal = (relatedPosts.length ? relatedPosts : this.POSTS.filter(p => p.id !== selPObj.id).slice(0, 3)).map(postCard);
+
+    // booking modal computed
+    const cardBase = 'display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:10px;cursor:pointer;background:#fff;width:100%;';
+    const inp = (err) => `width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${err ? '#e74c3c' : '#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`;
+    const services = this.SERVICES.map(sv => { const selS = s.service === sv.id; return { label: sv.label, icon: sv.icon, check: selS ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle', style: cardBase + `border:2px solid ${selS ? teal : '#e2e7ec'};color:${selS ? teal : '#6b7884'};` + (selS ? 'background:#f0faf9;' : ''), onSelect: () => this.setState({ service: sv.id, step1Error: false }) }; });
+    const practitioners = this.PRACS.map(name => { const selP = s.practitioner === name; return { name, style: `padding:9px 16px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${selP ? teal : '#e2e7ec'};background:${selP ? '#f0faf9' : '#fff'};color:${selP ? teal : '#6b7884'}`, onSelect: () => this.setState({ practitioner: name }) }; });
+    const days = this.buildDays();
+    const dayVals = days.map((d, i) => { const selD = s.dayIdx === i; const dis = d.closed; return { dow: d.dow, date: String(d.date), mon: d.mon, disabled: dis, style: `flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;width:62px;padding:11px 0;border-radius:12px;cursor:${dis ? 'not-allowed' : 'pointer'};border:2px solid ${selD ? teal : '#e2e7ec'};background:${selD ? '#f0faf9' : dis ? '#f5f7f9' : '#fff'};color:${dis ? '#cbd3da' : selD ? teal : '#14202e'};opacity:${dis ? '.6' : '1'}`, onSelect: dis ? (() => {}) : (() => this.setState({ dayIdx: i, slot: null, step2Error: false })) }; });
+    const slots = this.slotsFor(s.dayIdx);
+    const slotVals = slots.map(sl => { const selSl = s.slot === sl.time; return { time: sl.time, taken: sl.taken, style: `padding:11px 0;text-align:center;border-radius:9px;cursor:${sl.taken ? 'not-allowed' : 'pointer'};font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${selSl ? teal : '#e2e7ec'};background:${selSl ? teal : sl.taken ? '#f5f7f9' : '#fff'};color:${selSl ? '#fff' : sl.taken ? '#cbd3da' : '#14202e'};text-decoration:${sl.taken ? 'line-through' : 'none'}`, onSelect: sl.taken ? (() => {}) : (() => this.setState({ slot: sl.time, step2Error: false })) }; });
+    const allTaken = slots.length > 0 && slots.every(x => x.taken);
+    const svcObj = this.SERVICES.find(x => x.id === s.service);
+    const svcLabel = svcObj ? svcObj.label : '—';
+    const bookingPrice = svcObj ? (this.PRICES[svcObj.id] || '') : '';
+    const selDay = s.dayIdx != null ? days[s.dayIdx] : null;
+    const whenLabel = selDay ? `${selDay.dow} ${selDay.date} ${selDay.mon} · ${s.slot || '—'}` : '—';
+    const errs = s.showErrors ? this.validateStep3() : {};
+    const labels = { 1: 'Step 1 of 4 · Treatment', 2: 'Step 2 of 4 · Date & time', 3: 'Step 3 of 4 · Your details', 4: 'Step 4 of 4 · Payment', 5: 'All done' };
+    const pcolor = (n) => s.step >= n ? teal : '#e2e7ec';
+    const cErr = s.cErrors ? this.validateContact() : {};
+    const cInp = (err) => `width:100%;padding:12px 14px;border-radius:8px;border:1px solid ${err ? '#e74c3c' : '#cbd3da'};background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`;
+
+    return {
+      boolTrue: true, boolFalse: false,
+      navLinks, mobileMenu: s.mobileMenu,
+      toggleMenu: () => this.setState({ mobileMenu: !s.mobileMenu }),
+      goHome: () => this.nav('home'), goServices: () => this.nav('services'), goTeam: () => this.nav('team'),
+      goBlog: () => this.nav('blog'), goAbout: () => this.nav('about'), goContact: () => this.nav('contact'),
+      openBooking: () => this.open(1), openBookingMobile: () => this.open(1), stop: (e) => e.stopPropagation(),
+
+      isHome: s.page === 'home', isServices: s.page === 'services', isService: s.page === 'service',
+      isTeam: s.page === 'team', isMember: s.page === 'member', isBlog: s.page === 'blog', isPost: s.page === 'post',
+      isAbout: s.page === 'about', isContact: s.page === 'contact',
+
+      serviceCards, teamCards, testimonials: this.TESTI, blogPreview,
+      selService, serviceFaqs, bookThisService: () => this.open(1, sel.id),
+      selMember, memberBio, memberSpecs, memberQuals, memberTreats,
+      blogCats, blogList, hasPosts: filtered.length > 0, noPosts: filtered.length === 0,
+      selPost, postBody, relatedPosts: relatedFinal,
+
+      // contact
+      cName: s.cName, cEmail: s.cEmail, cSubject: s.cSubject, cMsg: s.cMsg,
+      setCName: (e) => this.setState({ cName: e.target.value }), setCEmail: (e) => this.setState({ cEmail: e.target.value }),
+      setCSubject: (e) => this.setState({ cSubject: e.target.value }), setCMsg: (e) => this.setState({ cMsg: e.target.value }),
+      cNameStyle: cInp(cErr.name), cEmailStyle: cInp(cErr.email),
+      cMsgStyle: `width:100%;padding:12px 14px;border-radius:8px;border:1px solid ${cErr.msg ? '#e74c3c' : '#cbd3da'};background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;resize:vertical;margin-bottom:6px;display:block`,
+      ecName: !!cErr.name, ecEmail: !!cErr.email, ecMsg: !!cErr.msg, ecEmailMsg: cErr.emailEmpty ? 'Required' : 'Enter a valid email',
+      contactSent: s.contactSent, contactForm: !s.contactSent,
+      submitContact: () => this.submitContact(), resetContact: () => this.setState({ contactSent: false, cName: '', cEmail: '', cSubject: '', cMsg: '', cErrors: false }),
+
+      // booking
+      modalOpen: s.modalOpen, closeModal: () => this.close(), stepLabel: labels[s.step],
+      showProgress: s.step <= 4, p1: pcolor(1), p2: pcolor(2), p3: pcolor(3), p4: pcolor(4),
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4, isStep5: s.step === 5,
+      services, practitioners, step1Error: s.step1Error, step2Error: s.step2Error,
+      days: dayVals, slots: slotVals, hasSlots: s.dayIdx != null && !allTaken, noSlots: s.dayIdx != null && allTaken,
+      summaryChip: `${svcLabel} · ${s.practitioner}`, fullSummary: `${svcLabel} · ${whenLabel}`,
+      first: s.first, last: s.last, email: s.email, phone: s.phone, note: s.note,
+      stFirst: inp(errs.first), stLast: inp(errs.last), stEmail: inp(errs.email), stPhone: inp(errs.phone),
+      eFirst: !!errs.first, eLast: !!errs.last, eEmail: !!errs.email, ePhone: !!errs.phone, eConsent: !!errs.consent,
+      eEmailMsg: errs.emailEmpty ? 'Required' : 'Enter a valid email', ePhoneMsg: errs.phoneEmpty ? 'Required' : 'Enter a valid phone number',
+      setFirst: (e) => this.setState({ first: e.target.value }), setLast: (e) => this.setState({ last: e.target.value }),
+      setEmail: (e) => this.setState({ email: e.target.value }), setPhone: (e) => this.setState({ phone: e.target.value }), setNote: (e) => this.setState({ note: e.target.value }),
+      toggleConsent: () => this.setState({ consent: !s.consent }),
+      consentBox: `width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid ${s.consent ? teal : '#cbd3da'};background:${s.consent ? teal : '#fff'}`,
+      refNo: s.refNo || '—', serviceLabel: svcLabel, practitioner: s.practitioner, whenLabel, firstOr: s.first.trim() || 'there',
+      showBack: s.step === 2 || s.step === 3 || s.step === 4, hideBack: !(s.step === 2 || s.step === 3 || s.step === 4),
+      back: () => this.setState({ step: s.step - 1, showErrors: false, payError: false }),
+      primaryAction: () => this.primary(),
+      primaryLabel: s.step === 3 ? 'Continue to Payment' : s.step === 4 ? (s.paying ? 'Processing…' : ('Pay ' + bookingPrice)) : s.step === 5 ? 'Done' : 'Continue',
+      primaryStyle: `background:${teal};border:none;border-radius:999px;padding:13px 30px;cursor:${s.paying ? 'wait' : 'pointer'};font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;opacity:${s.paying ? '.7' : '1'};box-shadow:0 4px 14px rgba(22,181,167,.35)`,
+      // payment
+      bookingPrice, cardNum: s.cardNum, cardExpiry: s.cardExpiry, cardCvv: s.cardCvv,
+      payError: s.payError, paying: s.paying,
+      setCardNum: (e) => { let v = e.target.value.replace(/\D/g, '').slice(0, 16); v = v.replace(/(.{4})/g, '$1 ').trim(); this.setState({ cardNum: v, payError: false }); },
+      setCardExpiry: (e) => this.setState({ cardExpiry: e.target.value, payError: false }),
+      setCardCvv: (e) => this.setState({ cardCvv: e.target.value.replace(/\D/g, '').slice(0, 3), payError: false }),
+      cardNumStyle: `width:100%;padding:11px 13px 11px 38px;border-radius:8px;border:1px solid ${s.payError && s.cardNum.replace(/\s/g,'').length < 16 ? '#e74c3c' : '#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;letter-spacing:.06em`,
+      cardExpiryStyle: `width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.payError && !s.cardExpiry ? '#e74c3c' : '#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      cardCvvStyle: `width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.payError && s.cardCvv.length < 3 ? '#e74c3c' : '#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      // login state
+      isPublicLoggedIn: s.loggedIn, isPublicLoggedOut: !s.loggedIn,
+      publicUserName: s.loggedInUser ? s.loggedInUser.name : '',
+      doPublicLogout: () => this.doPublicLogout(),
+      // comments
+      postComments: (s.comments[s.postId] || []).filter(c => !c.pending).map(c => ({ ...c, initials: c.initials || c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() })),
+      commentCount: String((s.comments[s.postId] || []).filter(c => !c.pending).length),
+      commentPosted: s.commentPosted,
+      newComment: s.newComment, newCommentName: s.newCommentName, newCommentEmail: s.newCommentEmail,
+      commentErr: s.commentErr,
+      commentCharCount: String(s.newComment.length),
+      setNewComment: (e) => this.setState({ newComment: e.target.value.slice(0, 512), commentErr: false }),
+      setNewCommentName: (e) => this.setState({ newCommentName: e.target.value, commentErr: false }),
+      setNewCommentEmail: (e) => this.setState({ newCommentEmail: e.target.value }),
+      submitComment: () => this.submitComment(),
+      commentNameStyle: `width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.commentErr && !s.newCommentName.trim() ? '#e74c3c' : '#cbd3da'};background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      commentAreaStyle: `width:100%;padding:12px 14px;border-radius:8px;border:1px solid ${s.commentErr && !s.newComment.trim() ? '#e74c3c' : '#cbd3da'};background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;resize:vertical;display:block`,
+    };
+  }
+}
+</script>
+</body>
+</html>

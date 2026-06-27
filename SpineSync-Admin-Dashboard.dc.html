@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
+  <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #f5f7f9; }
+    @keyframes modalIn { from { opacity:0; transform:translateY(14px) scale(.98); } to { opacity:1; transform:none; } }
+    @keyframes slideIn { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:none; } }
+    @keyframes toastIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    tr:hover td { background: rgba(22,181,167,.03); }
+    @media (max-width:960px) { .admin-sidebar { width:200px !important; } .g4 { grid-template-columns:repeat(2,1fr) !important; } }
+    @media (max-width:600px) { .admin-sidebar { display:none !important; } }
+  </style>
+</helmet>
+
+<!-- ══ LOGIN ══ -->
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ boolTrue }}">
+  <div style="min-height:100vh;background:#14202e;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Open Sans',sans-serif;position:relative">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(22,181,167,.09) 0%,transparent 60%);pointer-events:none"></div>
+    <div style="position:absolute;top:0;left:0;right:0;padding:18px 30px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-heart-pulse" style="font-size:13px;color:#fff"></i></div><span style="font-family:Poppins,sans-serif;font-weight:700;font-size:18px;color:#fff">Spine<span style="color:#16b5a7">Sync</span></span></div>
+      <a href="SpineSync-Public.dc.html" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-arrow-left" style="font-size:11px"></i>Public site</a>
+    </div>
+    <div style="width:100%;max-width:420px;position:relative">
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:40px;backdrop-filter:blur(6px)">
+        <div style="text-align:center;margin-bottom:28px">
+          <div style="width:54px;height:54px;background:rgba(22,181,167,.16);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:1px solid rgba(22,181,167,.25)"><i class="fa-solid fa-user-shield" style="font-size:22px;color:#16b5a7"></i></div>
+          <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#fff">Staff Login</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.5);margin-top:5px">SpineSync Administration</div>
+        </div>
+        <sc-if value="{{ loginErr }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:9px;margin-bottom:16px"><i class="fa-solid fa-circle-exclamation" style="color:#e74c3c;font-size:14px"></i><span style="font-size:13px;color:#ff8080">{{ loginErrMsg }}</span></div>
+        </sc-if>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:5px">Role</label>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ roleOptions }}" as="r" hint-placeholder-count="3">
+              <button onClick="{{ r.onSelect }}" style="{{ r.style }}">{{ r.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:5px">Email address</label>
+          <div style="position:relative"><i class="fa-solid fa-envelope" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.3);font-size:13px;pointer-events:none"></i><input value="{{ loginEmail }}" onInput="{{ setLoginEmail }}" type="email" placeholder="{{ loginPlaceholder }}" style="{{ loginEmailStyle }}" /></div>
+        </div>
+        <div style="margin-bottom:22px">
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:5px">Password</label>
+          <div style="position:relative"><i class="fa-solid fa-lock" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.3);font-size:13px;pointer-events:none"></i><input value="{{ loginPassword }}" onInput="{{ setLoginPassword }}" type="{{ pwType }}" placeholder="Your password" style="{{ loginPwStyle }}" /><button onClick="{{ togglePw }}" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);padding:0"><i class="{{ pwIcon }}" style="font-size:13px"></i></button></div>
+        </div>
+        <button onClick="{{ doLogin }}" style="width:100%;background:#16b5a7;border:none;border-radius:999px;padding:14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;box-shadow:0 4px 18px rgba(22,181,167,.4);margin-bottom:18px">Sign In</button>
+        <div style="background:rgba(22,181,167,.08);border-radius:9px;padding:12px 14px;border:1px solid rgba(22,181,167,.15)">
+          <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#16b5a7;margin-bottom:6px"><i class="fa-solid fa-circle-info" style="margin-right:5px"></i>Demo credentials</div>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:12px;color:rgba(255,255,255,.5)">
+            <div>Admin: <strong style="color:rgba(255,255,255,.85)">admin@spinesync.com</strong></div>
+            <div>Doctor: <strong style="color:rgba(255,255,255,.85)">doctor@spinesync.com</strong></div>
+            <div>Staff: <strong style="color:rgba(255,255,255,.85)">staff@spinesync.com</strong></div>
+            <div style="margin-top:2px">Password: <strong style="color:rgba(255,255,255,.85)">any 6+ chars</strong></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:18px"><a href="SpineSync-Patient-Portal.dc.html" style="font-size:13px;color:rgba(255,255,255,.35);text-decoration:none"><i class="fa-solid fa-circle-user" style="margin-right:5px"></i>Patient login instead</a></div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ══ APP ══ -->
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ boolFalse }}">
+<div style="display:flex;min-height:100vh;font-family:'Open Sans',sans-serif">
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar" style="width:252px;flex-shrink:0;background:#14202e;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto">
+    <div style="padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px">
+      <div style="width:34px;height:34px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-heart-pulse" style="font-size:14px;color:#fff"></i></div>
+      <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:17px;color:#fff">Spine<span style="color:#16b5a7">Sync</span></span>
+    </div>
+    <div style="padding:14px 14px;border-bottom:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">{{ userInitials }}</div>
+        <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">{{ userName }}</div><div style="font-size:11px;color:rgba(255,255,255,.4)">{{ userRoleLabel }}</div></div>
+      </div>
+    </div>
+    <nav style="padding:12px 10px;flex:1">
+      <sc-for list="{{ sidebarItems }}" as="si" hint-placeholder-count="10">
+        <sc-if value="{{ si.isHeader }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);padding:0 8px;margin:14px 0 6px">{{ si.label }}</div>
+        </sc-if>
+        <sc-if value="{{ si.isNav }}" hint-placeholder-val="{{ boolTrue }}">
+          <button onClick="{{ si.onSelect }}" style="{{ si.style }}"><i class="{{ si.icon }}" style="width:15px;font-size:13px;flex-shrink:0"></i>{{ si.label }}<span style="{{ si.badgeStyle }}">{{ si.badge }}</span></button>
+        </sc-if>
+      </sc-for>
+    </nav>
+    <div style="padding:12px 10px;border-top:1px solid rgba(255,255,255,.07)">
+      <button onClick="{{ confirmSignout }}" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.4);font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:15px"></i>Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1;background:#f5f7f9;min-width:0">
+    <div style="background:#fff;border-bottom:1px solid #e2e7ec;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+      <div style="flex:1;max-width:400px;position:relative"><i class="fa-solid fa-magnifying-glass" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ searchQ }}" onInput="{{ setSearchQ }}" placeholder="Search patients..." style="width:100%;padding:9px 13px 9px 38px;border-radius:999px;border:1px solid #e2e7ec;background:#f5f7f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none" /></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">{{ userInitials }}</div><div><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ userName }}</span><br><span style="font-size:11px;color:#6b7884">{{ userRoleLabel }}</span></div></div>
+      </div>
+    </div>
+
+    <div style="padding:26px 28px">
+
+      <!-- OVERVIEW -->
+      <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ boolTrue }}">
+        <div class="g4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px">
+          <button onClick="{{ goPatients }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-users" style="color:#16b5a7;font-size:16px"></i></div><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">+12</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">247</div><div style="font-size:12px;color:#6b7884;font-weight:600">Active Patients</div></button>
+          <button onClick="{{ goSchedule }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(45,90,142,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-calendar-days" style="color:#2d5a8e;font-size:16px"></i></div><span style="background:rgba(249,168,40,.12);color:#f39c12;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">3 pending</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">{{ todayApptCount }}</div><div style="font-size:12px;color:#6b7884;font-weight:600">Today's Appointments</div></button>
+          <button onClick="{{ goContactMessages }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(249,168,40,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-envelope" style="color:#f39c12;font-size:16px"></i></div><span style="background:rgba(249,168,40,.1);color:#f39c12;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">3 new</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">{{ contactMsgCount }}</div><div style="font-size:12px;color:#6b7884;font-weight:600">Contact Messages</div></button>
+          <button onClick="{{ goInvoices }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(39,174,96,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-sterling-sign" style="color:#27ae60;font-size:16px"></i></div><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">+8.4%</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">£12,480</div><div style="font-size:12px;color:#6b7884;font-weight:600">Monthly Revenue</div></button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:18px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+            <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Recent Patients</div><button onClick="{{ goPatients }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View All</button></div>
+            <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:10px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:10px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th></tr></thead><tbody><sc-for list="{{ recentPatients }}" as="p" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:11px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:13px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:13px 22px;text-align:right"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:6px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></td></tr></sc-for></tbody></table>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Today's Schedule</div>
+            <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ todaySlots }}" as="sl" hint-placeholder-count="6"><div style="{{ sl.cardStyle }}"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:{{ sl.timeColor }};min-width:40px">{{ sl.time }}</div><div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:{{ sl.nameColor }}">{{ sl.name }}</div><div style="font-size:11px;color:#6b7884">{{ sl.detail }}</div></div><span style="{{ sl.tagStyle }}">{{ sl.tag }}</span></div></sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- PATIENTS -->
+      <sc-if value="{{ isPatients }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ filterChips }}" as="chip" hint-placeholder-count="4"><button onClick="{{ chip.onSelect }}" style="{{ chip.style }}">{{ chip.label }} <span style="opacity:.7">{{ chip.count }}</span></button></sc-for></div>
+          <button onClick="{{ openAddPatient }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-user-plus" style="margin-right:7px"></i>Add Patient</button>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+          <sc-if value="{{ hasFilteredPatients }}" hint-placeholder-val="{{ boolTrue }}">
+            <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Last Visit</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ filteredPatients }}" as="p" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px"><div style="display:flex;align-items:center;gap:11px"><div style="width:36px;height:36px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:12px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:14px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.lastVisit }}</td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></div></td></tr></sc-for></tbody></table>
+          </sc-if>
+          <sc-if value="{{ noFilteredPatients }}" hint-placeholder-val="{{ boolFalse }}"><div style="text-align:center;padding:52px 24px"><i class="fa-solid fa-magnifying-glass" style="font-size:30px;color:#cbd3da;display:block;margin-bottom:14px"></i><div style="font-size:15px;color:#6b7884">No patients match "{{ searchQ }}"</div><button onClick="{{ clearSearch }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;margin-top:14px">Clear Search</button></div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- SCHEDULE -->
+      <sc-if value="{{ isSchedule }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <button onClick="{{ prevDay }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #e2e7ec;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-chevron-left" style="font-size:12px;color:#14202e"></i></button>
+            <div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">{{ scheduleDay }}</div>
+            <button onClick="{{ nextDay }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #e2e7ec;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-chevron-right" style="font-size:12px;color:#14202e"></i></button>
+          </div>
+          <button onClick="{{ openBookSlot }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Book Slot</button>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+          <sc-for list="{{ scheduleSlots }}" as="sl" hint-placeholder-count="8">
+            <div style="padding:14px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:center;gap:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#6b7884;min-width:52px">{{ sl.time }}</div>
+              <sc-if value="{{ sl.booked }}" hint-placeholder-val="{{ boolTrue }}">
+                <div style="width:4px;height:44px;border-radius:4px;background:{{ sl.barColor }};flex-shrink:0"></div>
+                <div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:2px">{{ sl.patient }}</div><div style="font-size:12px;color:#6b7884">{{ sl.detail }}</div></div>
+                <span style="{{ sl.statusTag }}">{{ sl.status }}</span>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ sl.onNotes }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:6px 12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7"><i class="fa-solid fa-note-sticky" style="margin-right:5px"></i>Notes</button>
+                  <sc-if value="{{ sl.canCancel }}" hint-placeholder-val="{{ boolTrue }}"><button onClick="{{ sl.onCancel }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:6px 12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#e74c3c">Cancel</button></sc-if>
+                </div>
+              </sc-if>
+              <sc-if value="{{ sl.available }}" hint-placeholder-val="{{ boolFalse }}">
+                <div style="flex:1;display:flex;align-items:center;gap:12px"><i class="fa-solid fa-calendar-plus" style="color:#cbd3da;font-size:16px"></i><span style="font-size:13px;color:#cbd3da">Available</span></div>
+                <button onClick="{{ openBookSlot }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Book</button>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- INVOICES -->
+      <sc-if value="{{ isInvoices }}" hint-placeholder-val="{{ boolFalse }}">
+        <div class="g4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Total Revenue (Month)</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£12,480</div><div style="font-size:12px;color:#27ae60;margin-top:4px">All payments via Stripe</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Invoices This Month</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">{{ invoiceCount }}</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Outstanding</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£0</div><div style="font-size:12px;color:#27ae60;margin-top:4px">No outstanding dues</div></div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Stripe Ref</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th></tr></thead><tbody><sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="6"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ inv.id }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.patient }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.service }}</td><td style="padding:14px 16px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ inv.amount }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.date }}</td><td style="padding:14px 16px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif">{{ inv.stripeRef }}</td><td style="padding:14px 22px;text-align:right"><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;display:inline-flex;align-items:center;gap:4px"><i class="fa-solid fa-circle-check" style="font-size:10px"></i>Paid</span></td></tr></sc-for></tbody></table>
+        </div>
+      </sc-if>
+
+      <!-- SERVICES CRUD -->
+      <sc-if value="{{ isServices }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Services</div><button onClick="{{ openAddService }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Add Service</button></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ services }}" as="svc" hint-placeholder-count="6">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px"><div style="width:44px;height:44px;border-radius:10px;background:rgba(22,181,167,.1);display:flex;align-items:center;justify-content:center"><i class="{{ svc.icon }}" style="color:#16b5a7;font-size:18px"></i></div><div style="display:flex;gap:6px"><button onClick="{{ svc.onEdit }}" style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:7px;padding:5px 11px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">Edit</button><button onClick="{{ svc.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:5px 11px;cursor:pointer;font-size:11px;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:11px"></i></button></div></div>
+              <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:4px">{{ svc.name }}</div>
+              <div style="font-size:13px;color:#6b7884;margin-bottom:12px;line-height:1.5">{{ svc.blurb }}</div>
+              <div style="display:flex;gap:14px"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#16b5a7">{{ svc.price }}</div><div style="font-size:12px;color:#6b7884">{{ svc.duration }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- BLOG CRUD -->
+      <sc-if value="{{ isBlog }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Blog Posts</div><button onClick="{{ openAddBlog }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>New Post</button></div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Title</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Category</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Author</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ blogPosts }}" as="post" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e;max-width:240px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ post.title }}</div><div style="font-size:11px;color:#6b7884;margin-top:2px">/{{ post.slug }}</div></td><td style="padding:14px 16px"><span style="{{ post.catStyle }}">{{ post.category }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.author }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.date }}</td><td style="padding:14px 16px"><span style="{{ post.statusStyle }}">{{ post.status }}</span></td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ post.onEdit }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit</button><button onClick="{{ post.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:7px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button></div></td></tr></sc-for></tbody></table>
+        </div>
+      </sc-if>
+
+      <!-- CATEGORIES -->
+      <sc-if value="{{ isCategories }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Categories</div><button onClick="{{ openAddCategory }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Add Category</button></div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
+            <div style="padding:16px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:center;gap:14px"><div style="width:12px;height:12px;border-radius:50%;background:{{ cat.color }};flex-shrink:0"></div><div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ cat.name }}</div><div style="font-size:12px;color:#6b7884">/{{ cat.slug }} · {{ cat.postCount }} posts</div></div><div style="display:flex;gap:7px"><button onClick="{{ cat.onEdit }}" style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:7px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884">Edit</button><button onClick="{{ cat.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:7px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button></div></div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- TEAM -->
+      <sc-if value="{{ isTeam }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Team Members</div><button onClick="{{ openAddTeam }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Add Doctor</button></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ teamMembers }}" as="tm" hint-placeholder-count="3">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="height:100px;background:{{ tm.grad }};display:flex;align-items:center;justify-content:center"><div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-user-doctor" style="font-size:26px;color:#fff"></i></div></div>
+              <div style="padding:18px">
+                <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:2px">{{ tm.name }}</div>
+                <div style="font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">{{ tm.role }}</div>
+                <div style="font-size:12px;color:#6b7884;margin-bottom:4px"><i class="fa-solid fa-envelope" style="margin-right:5px"></i>{{ tm.email }}</div>
+                <div style="font-size:12px;color:#6b7884;margin-bottom:14px">{{ tm.specialties }}</div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ tm.onEdit }}" style="flex:1;background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:8px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit Profile</button>
+                  <button onClick="{{ tm.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:8px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- LOCATIONS -->
+      <sc-if value="{{ isLocations }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Clinic Locations</div><button onClick="{{ openAddLocation }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Add Location</button></div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px">
+          <sc-for list="{{ locations }}" as="loc" hint-placeholder-count="2">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="height:140px;background:linear-gradient(135deg,#dceeed,#f0faf9);display:flex;align-items:center;justify-content:center;border-bottom:1px solid #e2e7ec;position:relative"><i class="fa-solid fa-map-location-dot" style="font-size:32px;color:#16b5a7;opacity:.5"></i><div style="position:absolute;bottom:10px;right:12px;background:#fff;border-radius:6px;padding:5px 10px;font-size:11px;color:#6b7884;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-google" style="color:#4285F4"></i>Maps Link</div></div>
+              <div style="padding:18px">
+                <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:10px">{{ loc.name }}</div>
+                <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+                  <div style="display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-location-dot" style="color:#16b5a7;font-size:13px;margin-top:2px"></i><span style="font-size:13px;color:#6b7884">{{ loc.address }}</span></div>
+                  <div style="display:flex;align-items:center;gap:9px"><i class="fa-solid fa-phone" style="color:#16b5a7;font-size:13px"></i><span style="font-size:13px;color:#6b7884">{{ loc.phone }}</span></div>
+                  <div style="display:flex;align-items:center;gap:9px"><i class="fa-solid fa-clock" style="color:#16b5a7;font-size:13px"></i><span style="font-size:13px;color:#6b7884">{{ loc.hours }}</span></div>
+                </div>
+                <div style="display:flex;gap:8px"><button onClick="{{ loc.onEdit }}" style="flex:1;background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:9px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit</button><button onClick="{{ loc.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:9px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- SITE SETTINGS -->
+      <sc-if value="{{ isSiteSettings }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="max-width:680px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+            <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Contact Information</div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Address</label><textarea value="{{ ssAddress }}" onInput="{{ setSsAddress }}" rows="2" style="{{ inpStyle }};resize:vertical"></textarea></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone</label><input value="{{ ssPhone }}" onInput="{{ setSsPhone }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email</label><input value="{{ ssEmail }}" onInput="{{ setSsEmail }}" style="{{ inpStyle }}" /></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+            <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Opening Hours</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Mon – Fri</label><input value="{{ ssHoursWeekday }}" onInput="{{ setSsHoursWeekday }}" style="{{ inpStyle }}" /></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Saturday</label><input value="{{ ssHoursSat }}" onInput="{{ setSsHoursSat }}" style="{{ inpStyle }}" /></div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Sunday</label><input value="{{ ssHoursSun }}" onInput="{{ setSsHoursSun }}" style="{{ inpStyle }}" /></div>
+            </div>
+          </div>
+          <button onClick="{{ saveSiteSettings }}" style="background:#16b5a7;border:none;border-radius:999px;padding:13px 30px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.3)">Save Settings</button>
+        </div>
+      </sc-if>
+
+      <!-- CONTACT MESSAGES -->
+      <sc-if value="{{ isContactMessages }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:grid;grid-template-columns:340px 1fr;gap:18px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="padding:16px 18px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">Inbox</div>
+            <sc-for list="{{ contactMessages }}" as="msg" hint-placeholder-count="4">
+              <button onClick="{{ msg.onSelect }}" style="{{ msg.itemStyle }}"><div style="flex:1;text-align:left;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px">{{ msg.name }}</span><sc-if value="{{ msg.unread }}" hint-placeholder-val="{{ boolFalse }}"><span style="width:8px;height:8px;border-radius:50%;background:#e74c3c;flex-shrink:0"></span></sc-if></div><div style="font-size:12px;color:#6b7884;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ msg.subject }}</div><div style="font-size:11px;color:#6b7884;margin-top:2px">{{ msg.time }}</div></div></button>
+            </sc-for>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <sc-if value="{{ selectedMsg }}" hint-placeholder-val="{{ boolTrue }}">
+              <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:4px">{{ activeMsg.subject }}</div><div style="font-size:13px;color:#6b7884">From: <strong style="color:#14202e">{{ activeMsg.name }}</strong> · {{ activeMsg.email }} · {{ activeMsg.time }}</div></div>
+              <div style="padding:24px;font-size:15px;line-height:1.8;color:#4a5663">{{ activeMsg.body }}</div>
+              <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;gap:10px"><button onClick="{{ replyMsg }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em"><i class="fa-solid fa-reply" style="margin-right:6px"></i>Reply</button><button onClick="{{ deleteMsg }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:999px;padding:11px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#e74c3c">Delete</button></div>
+            </sc-if>
+            <sc-if value="{{ noSelectedMsg }}" hint-placeholder-val="{{ boolFalse }}"><div style="display:flex;align-items:center;justify-content:center;height:300px"><div style="text-align:center"><i class="fa-solid fa-envelope-open" style="font-size:32px;color:#cbd3da;display:block;margin-bottom:12px"></i><div style="font-size:14px;color:#6b7884">Select a message to read</div></div></div></sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- COMMENTS MODERATION -->
+      <sc-if value="{{ isComments }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Blog Comments</div><span style="background:rgba(249,168,40,.1);color:#f39c12;border-radius:999px;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;padding:4px 12px">{{ pendingCommentsCount }} pending</span></div>
+          <sc-for list="{{ blogComments }}" as="c" hint-placeholder-count="4">
+            <div style="{{ c.rowStyle }}">
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ c.author }}</div><span style="font-size:11px;color:#6b7884">{{ c.email }}</span><span style="{{ c.statusStyle }}">{{ c.statusLabel }}</span></div>
+                <div style="font-size:13px;color:#4a5663;line-height:1.6;margin-bottom:6px">{{ c.text }}</div>
+                <div style="font-size:11px;color:#6b7884">On: <strong>{{ c.postTitle }}</strong> · {{ c.date }}</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;flex-shrink:0">
+                <sc-if value="{{ c.canApprove }}" hint-placeholder-val="{{ boolFalse }}"><button onClick="{{ c.onApprove }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:8px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7"><i class="fa-solid fa-check" style="margin-right:5px"></i>Approve</button></sc-if>
+                <button onClick="{{ c.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:8px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#e74c3c"><i class="fa-solid fa-trash" style="margin-right:5px"></i>Delete</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- FORMS BUILDER -->
+      <sc-if value="{{ isFormsBuilder }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Patient Forms</div><button onClick="{{ openCreateForm }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>Create Form</button></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ adminForms }}" as="frm" hint-placeholder-count="3">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:14px"><div style="width:44px;height:44px;background:rgba(22,181,167,.1);border-radius:10px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-file-pen" style="color:#16b5a7;font-size:17px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">{{ frm.name }}</div><div style="font-size:12px;color:#6b7884">{{ frm.fieldCount }} fields · {{ frm.responseCount }} responses</div></div></div>
+                <div style="display:flex;gap:8px">
+                  <button onClick="{{ frm.onViewResponses }}" style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:7px;padding:8px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884"><i class="fa-solid fa-eye" style="margin-right:5px"></i>Responses</button>
+                  <button onClick="{{ frm.onEdit }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:8px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit</button>
+                  <button onClick="{{ frm.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:8px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- AUDIT LOG -->
+      <sc-if value="{{ isAuditLog }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">System Audit Log</div>
+          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Timestamp</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">User</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Details</th></tr></thead><tbody><sc-for list="{{ auditLog }}" as="log" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif;white-space:nowrap">{{ log.timestamp }}</td><td style="padding:13px 16px;font-size:13px;font-weight:600;color:#14202e">{{ log.user }}</td><td style="padding:13px 16px"><span style="{{ log.actionStyle }}">{{ log.action }}</span></td><td style="padding:13px 22px;font-size:13px;color:#6b7884">{{ log.details }}</td></tr></sc-for></tbody></table>
+        </div>
+      </sc-if>
+
+      <!-- DOCTOR: MY APPOINTMENTS -->
+      <sc-if value="{{ isMyAppts }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="margin-bottom:18px;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">My Appointments — {{ scheduleDay }}</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ myAppts }}" as="ap" hint-placeholder-count="4">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;border-left:4px solid {{ ap.barColor }};padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+                <div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">{{ ap.patient }}</div><div style="font-size:13px;color:#6b7884">{{ ap.service }} · {{ ap.time }}</div></div>
+                <span style="{{ ap.statusTag }}">{{ ap.status }}</span>
+              </div>
+              <sc-if value="{{ ap.hasNote }}" hint-placeholder-val="{{ boolFalse }}">
+                <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:9px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-note-sticky" style="color:#16b5a7;font-size:13px;margin-top:2px"></i><span style="font-size:13px;color:#6b7884">{{ ap.noteText }}</span></div>
+              </sc-if>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <button onClick="{{ ap.onAddNote }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:999px;padding:8px 16px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7"><i class="fa-solid fa-note-sticky" style="margin-right:5px"></i>{{ ap.noteLabel }}</button>
+                <button onClick="{{ ap.onAddDoc }}" style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:999px;padding:8px 16px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884"><i class="fa-solid fa-file-arrow-up" style="margin-right:5px"></i>Add Document</button>
+                <sc-if value="{{ ap.canCancel }}" hint-placeholder-val="{{ boolFalse }}"><button onClick="{{ ap.onCancel }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:999px;padding:8px 16px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#e74c3c"><i class="fa-solid fa-xmark" style="margin-right:5px"></i>Cancel</button></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ══ MODALS ══ -->
+
+  <!-- ADD PATIENT MODAL -->
+  <sc-if value="{{ addPatientOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeAddPatient }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Add New Patient</div><button onClick="{{ closeAddPatient }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">First name *</label><input value="{{ apFirst }}" onInput="{{ setApFirst }}" placeholder="Alex" style="{{ inpStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Last name *</label><input value="{{ apLast }}" onInput="{{ setApLast }}" placeholder="Thompson" style="{{ inpStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email *</label><input value="{{ apEmail }}" onInput="{{ setApEmail }}" type="email" placeholder="patient@email.com" style="{{ inpStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone *</label><input value="{{ apPhone }}" onInput="{{ setApPhone }}" type="tel" placeholder="+44 7700 900000" style="{{ inpStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Condition *</label><input value="{{ apCondition }}" onInput="{{ setApCondition }}" placeholder="e.g. Lower back pain" style="{{ inpStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Assign therapist *</label><select value="{{ apTherapist }}" onChange="{{ setApTherapist }}" style="{{ inpStyle }}"><option value="">Select...</option><option value="Dr. Mitchell">Dr. Mitchell</option><option value="Dr. Okafor">Dr. Okafor</option><option value="Dr. Nair">Dr. Nair</option></select></div>
+          </div>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeAddPatient }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ submitAddPatient }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Add Patient</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CRUD MODAL (generic) -->
+  <sc-if value="{{ crudModalOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeCrudModal }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:600px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">{{ crudModalTitle }}</div><button onClick="{{ closeCrudModal }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ crudModalFields }}" as="field" hint-placeholder-count="4">
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">{{ field.label }}</label>
+              <sc-if value="{{ field.isText }}" hint-placeholder-val="{{ boolTrue }}"><input value="{{ field.value }}" onInput="{{ field.onInput }}" placeholder="{{ field.placeholder }}" style="{{ inpStyle }}" /></sc-if>
+              <sc-if value="{{ field.isTextarea }}" hint-placeholder-val="{{ boolFalse }}"><textarea value="{{ field.value }}" onInput="{{ field.onInput }}" rows="3" placeholder="{{ field.placeholder }}" style="{{ inpStyle }};resize:vertical"></textarea></sc-if>
+              <sc-if value="{{ field.isSelect }}" hint-placeholder-val="{{ boolFalse }}">
+                <select value="{{ field.value }}" onChange="{{ field.onInput }}" style="{{ inpStyle }}">
+                  <sc-for list="{{ field.options }}" as="opt" hint-placeholder-count="3"><option value="{{ opt.value }}">{{ opt.label }}</option></sc-for>
+                </select>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeCrudModal }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ saveCrudModal }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">{{ crudModalSaveLabel }}</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- DOCTOR NOTES MODAL -->
+  <sc-if value="{{ docNoteOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeDocNote }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:480px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Internal Notes</div><button onClick="{{ closeDocNote }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px">
+          <div style="background:#fff8e8;border:1px solid rgba(249,168,40,.2);border-radius:9px;padding:11px 13px;margin-bottom:14px;font-size:12px;color:#6b7884"><i class="fa-solid fa-lock" style="color:#f39c12;margin-right:6px"></i>Notes are internal and not visible to the patient.</div>
+          <label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Notes</label>
+          <textarea value="{{ docNoteText }}" onInput="{{ setDocNoteText }}" rows="5" placeholder="Add clinical notes, observations, or instructions for the next session..." style="{{ inpStyle }};resize:vertical"></textarea>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeDocNote }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ saveDocNote }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Save Notes</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- DOCTOR CANCEL MODAL -->
+  <sc-if value="{{ docCancelOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeDocCancel }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:460px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Cancel Appointment</div><button onClick="{{ closeDocCancel }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Cancellation reason *</label><textarea value="{{ docCancelReason }}" onInput="{{ setDocCancelReason }}" rows="3" placeholder="Please provide a reason for the patient…" style="{{ inpStyle }};resize:vertical"></textarea></div>
+          <button onClick="{{ toggleDocCancelRefund }}" style="display:flex;align-items:center;gap:12px;background:#f5f7f9;border:1px solid #e2e7ec;border-radius:10px;padding:14px;cursor:pointer;width:100%;text-align:left">
+            <div style="{{ docRefundBoxStyle }}"><i class="fa-solid fa-check" style="font-size:11px;color:#fff"></i></div>
+            <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">Process full refund via Stripe</div><div style="font-size:12px;color:#6b7884;margin-top:2px">Refund will be processed within 5–10 business days.</div></div>
+          </button>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeDocCancel }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Keep Appointment</button><button onClick="{{ confirmDocCancel }}" style="background:#e74c3c;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Confirm Cancellation</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- DOCTOR ADD DOCUMENT MODAL -->
+  <sc-if value="{{ docDocOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeDocDoc }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:460px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Add Document</div><button onClick="{{ closeDocDoc }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Document title</label><input value="{{ docDocTitle }}" onInput="{{ setDocDocTitle }}" placeholder="e.g. Treatment Plan Week 8" style="{{ inpStyle }}" /></div>
+          <div style="border:2px dashed #cbd3da;border-radius:12px;padding:32px;text-align:center;cursor:pointer;background:#f9f9f9"><i class="fa-solid fa-cloud-arrow-up" style="font-size:28px;color:#cbd3da;display:block;margin-bottom:10px"></i><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e;margin-bottom:4px">Drop file here or click to browse</div><div style="font-size:12px;color:#6b7884">PDF, DOCX, JPEG — max 10MB</div></div>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeDocDoc }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ saveDocDoc }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Upload</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FORM RESPONSES MODAL -->
+  <sc-if value="{{ formResponsesOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeFormResponses }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:600px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Form Responses — {{ formRespTitle }}</div><button onClick="{{ closeFormResponses }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ formResponsesList }}" as="resp" hint-placeholder-count="2">
+            <div style="background:#f5f7f9;border-radius:12px;padding:16px 18px;border:1px solid #e2e7ec">
+              <div style="display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #e2e7ec"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ resp.patient }}</div><div style="font-size:12px;color:#6b7884">{{ resp.date }}</div></div>
+              <sc-for list="{{ resp.answers }}" as="ans" hint-placeholder-count="3"><div style="margin-bottom:9px"><div style="font-size:12px;font-weight:600;color:#6b7884;margin-bottom:2px">{{ ans.q }}</div><div style="font-size:14px;color:#14202e">{{ ans.a }}</div></div></sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;text-align:right"><button onClick="{{ closeFormResponses }}" style="background:#14202e;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Close</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- SIGN OUT DIALOG -->
+  <sc-if value="{{ signoutOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeSignout }}" style="position:fixed;inset:0;z-index:1100;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:380px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);padding:28px;text-align:center;animation:modalIn .24s cubic-bezier(.16,1,.3,1)">
+        <div style="width:52px;height:52px;border-radius:50%;background:rgba(20,32,46,.07);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i class="fa-solid fa-arrow-right-from-bracket" style="font-size:20px;color:#14202e"></i></div>
+        <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:8px">Sign out?</div>
+        <p style="font-size:14px;color:#6b7884;margin:0 0 22px">You will be returned to the login screen.</p>
+        <div style="display:flex;gap:10px"><button onClick="{{ closeSignout }}" style="flex:1;background:#f5f7f9;border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#6b7884">Cancel</button><button onClick="{{ doSignout }}" style="flex:1;background:#14202e;border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">Sign Out</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- TOAST -->
+  <sc-if value="{{ toastShown }}" hint-placeholder-val="{{ boolFalse }}">
+    <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:1200;background:#14202e;color:#fff;border-radius:999px;padding:13px 24px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 36px rgba(0,0,0,.3);animation:toastIn .25s ease;white-space:nowrap"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:15px"></i><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600">{{ toast }}</span></div>
+  </sc-if>
+
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    authView: 'login', showPw: false, loginRole: 'admin',
+    loginEmail: '', loginPassword: '', loginErrors: false,
+    role: 'admin', userName: 'Dr. James Okafor', view: 'overview',
+    searchQ: '', patientFilter: 'All', selectedPatientId: null, drawerOpen: false,
+    addPatientOpen: false, apFirst:'',apLast:'',apEmail:'',apPhone:'',apCondition:'',apTherapist:'',
+    scheduleDay: 0, bookSlotOpen: false, signoutOpen: false, toast: null,
+    // CRUD state
+    crudModal: null, // {type, mode, data, fields}
+    // Contact messages
+    selectedMsgId: null,
+    contactMessages: [
+      {id:'m1',name:'James Brown',email:'james@email.com',subject:'Question about chiropractic assessment',body:'Hi, I\'d like to know more about what to expect during an initial chiropractic assessment. I\'ve had lower back pain for about six months and I\'m not sure if this is the right approach. Could you advise?',time:'2h ago',unread:true},
+      {id:'m2',name:'Sophie Chen',email:'sophie.c@email.com',subject:'Rescheduling my appointment',body:'Hello, I need to reschedule my appointment on Friday 3rd July as I have a work commitment. Would Monday or Tuesday the following week be available?',time:'Yesterday',unread:true},
+      {id:'m3',name:'Tom Hughes',email:'tom.h@email.com',subject:'Referral from Dr. Williams',body:'I was referred by my GP Dr. Williams following an MRI scan showing disc protrusion at L4/L5. I\'d like to book an initial consultation at your earliest convenience.',time:'2 days ago',unread:false},
+      {id:'m4',name:'Rachel Kim',email:'rachel.k@email.com',subject:'Thank you',body:'Just wanted to say thank you to the entire team — especially Dr. Nair. My recovery has been incredible and I\'m finally pain-free after two years of discomfort.',time:'3 days ago',unread:false},
+    ],
+    // Blog comments
+    blogComments: [
+      {id:'c1',author:'James H.',email:'james@email.com',text:'Really useful article. These simple habits have made a real difference to my back pain.',postTitle:'5 Daily Habits to Protect Your Lower Back',date:'25 Jun 2026',status:'pending'},
+      {id:'c2',author:'Sophie L.',email:'sophie.l@email.com',text:'My physio always talks about being patient with recovery. This explains why so well.',postTitle:'Returning to Sport After Injury',date:'22 Jun 2026',status:'pending'},
+      {id:'c3',author:'David M.',email:'david@email.com',text:'Brilliant explanation. Sharing this with my running club.',postTitle:'Strength Training for a Healthy Spine',date:'20 Jun 2026',status:'approved'},
+    ],
+    // Audit log
+    auditLog: [
+      {timestamp:'27 Jun 2026 10:42',user:'Dr. Okafor',action:'LOGIN',details:'Successful login from 192.168.1.5'},
+      {timestamp:'27 Jun 2026 10:15',user:'Dr. Mitchell',action:'APPT_CANCEL',details:'Cancelled appointment SS-4821 — patient request'},
+      {timestamp:'26 Jun 2026 16:30',user:'Admin',action:'BLOG_PUBLISH',details:'Published "5 Daily Habits to Protect Your Lower Back"'},
+      {timestamp:'26 Jun 2026 14:12',user:'Dr. Nair',action:'NOTE_ADDED',details:'Added internal note to appointment #A2048'},
+      {timestamp:'26 Jun 2026 11:00',user:'Admin',action:'TEAM_UPDATED',details:'Updated profile for Dr. Sarah Mitchell'},
+      {timestamp:'25 Jun 2026 09:30',user:'Admin',action:'SERVICE_ADDED',details:'Created new service: Post-Surgery Recovery'},
+      {timestamp:'25 Jun 2026 08:55',user:'Dr. Okafor',action:'LOGIN',details:'Successful login'},
+      {timestamp:'24 Jun 2026 17:45',user:'Admin',action:'INVOICE_VIEWED',details:'Viewed invoices for June 2026'},
+    ],
+    // Forms
+    adminForms: [
+      {id:'f1',name:'New Patient Intake',fieldCount:4,responseCount:12,responses:[{patient:'Alex Thompson',date:'6 Jun 2026',answers:[{q:'Main reason for visit',a:'Lower back pain'},{q:'Duration',a:'3 months'}]},{patient:'Rachel Kim',date:'10 Jun 2026',answers:[{q:'Main reason for visit',a:'Post-op knee recovery'},{q:'Duration',a:'4 weeks post-surgery'}]}]},
+      {id:'f2',name:'Monthly Progress Check',fieldCount:3,responseCount:7,responses:[{patient:'Alex Thompson',date:'22 Jun 2026',answers:[{q:'Current pain level',a:'3/10'},{q:'Activities improved',a:'Walking, sleeping better'}]}]},
+      {id:'f3',name:'Discharge Feedback',fieldCount:2,responseCount:5,responses:[{patient:'Marcus White',date:'10 Jun 2026',answers:[{q:'Overall rating',a:'5/5'},{q:'What helped most',a:'The structured exercise programme'}]}]},
+    ],
+    viewFormResponsesId: null,
+    // Site settings
+    ssAddress:'12 Harley Street\nLondon W1G 9PQ',ssPhone:'+44 (0)20 7946 0321',ssEmail:'hello@spinesync.co.uk',
+    ssHoursWeekday:'Mon–Fri 8am–8pm',ssHoursSat:'Sat 9am–4pm',ssHoursSun:'Sun closed',
+    // Doctor modals
+    docNoteApptId:null,docNoteText:'',docNoteOpen:false,
+    docCancelApptId:null,docCancelReason:'',docCancelRefund:false,docCancelOpen:false,
+    docDocApptId:null,docDocTitle:'',docDocOpen:false,
+    // My appointments notes
+    apptNotes:{},
+    // Services (match public site)
+    services:[
+      {id:'s1',name:'Chiropractic Care',icon:'fa-solid fa-bone',blurb:'Targeted spinal adjustments to restore alignment and reduce pain.',price:'£120',duration:'30–45 min'},
+      {id:'s2',name:'Physical Therapy',icon:'fa-solid fa-hand-holding-medical',blurb:'Evidence-based rehabilitation programmes after injury or surgery.',price:'£95',duration:'45 min'},
+      {id:'s3',name:'Sports Rehabilitation',icon:'fa-solid fa-dumbbell',blurb:'Sport-specific recovery protocols and injury prevention strategies.',price:'£110',duration:'45–60 min'},
+      {id:'s4',name:'Posture Correction',icon:'fa-solid fa-person-walking',blurb:'Targeted corrective exercises and ergonomic guidance.',price:'£85',duration:'30–45 min'},
+      {id:'s5',name:'Pain Management',icon:'fa-solid fa-bed-pulse',blurb:'Multi-modal approaches for chronic and acute pain.',price:'£95',duration:'45 min'},
+      {id:'s6',name:'Post-Surgery Recovery',icon:'fa-solid fa-stethoscope',blurb:'Specialist post-operative rehabilitation to restore function safely.',price:'£120',duration:'45 min'},
+    ],
+    // Blog posts
+    blogPosts:[
+      {id:'b1',title:'5 Daily Habits to Protect Your Lower Back',slug:'5-daily-habits',category:'Back Pain',author:'Dr. Mitchell',date:'22 Jun 2026',status:'published',seoTitle:'',metaDesc:''},
+      {id:'b2',title:'Returning to Sport After Injury: A Safe Timeline',slug:'returning-to-sport',category:'Sports',author:'Dr. Okafor',date:'18 Jun 2026',status:'published',seoTitle:'',metaDesc:''},
+      {id:'b3',title:'Why Posture Matters More Than You Think',slug:'posture-matters',category:'Wellness',author:'Dr. Mitchell',date:'12 Jun 2026',status:'published',seoTitle:'',metaDesc:''},
+      {id:'b4',title:'Understanding Sciatica: Causes and Relief',slug:'understanding-sciatica',category:'Back Pain',author:'Dr. Nair',date:'6 Jun 2026',status:'draft',seoTitle:'',metaDesc:''},
+    ],
+    // Categories
+    categories:[
+      {id:'c1',name:'Back Pain',slug:'back-pain',color:'#16b5a7',postCount:2},
+      {id:'c2',name:'Sports',slug:'sports',color:'#14202e',postCount:1},
+      {id:'c3',name:'Wellness',slug:'wellness',color:'#9A65A5',postCount:1},
+      {id:'c4',name:'Recovery',slug:'recovery',color:'#f9a828',postCount:0},
+    ],
+    // Team
+    teamMembers:[
+      {id:'t1',name:'Dr. Sarah Mitchell',role:'Lead Chiropractor',email:'sarah@spinesync.com',specialties:'Spine, Posture',grad:'linear-gradient(135deg,#0a4f47,#16b5a7)'},
+      {id:'t2',name:'Dr. James Okafor',role:'Sports Physiotherapist',email:'james@spinesync.com',specialties:'Sports, Rehab',grad:'linear-gradient(135deg,#14202e,#2d5a8e)'},
+      {id:'t3',name:'Dr. Priya Nair',role:'Rehabilitation Specialist',email:'priya@spinesync.com',specialties:'Post-Op, Pain',grad:'linear-gradient(135deg,#4a1f6e,#7c5cbf)'},
+    ],
+    // Locations
+    locations:[
+      {id:'l1',name:'Harley Street Clinic',address:'12 Harley Street, London W1G 9PQ',phone:'+44 (0)20 7946 0321',email:'hello@spinesync.co.uk',hours:'Mon–Fri 8am–8pm, Sat 9am–4pm'},
+    ],
+    // Invoices (all paid)
+    invoices:[
+      {id:'INV-2048',patient:'Alex Thompson',service:'Chiropractic Care',amount:'£120',date:'20 Jun 2026',stripeRef:'pi_3Oaq2HLF'},
+      {id:'INV-2049',patient:'Rachel Kim',service:'Post-Op Rehab',amount:'£95',date:'20 Jun 2026',stripeRef:'pi_3OaM1GKD'},
+      {id:'INV-2050',patient:'David Lee',service:'Sports Rehab',amount:'£110',date:'22 Jun 2026',stripeRef:'pi_3ObZ9xCJ'},
+      {id:'INV-2051',patient:'Emma Walsh',service:'Chiropractic Assessment',amount:'£85',date:'24 Jun 2026',stripeRef:'pi_3OcVpBH2'},
+      {id:'INV-2052',patient:'James Patel',service:'Pain Management',amount:'£95',date:'25 Jun 2026',stripeRef:'pi_3OdK3AE1'},
+      {id:'INV-2053',patient:'Sophie Chen',service:'Physical Therapy',amount:'£95',date:'18 Jun 2026',stripeRef:'pi_3OaX7FMN'},
+    ],
+  };
+
+  PATIENTS = [
+    {id:'SS-4821',name:'Alex Thompson',condition:'Lumbar Disc',therapist:'Dr. Mitchell',status:'Active',lastVisit:'20 Jun 2026',avBg:'linear-gradient(135deg,#16b5a7,#0a8a7e)'},
+    {id:'SS-4822',name:'Rachel Kim',condition:'Post-Op Knee',therapist:'Dr. Nair',status:'Active',lastVisit:'21 Jun 2026',avBg:'linear-gradient(135deg,#9b59b6,#7c5cbf)'},
+    {id:'SS-4823',name:'David Lee',condition:'Sports Injury',therapist:'Dr. Okafor',status:'Active',lastVisit:'22 Jun 2026',avBg:'linear-gradient(135deg,#14202e,#2d5a8e)'},
+    {id:'SS-4824',name:'Emma Walsh',condition:'Chronic Back Pain',therapist:'Dr. Mitchell',status:'Pending',lastVisit:'—',avBg:'linear-gradient(135deg,#e74c3c,#c0392b)'},
+    {id:'SS-4825',name:'James Patel',condition:'Sciatica',therapist:'Dr. Mitchell',status:'Pending',lastVisit:'—',avBg:'linear-gradient(135deg,#f39c12,#d68910)'},
+    {id:'SS-4826',name:'Sophie Chen',condition:'Posture Correction',therapist:'Dr. Mitchell',status:'Active',lastVisit:'18 Jun 2026',avBg:'linear-gradient(135deg,#16b5a7,#0a4f47)'},
+    {id:'SS-4817',name:'Marcus White',condition:'Sports Rehab',therapist:'Dr. Okafor',status:'Completed',lastVisit:'10 Jun 2026',avBg:'linear-gradient(135deg,#2d5a8e,#14202e)'},
+    {id:'SS-4827',name:'Tom Hughes',condition:'Neck Pain',therapist:'Dr. Okafor',status:'Active',lastVisit:'23 Jun 2026',avBg:'linear-gradient(135deg,#27ae60,#1e8449)'},
+  ];
+
+  TODAY_SLOTS = [
+    {time:'8:00',patient:'Alex Thompson',detail:'Chiropractic · Dr. Mitchell · Room 2',status:'Completed',barColor:'#27ae60'},
+    {time:'9:00',patient:'Rachel Kim',detail:'Post-Op Rehab · Dr. Nair · Room 1',status:'In Progress',barColor:'#f39c12'},
+    {time:'10:00',patient:'David Lee',detail:'Sports Rehab · Dr. Okafor · Room 3',status:'Upcoming',barColor:'#16b5a7'},
+    {time:'11:00',patient:'Emma Walsh',detail:'Assessment · Dr. Mitchell · Room 2',status:'Upcoming',barColor:'#16b5a7'},
+    {time:'12:00',patient:'',detail:'',status:'Available',barColor:'#cbd3da'},
+    {time:'1:30',patient:'Sophie Chen',detail:'Physio Session · Dr. Mitchell · Room 2',status:'Upcoming',barColor:'#16b5a7'},
+    {time:'2:30',patient:'Tom Hughes',detail:'PT Session · Dr. Okafor · Room 3',status:'Upcoming',barColor:'#16b5a7'},
+    {time:'3:30',patient:'',detail:'',status:'Available',barColor:'#cbd3da'},
+  ];
+  DAYS=['Thu 26 Jun','Fri 27 Jun','Sat 28 Jun','Mon 30 Jun','Tue 1 Jul','Wed 2 Jul','Thu 3 Jul'];
+  ROLE_LABELS={admin:'Administrator',doctor:'Doctor',staff:'Staff'};
+  ROLE_USERS={admin:'Dr. James Okafor',doctor:'Dr. Sarah Mitchell',staff:'Sarah — Reception'};
+
+  doLogin() {
+    const s=this.state;
+    if(!s.loginEmail.trim()||s.loginPassword.trim().length<6){this.setState({loginErrors:true});return;}
+    const role=s.loginRole;
+    const userName=this.ROLE_USERS[role];
+    const initView = role==='doctor'?'myAppts':'overview';
+    this.setState({authView:'app',loginErrors:false,role,userName,view:initView});
+  }
+  go(view){this.setState({view});}
+  toast(msg){this.setState({toast:msg});clearTimeout(this._t);this._t=setTimeout(()=>this.setState({toast:null}),2600);}
+
+  openCrudModal(type, mode, data) {
+    const teal='#16b5a7';
+    const inp=(k)=>({label:k, isText:true, isTextarea:false, isSelect:false, value:data[k]||'', placeholder:'', options:[], onInput:(e)=>{const d={...this.state.crudModal.data};d[k]=e.target.value;this.setState({crudModal:{...this.state.crudModal,data:d}});}});
+    let fields=[];
+    if(type==='service') fields=[inp('name'),{...inp('blurb'),isText:false,isTextarea:true,placeholder:'Short description…'},inp('price'),inp('duration'),inp('icon')];
+    else if(type==='blog') fields=[inp('title'),inp('slug'),{...inp('excerpt'),isText:false,isTextarea:true},inp('category'),inp('author'),inp('seoTitle'),{...inp('metaDesc'),label:'Meta description',isText:false,isTextarea:true}];
+    else if(type==='category') fields=[inp('name'),inp('slug'),inp('color')];
+    else if(type==='team') fields=[inp('name'),inp('role'),inp('email'),inp('specialties'),{...inp('bio'),isText:false,isTextarea:true},inp('seoTitle'),{...inp('metaDesc'),label:'Meta description',isText:false,isTextarea:true}];
+    else if(type==='location') fields=[inp('name'),{...inp('address'),isText:false,isTextarea:true},inp('phone'),inp('email'),inp('hours'),{...inp('mapUrl'),label:'Google Maps URL',placeholder:'https://maps.google.com/...'}];
+    else if(type==='form') fields=[inp('name'),{...inp('description'),label:'Description',isText:false,isTextarea:true}];
+    this.setState({crudModal:{type,mode,data,fields}});
+  }
+
+  saveCrudModal() {
+    const s=this.state; if(!s.crudModal) return;
+    const {type,mode,data}=s.crudModal;
+    if(type==='service'){
+      if(mode==='add') this.setState({services:[...s.services,{...data,id:'s'+Date.now()}]});
+      else this.setState({services:s.services.map(x=>x.id===data.id?data:x)});
+    } else if(type==='blog'){
+      if(mode==='add') this.setState({blogPosts:[...s.blogPosts,{...data,id:'b'+Date.now(),date:'27 Jun 2026',status:'draft'}]});
+      else this.setState({blogPosts:s.blogPosts.map(x=>x.id===data.id?data:x)});
+    } else if(type==='category'){
+      if(mode==='add') this.setState({categories:[...s.categories,{...data,id:'c'+Date.now(),postCount:0}]});
+      else this.setState({categories:s.categories.map(x=>x.id===data.id?data:x)});
+    } else if(type==='team'){
+      if(mode==='add') this.setState({teamMembers:[...s.teamMembers,{...data,id:'t'+Date.now(),grad:'linear-gradient(135deg,#16b5a7,#0a4f47)'}]});
+      else this.setState({teamMembers:s.teamMembers.map(x=>x.id===data.id?data:x)});
+    } else if(type==='location'){
+      if(mode==='add') this.setState({locations:[...s.locations,{...data,id:'l'+Date.now()}]});
+      else this.setState({locations:s.locations.map(x=>x.id===data.id?data:x)});
+    }
+    this.setState({crudModal:null});
+    this.toast(mode==='add'?'Created successfully':'Saved successfully');
+  }
+
+  inpStyle(){return 'width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:\'Open Sans\',sans-serif;font-size:14px;color:#14202e;outline:none';}
+
+  renderVals() {
+    const s=this.state; const teal='#16b5a7';
+
+    // Role-based nav
+    const navStyle=(key)=>`display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:${s.view===key?'rgba(22,181,167,.15)':'transparent'};color:${s.view===key?teal:'rgba(255,255,255,.55)'};font-family:Poppins,sans-serif;font-weight:${s.view===key?700:500};font-size:13px;width:100%;text-align:left`;
+    const navItem=(key,label,icon,badge=0)=>({label,icon,style:navStyle(key),badge:badge?String(badge):'',badgeStyle:badge?`margin-left:auto;background:rgba(22,181,167,.25);color:${teal};border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 7px`:'display:none',onSelect:()=>this.go(key)});
+
+    const pendingComments=s.blogComments.filter(c=>c.status==='pending').length;
+    const unreadMsgs=s.contactMessages.filter(m=>m.unread).length;
+
+    let navGroups=[];
+    if(s.role==='admin'||s.role==='staff'){
+      navGroups.push({label:'Main',items:[navItem('overview','Overview','fa-solid fa-house-chimney'),navItem('patients','Patients','fa-solid fa-users',247),navItem('schedule','Schedule','fa-solid fa-calendar-days'),navItem('invoices','Invoices','fa-solid fa-file-invoice-dollar')]});
+    }
+    if(s.role==='doctor'){
+      navGroups.push({label:'My Work',items:[navItem('myAppts','My Appointments','fa-solid fa-calendar-days'),navItem('patients','Patients','fa-solid fa-users')]});
+    }
+    if(s.role==='admin'){
+      navGroups.push({label:'Content',items:[navItem('services','Services','fa-solid fa-stethoscope'),navItem('blog','Blog','fa-solid fa-newspaper'),navItem('categories','Categories','fa-solid fa-tag'),navItem('team','Team','fa-solid fa-user-doctor')]});
+      navGroups.push({label:'Clinic',items:[navItem('locations','Locations','fa-solid fa-location-dot'),navItem('siteSettings','Site Settings','fa-solid fa-gear')]});
+      navGroups.push({label:'Communications',items:[navItem('contactMessages','Contact Messages','fa-solid fa-envelope',unreadMsgs),navItem('comments','Comments','fa-solid fa-comments',pendingComments)]});
+      navGroups.push({label:'System',items:[navItem('formsBuilder','Forms Builder','fa-solid fa-file-pen'),navItem('auditLog','Audit Log','fa-solid fa-shield-halved')]});
+    }
+
+    // Patients
+    const statusStyle=(st)=>{const m={Active:'background:rgba(22,181,167,.1);color:#16b5a7',Pending:'background:rgba(249,168,40,.1);color:#f39c12',Completed:'background:rgba(100,100,100,.1);color:#6b7884'};return `${m[st]||m['Active']};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.04em`;};
+    const searchLower=s.searchQ.toLowerCase();
+    const filtered=this.PATIENTS.filter(p=>{
+      const matchS=!s.searchQ||p.name.toLowerCase().includes(searchLower)||p.id.toLowerCase().includes(searchLower)||p.condition.toLowerCase().includes(searchLower);
+      const matchF=s.patientFilter==='All'||p.status===s.patientFilter;
+      return matchS&&matchF;
+    });
+    const ptCard=(p)=>({...p,initials:p.name.split(' ').map(w=>w[0]).join(''),statusStyle:statusStyle(p.status),onView:()=>this.setState({selectedPatientId:p.id,drawerOpen:true})});
+    const filteredPatients=filtered.map(ptCard);
+    const recentPatients=this.PATIENTS.slice(0,5).map(ptCard);
+    const filterChips=['All','Active','Pending','Completed'].map(f=>{const cnt=f==='All'?this.PATIENTS.length:this.PATIENTS.filter(p=>p.status===f).length;return{label:f,count:String(cnt),style:`padding:8px 16px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:1px solid ${s.patientFilter===f?teal:'#e2e7ec'};background:${s.patientFilter===f?teal:'#fff'};color:${s.patientFilter===f?'#fff':'#6b7884'}`,onSelect:()=>this.setState({patientFilter:f})};});
+
+    // Schedule
+    const slotTagStyle=(st)=>{const m={Completed:'background:rgba(39,174,96,.1);color:#27ae60','In Progress':'background:rgba(249,168,40,.12);color:#f39c12',Upcoming:'background:rgba(22,181,167,.1);color:#16b5a7',Available:'display:none'};return `${m[st]||''};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0`;};
+    const scheduleSlots=this.TODAY_SLOTS.map((sl,i)=>{const booked=sl.status!=='Available';return{time:sl.time,patient:sl.patient,detail:sl.detail,status:sl.status,barColor:sl.barColor,tag:sl.status,statusTag:slotTagStyle(sl.status),booked,available:!booked,canCancel:booked&&sl.status!=='Completed',onNotes:()=>{this.setState({docNoteApptId:i,docNoteText:s.apptNotes[i]||'',docNoteOpen:true});},onCancel:()=>this.setState({docCancelApptId:i,docCancelReason:'',docCancelRefund:false,docCancelOpen:true})};});
+    const todaySlots=this.TODAY_SLOTS.slice(0,6).map(sl=>{const booked=sl.status!=='Available';const tagColors={Completed:'#27ae60','In Progress':'#f39c12',Upcoming:'#16b5a7',Available:'#cbd3da'};return{time:sl.time,name:booked?sl.patient:'Available',detail:booked?sl.detail.split('·')[0].trim():'',tag:sl.status,tagStyle:`font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${tagColors[sl.status]};flex-shrink:0`,timeColor:booked?'#14202e':'#cbd3da',nameColor:booked?'#14202e':'#cbd3da',cardStyle:`display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;background:${sl.status==='In Progress'?'rgba(249,168,40,.07)':booked?'rgba(22,181,167,.04)':'#f5f7f9'}`};});
+
+    // Services CRUD
+    const services=s.services.map(svc=>({...svc,onEdit:()=>this.openCrudModal('service','edit',{...svc}),onDelete:()=>{this.setState({services:s.services.filter(x=>x.id!==svc.id)});this.toast('Service deleted');}}));
+
+    // Blog CRUD
+    const catColors={'Back Pain':'background:rgba(22,181,167,.1);color:#16b5a7','Sports':'background:rgba(20,32,46,.1);color:#14202e','Wellness':'background:rgba(154,101,165,.1);color:#9A65A5','Recovery':'background:rgba(249,168,40,.1);color:#f39c12'};
+    const blogPosts=s.blogPosts.map(post=>({...post,catStyle:`${catColors[post.category]||'background:#f0f0f0;color:#666'};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px`,statusStyle:`background:${post.status==='published'?'rgba(39,174,96,.1)':'rgba(100,100,100,.1)'};color:${post.status==='published'?'#27ae60':'#6b7884'};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;text-transform:capitalize`,onEdit:()=>this.openCrudModal('blog','edit',{...post}),onDelete:()=>{this.setState({blogPosts:s.blogPosts.filter(x=>x.id!==post.id)});this.toast('Post deleted');}}));
+
+    // Categories
+    const categories=s.categories.map(cat=>({...cat,onEdit:()=>this.openCrudModal('category','edit',{...cat}),onDelete:()=>{this.setState({categories:s.categories.filter(x=>x.id!==cat.id)});this.toast('Category deleted');}}));
+
+    // Team
+    const teamMembers=s.teamMembers.map(tm=>({...tm,onEdit:()=>this.openCrudModal('team','edit',{...tm}),onDelete:()=>{this.setState({teamMembers:s.teamMembers.filter(x=>x.id!==tm.id)});this.toast('Team member removed');}}));
+
+    // Locations
+    const locations=s.locations.map(loc=>({...loc,onEdit:()=>this.openCrudModal('location','edit',{...loc}),onDelete:()=>{this.setState({locations:s.locations.filter(x=>x.id!==loc.id)});this.toast('Location removed');}}));
+
+    // Invoices
+    const invoices=s.invoices;
+
+    // Contact messages
+    const contactMessages=s.contactMessages.map(msg=>({...msg,itemStyle:`display:flex;align-items:flex-start;gap:11px;padding:14px 16px;border:none;border-bottom:1px solid #f5f7f9;cursor:pointer;width:100%;background:${msg.id===s.selectedMsgId?'#f0faf9':'#fff'}`,onSelect:()=>this.setState({selectedMsgId:msg.id,contactMessages:s.contactMessages.map(m=>m.id===msg.id?{...m,unread:false}:m)})}));
+    const activeMsg=s.contactMessages.find(m=>m.id===s.selectedMsgId)||null;
+
+    // Comments
+    const blogComments=s.blogComments.map(c=>({...c,statusStyle:`background:${c.status==='approved'?'rgba(39,174,96,.1)':'rgba(249,168,40,.1)'};color:${c.status==='approved'?'#27ae60':'#f39c12'};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:2px 8px`,statusLabel:c.status==='approved'?'Approved':'Pending',canApprove:c.status==='pending',rowStyle:`padding:18px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:flex-start;gap:16px`,onApprove:()=>{this.setState({blogComments:s.blogComments.map(x=>x.id===c.id?{...x,status:'approved'}:x)});this.toast('Comment approved');},onDelete:()=>{this.setState({blogComments:s.blogComments.filter(x=>x.id!==c.id)});this.toast('Comment deleted');}}));
+
+    // Audit log
+    const actionColors={'LOGIN':'background:rgba(22,181,167,.1);color:#16b5a7','APPT_CANCEL':'background:rgba(231,76,60,.1);color:#e74c3c','BLOG_PUBLISH':'background:rgba(45,90,142,.1);color:#2d5a8e','NOTE_ADDED':'background:rgba(249,168,40,.1);color:#f39c12','TEAM_UPDATED':'background:rgba(155,89,182,.1);color:#9b59b6','SERVICE_ADDED':'background:rgba(39,174,96,.1);color:#27ae60','INVOICE_VIEWED':'background:rgba(100,100,100,.1);color:#6b7884'};
+    const auditLog=s.auditLog.map(log=>({...log,actionStyle:`${actionColors[log.action]||'background:#f0f0f0;color:#666'};border-radius:6px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.04em`}));
+
+    // Admin forms
+    const adminForms=s.adminForms.map(f=>({...f,fieldCount:String(f.fieldCount||0),responseCount:String((f.responses||[]).length),onViewResponses:()=>this.setState({viewFormResponsesId:f.id}),onEdit:()=>this.openCrudModal('form','edit',{name:f.name,description:''}),onDelete:()=>{this.setState({adminForms:s.adminForms.filter(x=>x.id!==f.id)});this.toast('Form deleted');}}));
+    const viewRespForm=s.adminForms.find(f=>f.id===s.viewFormResponsesId);
+    const formResponsesList=viewRespForm?(viewRespForm.responses||[]):[];
+
+    // CRUD modal fields with current data
+    const crudModalFields=s.crudModal?s.crudModal.fields.map(f=>({...f,isText:f.isText&&!f.isTextarea&&!f.isSelect, isTextarea:!!f.isTextarea, isSelect:!!f.isSelect})):[];
+
+    // Doctor My Appointments
+    const myAppts=this.TODAY_SLOTS.filter(sl=>sl.status!=='Available').map((sl,i)=>{
+      const barColors={Completed:'#27ae60','In Progress':'#f39c12',Upcoming:'#16b5a7'};
+      const note=s.apptNotes[i]||'';
+      return{patient:sl.patient,service:sl.detail.split('·')[0].trim(),time:sl.time,status:sl.status,barColor:barColors[sl.status]||teal,hasNote:!!note,noteText:note,noteLabel:note?'Edit Notes':'Add Notes',canCancel:sl.status==='Upcoming',statusTag:slotTagStyle(sl.status),onAddNote:()=>this.setState({docNoteApptId:i,docNoteText:note,docNoteOpen:true}),onAddDoc:()=>this.setState({docDocApptId:i,docDocTitle:'',docDocOpen:true}),onCancel:()=>this.setState({docCancelApptId:i,docCancelReason:'',docCancelRefund:false,docCancelOpen:true})};
+    });
+
+    // Role options for login
+    // Flatten navGroups into a single array for the template (avoids nested sc-for)
+    const sidebarItems = [];
+    navGroups.forEach(grp => {
+      sidebarItems.push({isHeader:true, isNav:false, label:grp.label, style:'', icon:'', badge:'', badgeStyle:'display:none', onSelect:()=>{}});
+      grp.items.forEach(item => { sidebarItems.push({isHeader:false, isNav:true, ...item}); });
+    });
+
+    const roleOptions=['admin','doctor','staff'].map(r=>({label:{admin:'Admin',doctor:'Doctor',staff:'Staff'}[r],style:`flex:1;padding:9px 0;border-radius:8px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${s.loginRole===r?teal:'rgba(255,255,255,.12)'};background:${s.loginRole===r?'rgba(22,181,167,.15)':'transparent'};color:${s.loginRole===r?teal:'rgba(255,255,255,.5)'}`,onSelect:()=>this.setState({loginRole:r})}));
+
+    const inp=this.inpStyle();
+
+    return {
+      boolTrue:true, boolFalse:false,
+      isAuth:s.authView!=='app', isApp:s.authView==='app',
+      doLogin:()=>this.doLogin(),
+      loginEmail:s.loginEmail, loginPassword:s.loginPassword,
+      setLoginEmail:(e)=>this.setState({loginEmail:e.target.value,loginErrors:false}),
+      setLoginPassword:(e)=>this.setState({loginPassword:e.target.value,loginErrors:false}),
+      loginErr:s.loginErrors,loginErrMsg:'Invalid credentials. Please try again.',
+      loginEmailStyle:`width:100%;padding:11px 13px 11px 38px;border-radius:8px;border:1px solid ${s.loginErrors?'rgba(231,76,60,.5)':'rgba(255,255,255,.12)'};background:rgba(255,255,255,.06);color:#fff;font-family:'Open Sans',sans-serif;font-size:14px;outline:none`,
+      loginPwStyle:`width:100%;padding:11px 38px 11px 38px;border-radius:8px;border:1px solid ${s.loginErrors?'rgba(231,76,60,.5)':'rgba(255,255,255,.12)'};background:rgba(255,255,255,.06);color:#fff;font-family:'Open Sans',sans-serif;font-size:14px;outline:none`,
+      pwType:s.showPw?'text':'password',pwIcon:s.showPw?'fa-solid fa-eye-slash':'fa-solid fa-eye',
+      togglePw:()=>this.setState({showPw:!s.showPw}),
+      loginPlaceholder:{admin:'admin@spinesync.com',doctor:'doctor@spinesync.com',staff:'staff@spinesync.com'}[s.loginRole],
+      roleOptions,
+
+      userInitials:s.userName.split(' ').filter(w=>w[0]===w[0].toUpperCase()).slice(0,2).map(w=>w[0]).join(''),
+      userName:s.userName, userRoleLabel:this.ROLE_LABELS[s.role]||'',
+      navGroups, sidebarItems, inpStyle:inp,
+
+      isOverview:s.view==='overview', isPatients:s.view==='patients', isSchedule:s.view==='schedule',
+      isInvoices:s.view==='invoices', isServices:s.view==='services', isBlog:s.view==='blog',
+      isCategories:s.view==='categories', isTeam:s.view==='team', isLocations:s.view==='locations',
+      isSiteSettings:s.view==='siteSettings', isContactMessages:s.view==='contactMessages',
+      isComments:s.view==='comments', isFormsBuilder:s.view==='formsBuilder',
+      isAuditLog:s.view==='auditLog', isMyAppts:s.view==='myAppts',
+
+      goPatients:()=>this.go('patients'), goSchedule:()=>this.go('schedule'),
+      goInvoices:()=>this.go('invoices'), goContactMessages:()=>this.go('contactMessages'),
+      openAddPatient:()=>this.setState({addPatientOpen:true,apFirst:'',apLast:'',apEmail:'',apPhone:'',apCondition:'',apTherapist:''}),
+      closeAddPatient:()=>this.setState({addPatientOpen:false}),
+      addPatientOpen:s.addPatientOpen, apFirst:s.apFirst,apLast:s.apLast,apEmail:s.apEmail,apPhone:s.apPhone,apCondition:s.apCondition,apTherapist:s.apTherapist,
+      setApFirst:(e)=>this.setState({apFirst:e.target.value}),setApLast:(e)=>this.setState({apLast:e.target.value}),
+      setApEmail:(e)=>this.setState({apEmail:e.target.value}),setApPhone:(e)=>this.setState({apPhone:e.target.value}),
+      setApCondition:(e)=>this.setState({apCondition:e.target.value}),setApTherapist:(e)=>this.setState({apTherapist:e.target.value}),
+      submitAddPatient:()=>{if(!s.apFirst.trim()||!s.apLast.trim()){this.toast('Please fill required fields');return;}this.setState({addPatientOpen:false});this.toast('Patient added: '+s.apFirst+' '+s.apLast);},
+
+      recentPatients,todaySlots,todayApptCount:String(this.TODAY_SLOTS.filter(sl=>sl.status!=='Available').length),
+      filteredPatients,hasFilteredPatients:filteredPatients.length>0,noFilteredPatients:filteredPatients.length===0,
+      filterChips,searchQ:s.searchQ,setSearchQ:(e)=>this.setState({searchQ:e.target.value,view:'patients'}),
+      clearSearch:()=>this.setState({searchQ:'',patientFilter:'All'}),
+      scheduleSlots,scheduleDay:this.DAYS[((s.scheduleDay%this.DAYS.length)+this.DAYS.length)%this.DAYS.length],
+      prevDay:()=>this.setState({scheduleDay:s.scheduleDay-1}),nextDay:()=>this.setState({scheduleDay:s.scheduleDay+1}),
+      openBookSlot:()=>this.toast('Book slot — select a patient and time'),
+      invoices,invoiceCount:String(s.invoices.length),
+
+      services,openAddService:()=>this.openCrudModal('service','add',{name:'',blurb:'',price:'',duration:'',icon:'fa-solid fa-stethoscope'}),
+      blogPosts,openAddBlog:()=>this.openCrudModal('blog','add',{title:'',slug:'',excerpt:'',category:'',author:'',seoTitle:'',metaDesc:''}),
+      categories,openAddCategory:()=>this.openCrudModal('category','add',{name:'',slug:'',color:'#16b5a7'}),
+      teamMembers,openAddTeam:()=>this.openCrudModal('team','add',{name:'',role:'',email:'',specialties:'',bio:'',seoTitle:'',metaDesc:''}),
+      locations,openAddLocation:()=>this.openCrudModal('location','add',{name:'',address:'',phone:'',email:'',hours:'',mapUrl:''}),
+
+      crudModalOpen:!!s.crudModal,crudModalTitle:s.crudModal?({add:'Add',edit:'Edit'}[s.crudModal.mode]+' '+(s.crudModal.type.charAt(0).toUpperCase()+s.crudModal.type.slice(1))):'',
+      crudModalFields,crudModalSaveLabel:s.crudModal&&s.crudModal.mode==='add'?'Create':'Save Changes',
+      closeCrudModal:()=>this.setState({crudModal:null}),saveCrudModal:()=>this.saveCrudModal(),
+
+      contactMessages,selectedMsg:!!activeMsg,noSelectedMsg:!activeMsg,
+      activeMsg:activeMsg||{subject:'',name:'',email:'',time:'',body:''},
+      replyMsg:()=>this.toast('Reply sent'),deleteMsg:()=>{this.setState({contactMessages:s.contactMessages.filter(m=>m.id!==s.selectedMsgId),selectedMsgId:null});this.toast('Message deleted');},
+      contactMsgCount:String(s.contactMessages.length),
+
+      blogComments,pendingCommentsCount:String(pendingComments),
+      auditLog,
+      adminForms,openCreateForm:()=>this.openCrudModal('form','add',{name:'',description:''}),
+      formResponsesOpen:!!s.viewFormResponsesId,
+      formRespTitle:viewRespForm?viewRespForm.name:'',
+      formResponsesList,closeFormResponses:()=>this.setState({viewFormResponsesId:null}),
+
+      ssAddress:s.ssAddress,ssPhone:s.ssPhone,ssEmail:s.ssEmail,ssHoursWeekday:s.ssHoursWeekday,ssHoursSat:s.ssHoursSat,ssHoursSun:s.ssHoursSun,
+      setSsAddress:(e)=>this.setState({ssAddress:e.target.value}),setSsPhone:(e)=>this.setState({ssPhone:e.target.value}),
+      setSsEmail:(e)=>this.setState({ssEmail:e.target.value}),setSsHoursWeekday:(e)=>this.setState({ssHoursWeekday:e.target.value}),
+      setSsHoursSat:(e)=>this.setState({ssHoursSat:e.target.value}),setSsHoursSun:(e)=>this.setState({ssHoursSun:e.target.value}),
+      saveSiteSettings:()=>this.toast('Site settings saved'),
+
+      myAppts,
+      docNoteOpen:s.docNoteOpen,docNoteText:s.docNoteText,
+      setDocNoteText:(e)=>this.setState({docNoteText:e.target.value}),
+      closeDocNote:()=>this.setState({docNoteOpen:false}),
+      saveDocNote:()=>{const notes={...s.apptNotes};if(s.docNoteApptId!=null)notes[s.docNoteApptId]=s.docNoteText;this.setState({apptNotes:notes,docNoteOpen:false});this.toast('Notes saved');},
+      docCancelOpen:s.docCancelOpen,docCancelReason:s.docCancelReason,docCancelRefund:s.docCancelRefund,
+      setDocCancelReason:(e)=>this.setState({docCancelReason:e.target.value}),
+      toggleDocCancelRefund:()=>this.setState({docCancelRefund:!s.docCancelRefund}),
+      docRefundBoxStyle:`width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid ${s.docCancelRefund?teal:'#cbd3da'};background:${s.docCancelRefund?teal:'#fff'}`,
+      closeDocCancel:()=>this.setState({docCancelOpen:false}),
+      confirmDocCancel:()=>{if(!s.docCancelReason.trim()){this.toast('Please provide a cancellation reason');return;}this.setState({docCancelOpen:false});this.toast(s.docCancelRefund?'Appointment cancelled & refund initiated via Stripe':'Appointment cancelled');},
+      docDocOpen:s.docDocOpen,docDocTitle:s.docDocTitle,
+      setDocDocTitle:(e)=>this.setState({docDocTitle:e.target.value}),
+      closeDocDoc:()=>this.setState({docDocOpen:false}),
+      saveDocDoc:()=>{this.setState({docDocOpen:false});this.toast('Document attached to appointment');},
+
+      signoutOpen:s.signoutOpen,confirmSignout:()=>this.setState({signoutOpen:true}),
+      closeSignout:()=>this.setState({signoutOpen:false}),
+      doSignout:()=>this.setState({authView:'login',signoutOpen:false,loginEmail:'',loginPassword:'',loginErrors:false}),
+      toastShown:!!s.toast,toast:s.toast||'',
+      stop:(e)=>e.stopPropagation(),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
+  <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #f5f7f9; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    @keyframes modalIn { from { opacity:0; transform:translateY(16px) scale(.98); } to { opacity:1; transform:none; } }
+    @keyframes toastIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+    @media (max-width:768px) {
+      .dash-sidebar { width:100% !important; height:auto !important; position:static !important; }
+      .dash-wrap { flex-direction:column !important; }
+      .grid-4 { grid-template-columns:repeat(2,1fr) !important; }
+    }
+  </style>
+</helmet>
+
+<!-- ══ AUTH ══ -->
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ boolTrue }}">
+  <div style="min-height:100vh;background:linear-gradient(150deg,#f0faf9 0%,#f5f7f9 60%);display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Open Sans',sans-serif">
+    <div style="position:absolute;top:0;left:0;right:0;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;z-index:10">
+      <div style="display:flex;align-items:center;gap:9px"><div style="width:30px;height:30px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-heart-pulse" style="font-size:13px;color:#fff"></i></div><span style="font-family:Poppins,sans-serif;font-weight:700;font-size:18px;color:#14202e">Spine<span style="color:#16b5a7">Sync</span></span></div>
+      <a href="SpineSync-Public.dc.html" style="font-size:13px;color:#6b7884;text-decoration:none;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-arrow-left" style="font-size:11px"></i>Back to website</a>
+    </div>
+    <div style="width:100%;max-width:460px;padding-top:60px">
+      <sc-if value="{{ isLoginView }}" hint-placeholder-val="{{ boolTrue }}">
+        <div style="background:#fff;border-radius:18px;border:1px solid #e2e7ec;padding:38px;box-shadow:0 8px 32px rgba(20,32,46,.08)">
+          <div style="text-align:center;margin-bottom:26px">
+            <div style="width:52px;height:52px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fa-solid fa-circle-user" style="font-size:22px;color:#fff"></i></div>
+            <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#14202e">Welcome back</div>
+            <div style="font-size:14px;color:#6b7884;margin-top:5px">Sign in to your patient account</div>
+          </div>
+          <sc-if value="{{ loginErr }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:9px;margin-bottom:16px"><i class="fa-solid fa-circle-exclamation" style="color:#e74c3c;font-size:14px"></i><span style="font-size:13px;color:#e74c3c">{{ loginErrMsg }}</span></div>
+          </sc-if>
+          <div style="margin-bottom:14px"><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email address</label><div style="position:relative"><i class="fa-solid fa-envelope" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ loginEmail }}" onInput="{{ setLoginEmail }}" type="email" placeholder="you@email.com" style="{{ loginEmailStyle }}" /></div></div>
+          <div style="margin-bottom:6px"><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Password</label><div style="position:relative"><i class="fa-solid fa-lock" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ loginPassword }}" onInput="{{ setLoginPassword }}" type="{{ pwType }}" placeholder="Your password" style="{{ loginPwStyle }}" /><button onClick="{{ togglePw }}" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#6b7884;padding:0"><i class="{{ pwIcon }}" style="font-size:13px"></i></button></div></div>
+          <div style="text-align:right;margin-bottom:22px"><button onClick="{{ goForgot }}" style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:#16b5a7;font-family:Poppins,sans-serif">Forgot password?</button></div>
+          <button onClick="{{ doLogin }}" style="width:100%;background:#16b5a7;border:none;border-radius:999px;padding:14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.35);margin-bottom:18px">Sign In to Portal</button>
+          <div style="background:#f0faf9;border-radius:9px;padding:12px 14px;margin-bottom:20px;border:1px solid rgba(22,181,167,.15)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#16b5a7;margin-bottom:4px"><i class="fa-solid fa-circle-info" style="margin-right:5px"></i>Demo credentials</div><div style="font-size:12px;color:#6b7884">Email: <strong style="color:#14202e">alex@spinesync.com</strong>&nbsp;·&nbsp;Password: <strong style="color:#14202e">any 6+ chars</strong></div></div>
+          <div style="text-align:center;font-size:13px;color:#6b7884">New patient? <button onClick="{{ goSignup }}" style="background:none;border:none;cursor:pointer;font-size:13px;font-weight:700;color:#16b5a7;font-family:Poppins,sans-serif">Create an account</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isSignupView }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#fff;border-radius:18px;border:1px solid #e2e7ec;padding:38px;box-shadow:0 8px 32px rgba(20,32,46,.08)">
+          <div style="text-align:center;margin-bottom:24px"><div style="width:52px;height:52px;background:#14202e;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fa-solid fa-user-plus" style="font-size:20px;color:#fff"></i></div><div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#14202e">Create your account</div><div style="font-size:14px;color:#6b7884;margin-top:5px">Join SpineSync to manage your care online</div></div>
+          <sc-if value="{{ signupErr }}" hint-placeholder-val="{{ boolFalse }}"><div style="background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:9px;margin-bottom:14px"><i class="fa-solid fa-circle-exclamation" style="color:#e74c3c;font-size:14px"></i><span style="font-size:13px;color:#e74c3c">Please fix the highlighted fields.</span></div></sc-if>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">First name *</label><input value="{{ suFirst }}" onInput="{{ setSuFirst }}" placeholder="Alex" style="{{ suFirstStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Last name *</label><input value="{{ suLast }}" onInput="{{ setSuLast }}" placeholder="Thompson" style="{{ suLastStyle }}" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email *</label><input value="{{ suEmail }}" onInput="{{ setSuEmail }}" type="email" placeholder="you@email.com" style="{{ suEmailStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone *</label><input value="{{ suPhone }}" onInput="{{ setSuPhone }}" type="tel" placeholder="+44 7700 900000" style="{{ suPhoneStyle }}" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Password *</label><input value="{{ suPw }}" onInput="{{ setSuPw }}" type="password" placeholder="Min. 8 characters" style="{{ suPwStyle }}" /></div>
+            <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Confirm *</label><input value="{{ suConfirm }}" onInput="{{ setSuConfirm }}" type="password" placeholder="Repeat password" style="{{ suConfirmStyle }}" /></div>
+          </div>
+          <button onClick="{{ doSignup }}" style="width:100%;background:#14202e;border:none;border-radius:999px;padding:14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;margin-top:4px">Create Account</button>
+          <div style="text-align:center;font-size:13px;color:#6b7884">Already have an account? <button onClick="{{ goLogin }}" style="background:none;border:none;cursor:pointer;font-size:13px;font-weight:700;color:#16b5a7;font-family:Poppins,sans-serif">Sign in</button></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isForgotView }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#fff;border-radius:18px;border:1px solid #e2e7ec;padding:38px;box-shadow:0 8px 32px rgba(20,32,46,.08)">
+          <sc-if value="{{ forgotSent }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="text-align:center;padding:10px 0"><div style="width:64px;height:64px;border-radius:50%;background:#f0faf9;display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><i class="fa-solid fa-envelope-circle-check" style="font-size:28px;color:#16b5a7"></i></div><div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:8px">Check your inbox</div><p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 22px">Reset link sent to <strong style="color:#14202e">{{ forgotEmailVal }}</strong></p><button onClick="{{ goLogin }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 28px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em">Back to Sign In</button></div>
+          </sc-if>
+          <sc-if value="{{ notForgotSent }}" hint-placeholder-val="{{ boolTrue }}">
+            <div style="text-align:center;margin-bottom:26px"><div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#14202e">Reset your password</div><div style="font-size:14px;color:#6b7884;margin-top:5px">We'll send a secure link to your email</div></div>
+            <div style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email address</label><div style="position:relative"><i class="fa-solid fa-envelope" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ forgotEmail }}" onInput="{{ setForgotEmail }}" type="email" placeholder="you@email.com" style="{{ forgotEmailStyle }}" /></div><sc-if value="{{ forgotError }}" hint-placeholder-val="{{ boolFalse }}"><span style="font-size:11px;color:#e74c3c;display:block;margin-top:4px">Please enter a valid email address</span></sc-if></div>
+            <button onClick="{{ doForgot }}" style="width:100%;background:#16b5a7;border:none;border-radius:999px;padding:14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Send Reset Link</button>
+            <div style="text-align:center"><button onClick="{{ goLogin }}" style="background:none;border:none;cursor:pointer;font-size:13px;font-weight:600;color:#6b7884;font-family:Poppins,sans-serif"><i class="fa-solid fa-arrow-left" style="font-size:11px;margin-right:5px"></i>Back to Sign In</button></div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ══ APP ══ -->
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ boolFalse }}">
+<div class="dash-wrap" style="display:flex;min-height:100vh;font-family:'Open Sans',sans-serif">
+
+  <!-- SIDEBAR -->
+  <div class="dash-sidebar" style="width:238px;flex-shrink:0;background:#fff;border-right:1px solid #e2e7ec;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto">
+    <div style="padding:18px 16px;border-bottom:1px solid #e2e7ec;display:flex;align-items:center;gap:10px">
+      <div style="width:34px;height:34px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-heart-pulse" style="font-size:14px;color:#fff"></i></div>
+      <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:17px;color:#14202e">Spine<span style="color:#16b5a7">Sync</span></span>
+    </div>
+    <div style="padding:16px;border-bottom:1px solid #e2e7ec">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#fff">AT</div>
+        <div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">Alex Thompson</div><div style="font-size:12px;color:#6b7884">Patient #SS-4821</div></div>
+      </div>
+    </div>
+    <nav style="padding:14px 10px;flex:1">
+      <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7884;padding:0 8px;margin-bottom:8px">Navigation</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+          <button onClick="{{ item.onSelect }}" style="{{ item.style }}"><i class="{{ item.icon }}" style="width:16px;font-size:14px;flex-shrink:0"></i>{{ item.label }}<span style="{{ item.badgeStyle }}">{{ item.badge }}</span></button>
+        </sc-for>
+      </div>
+    </nav>
+    <div style="padding:12px 10px;border-top:1px solid #e2e7ec">
+      <button onClick="{{ goProfile }}" style="{{ profileNavStyle }}"><i class="fa-solid fa-circle-user" style="width:16px"></i>Profile</button>
+      <button onClick="{{ confirmSignout }}" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:16px"></i>Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1;background:#f5f7f9;min-width:0">
+    <!-- TOP BAR -->
+    <div style="background:#fff;border-bottom:1px solid #e2e7ec;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+      <div><div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e">{{ headerTitle }}</div><div style="font-size:12px;color:#6b7884">{{ headerSub }}</div></div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button onClick="{{ goNotifications }}" style="position:relative;cursor:pointer;background:none;border:none;padding:0">
+          <div style="width:36px;height:36px;border-radius:50%;background:#f5f7f9;border:1px solid #e2e7ec;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-bell" style="font-size:14px;color:#6b7884"></i></div>
+          <sc-if value="{{ hasUnreadNotifs }}" hint-placeholder-val="{{ boolTrue }}"><div style="position:absolute;top:1px;right:1px;width:9px;height:9px;background:#e74c3c;border-radius:50%;border:2px solid #fff"></div></sc-if>
+        </button>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">AT</div>
+      </div>
+    </div>
+
+    <div style="padding:26px 28px">
+
+      <!-- ══ OVERVIEW ══ -->
+      <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ boolTrue }}">
+        <div class="grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-calendar-check" style="color:#16b5a7;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Next Appt</span></div>
+            <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:3px">{{ nextApptDate }}</div>
+            <div style="font-size:12px;color:#6b7884">{{ nextApptSub }}</div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(45,90,142,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-calendar-days" style="color:#2d5a8e;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Bookings</span></div>
+            <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:3px">{{ totalBookings }}</div>
+            <div style="font-size:12px;color:#6b7884">{{ pastCount }} past · {{ futureCount }} upcoming</div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(39,174,96,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-file-invoice-dollar" style="color:#27ae60;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoices</span></div>
+            <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#27ae60;margin-bottom:3px">All clear</div>
+            <div style="font-size:12px;color:#6b7884">{{ invoiceCount }} paid via Stripe</div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(249,168,40,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-bell" style="color:#f39c12;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Notifications</span></div>
+            <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:3px">{{ unreadNotifCount }}</div>
+            <div style="font-size:12px;color:#6b7884">unread messages</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:18px;margin-bottom:18px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Upcoming Appointment</div><button onClick="{{ goAppts }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View All</button></div>
+            <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ boolTrue }}">
+              <div style="border:2px solid rgba(22,181,167,.2);border-left:4px solid #16b5a7;border-radius:10px;padding:18px;background:rgba(22,181,167,.03)">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">{{ topAppt.title }}</div><div style="font-size:13px;color:#6b7884">with {{ topAppt.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Confirmed</x-import></div>
+                <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px">
+                  <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-calendar" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.date }}</span></div>
+                  <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-clock" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.time }}</span></div>
+                  <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-location-dot" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.room }}</span></div>
+                </div>
+                <div style="display:flex;gap:10px"><button onClick="{{ topAppt.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ topAppt.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ boolFalse }}">
+              <div style="text-align:center;padding:30px;border:1px dashed #cbd3da;border-radius:10px"><i class="fa-solid fa-calendar-plus" style="font-size:26px;color:#cbd3da;display:block;margin-bottom:10px"></i><div style="font-size:13px;color:#6b7884;margin-bottom:14px">No upcoming appointments.</div><button onClick="{{ openBook }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Book Appointment</button></div>
+            </sc-if>
+          </div>
+
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Notifications</div><button onClick="{{ goNotifications }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">All</button></div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ notifPreview }}" as="n" hint-placeholder-count="3">
+                <div style="{{ n.rowStyle }}"><div style="{{ n.iconWrap }}"><i class="{{ n.icon }}" style="font-size:13px;color:{{ n.iconColor }}"></i></div><div style="flex:1;min-width:0"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:{{ n.fw }};color:#14202e;margin-bottom:2px">{{ n.title }}</div><div style="font-size:11px;color:#6b7884">{{ n.time }}</div></div></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:18px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Recent Appointments</div><button onClick="{{ goAppts }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View All</button></div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ recentPastAppts }}" as="pa" hint-placeholder-count="3">
+                <div style="padding:13px 0;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;gap:12px"><div style="width:38px;height:38px;background:#f0faf9;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-calendar-check" style="color:#27ae60;font-size:16px"></i></div><div style="flex:1"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">{{ pa.title }}</div><div style="font-size:12px;color:#6b7884">{{ pa.date }} · {{ pa.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Completed</x-import></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Forms to Fill</div><button onClick="{{ goForms }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">All</button></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ pendingForms }}" as="f" hint-placeholder-count="2">
+                <button onClick="{{ f.onFill }}" style="display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:#fff8e8;border:1px solid rgba(249,168,40,.2);cursor:pointer;width:100%;text-align:left"><div style="width:34px;height:34px;background:rgba(249,168,40,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-file-pen" style="color:#f39c12;font-size:14px"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">{{ f.name }}</div><div style="font-size:11px;color:#6b7884">{{ f.fieldCount }} fields · Pending</div></div></button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ APPOINTMENTS ══ -->
+      <sc-if value="{{ isAppts }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="display:flex;gap:8px;background:#fff;border:1px solid #e2e7ec;border-radius:999px;padding:4px">
+            <button onClick="{{ tabUpcoming }}" style="{{ tabUpStyle }}">Upcoming</button>
+            <button onClick="{{ tabPast }}" style="{{ tabPastStyle }}">Past</button>
+          </div>
+          <button onClick="{{ openBook }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:6px"></i>Book New</button>
+        </div>
+        <sc-if value="{{ showUpcoming }}" hint-placeholder-val="{{ boolTrue }}">
+          <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ boolTrue }}">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ upcomingAppts }}" as="ap" hint-placeholder-count="2">
+                <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;border-left:4px solid #16b5a7;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">{{ ap.title }}</div><div style="font-size:13px;color:#6b7884">with {{ ap.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Confirmed</x-import></div>
+                  <div style="display:flex;flex-wrap:wrap;gap:18px;margin-bottom:16px">
+                    <div style="display:flex;align-items:center;gap:7px"><i class="fa-solid fa-calendar" style="font-size:13px;color:#16b5a7"></i><span style="font-size:14px;color:#14202e">{{ ap.date }}</span></div>
+                    <div style="display:flex;align-items:center;gap:7px"><i class="fa-solid fa-clock" style="font-size:13px;color:#16b5a7"></i><span style="font-size:14px;color:#14202e">{{ ap.time }}</span></div>
+                    <div style="display:flex;align-items:center;gap:7px"><i class="fa-solid fa-location-dot" style="font-size:13px;color:#16b5a7"></i><span style="font-size:14px;color:#14202e">{{ ap.room }}</span></div>
+                  </div>
+                  <sc-if value="{{ ap.hasNote }}" hint-placeholder-val="{{ boolFalse }}">
+                    <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:9px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-note-sticky" style="color:#16b5a7;font-size:14px;margin-top:2px"></i><div><div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;margin-bottom:3px">Practitioner Note</div><div style="font-size:13px;color:#6b7884;line-height:1.55">{{ ap.note }}</div></div></div>
+                  </sc-if>
+                  <div style="display:flex;gap:10px"><button onClick="{{ ap.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ ap.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border:1px dashed #cbd3da;border-radius:12px;text-align:center;padding:48px 24px"><i class="fa-solid fa-calendar-plus" style="font-size:34px;color:#cbd3da;display:block;margin-bottom:14px"></i><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:6px">No upcoming appointments</div><button onClick="{{ openBook }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Book Appointment</button></div>
+          </sc-if>
+        </sc-if>
+        <sc-if value="{{ showPast }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+            <sc-for list="{{ pastAppts }}" as="pa" hint-placeholder-count="4">
+              <div style="padding:16px 22px;border-bottom:1px solid #f5f7f9">
+                <div style="display:flex;align-items:flex-start;gap:14px">
+                  <div style="width:40px;height:40px;background:#f0faf9;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-calendar-check" style="color:#27ae60;font-size:16px"></i></div>
+                  <div style="flex:1">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ pa.title }}</div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Completed</x-import></div>
+                    <div style="font-size:12px;color:#6b7884;margin-bottom:8px">{{ pa.date }} · {{ pa.prac }}</div>
+                    <sc-if value="{{ pa.hasNote }}" hint-placeholder-val="{{ boolFalse }}">
+                      <div style="background:#f5f7f9;border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-note-sticky" style="color:#6b7884;font-size:12px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.5">{{ pa.note }}</span></div>
+                    </sc-if>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- ══ INVOICES ══ -->
+      <sc-if value="{{ isInvoices }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Total Paid</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£{{ invoiceTotalPaid }}</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Invoices</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">{{ invoiceCount }}</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Outstanding</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£0</div><div style="font-size:12px;color:#27ae60;margin-top:3px">All paid via Stripe</div></div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+          <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Invoice History</div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Ref</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="4">
+                <tr style="border-top:1px solid #f5f7f9">
+                  <td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ inv.id }}</td>
+                  <td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.service }}</td>
+                  <td style="padding:14px 16px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ inv.amount }}</td>
+                  <td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.date }}</td>
+                  <td style="padding:14px 16px"><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;display:inline-flex;align-items:center;gap:5px"><i class="fa-solid fa-circle-check" style="font-size:10px"></i>Paid</span></td>
+                  <td style="padding:14px 22px;text-align:right;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif">{{ inv.stripeRef }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </sc-if>
+
+      <!-- ══ NOTIFICATIONS ══ -->
+      <sc-if value="{{ isNotifications }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">All Notifications</div>
+          <button onClick="{{ markAllRead }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">Mark All Read</button>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="5">
+            <div style="{{ n.itemStyle }}">
+              <div style="{{ n.iconWrap }}"><i class="{{ n.icon }}" style="font-size:15px;color:{{ n.iconColor }}"></i></div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:{{ n.fw }};color:#14202e;margin-bottom:3px">{{ n.title }}</div>
+                <div style="font-size:13px;color:#6b7884;margin-bottom:4px">{{ n.body }}</div>
+                <div style="font-size:11px;color:#6b7884">{{ n.time }}</div>
+              </div>
+              <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ boolFalse }}"><div style="width:8px;height:8px;border-radius:50%;background:#e74c3c;flex-shrink:0;margin-top:6px"></div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══ FORMS ══ -->
+      <sc-if value="{{ isForms }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ patientForms }}" as="f" hint-placeholder-count="3">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+                <div style="display:flex;align-items:center;gap:14px"><div style="width:42px;height:42px;background:{{ f.iconBg }};border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="{{ f.icon }}" style="font-size:17px;color:{{ f.iconColor }}"></i></div><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">{{ f.name }}</div><div style="font-size:12px;color:#6b7884">{{ f.fieldCount }} fields · {{ f.desc }}</div></div></div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ f.statusColor }}" hint-size="auto,22px">{{ f.statusLabel }}</x-import>
+              </div>
+              <div style="display:flex;gap:10px">
+                <button onClick="{{ f.onFill }}" style="{{ f.fillBtnStyle }}"><i class="fa-solid fa-file-pen" style="margin-right:6px"></i>{{ f.fillLabel }}</button>
+                <sc-if value="{{ f.hasResponses }}" hint-placeholder-val="{{ boolFalse }}"><button onClick="{{ f.onViewResponses }}" style="background:#f5f7f9;border:1px solid #e2e7ec;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em"><i class="fa-solid fa-clock-rotate-left" style="margin-right:6px"></i>View Responses ({{ f.responseCount }})</button></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══ PROFILE ══ -->
+      <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="max-width:800px">
+          <div style="display:flex;gap:8px;background:#fff;border:1px solid #e2e7ec;border-radius:999px;padding:4px;margin-bottom:22px;width:fit-content">
+            <sc-for list="{{ profileTabs }}" as="pt" hint-placeholder-count="5">
+              <button onClick="{{ pt.onSelect }}" style="{{ pt.style }}">{{ pt.label }}</button>
+            </sc-for>
+          </div>
+
+          <!-- Personal -->
+          <sc-if value="{{ isProfilePersonal }}" hint-placeholder-val="{{ boolTrue }}">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Personal Information</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Legal name</label><input value="{{ pLegalName }}" onInput="{{ setPLegalName }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Preferred name</label><input value="{{ pPreferredName }}" onInput="{{ setPPreferredName }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Date of birth</label><input type="date" value="{{ pDob }}" onInput="{{ setPDob }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone</label><input value="{{ pPhone }}" onInput="{{ setPPhone }}" style="{{ inpStyle }}" /></div>
+              </div>
+              <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email</label><input value="{{ pEmail }}" onInput="{{ setPEmail }}" style="{{ inpStyle }}" /></div>
+            </div>
+          </sc-if>
+
+          <!-- Address -->
+          <sc-if value="{{ isProfileAddress }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Address</div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Address line 1</label><input value="{{ pAddr1 }}" onInput="{{ setPAddr1 }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Address line 2 (optional)</label><input value="{{ pAddr2 }}" onInput="{{ setPAddr2 }}" style="{{ inpStyle }}" /></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                  <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">City</label><input value="{{ pCity }}" onInput="{{ setPCity }}" style="{{ inpStyle }}" /></div>
+                  <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Postcode</label><input value="{{ pPostcode }}" onInput="{{ setPPostcode }}" style="{{ inpStyle }}" /></div>
+                </div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Country</label><input value="{{ pCountry }}" onInput="{{ setPCountry }}" style="{{ inpStyle }}" /></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Emergency Contact -->
+          <sc-if value="{{ isProfileEmergency }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Emergency Contact</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Full name</label><input value="{{ pEcName }}" onInput="{{ setPEcName }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Relationship</label><input value="{{ pEcRel }}" onInput="{{ setPEcRel }}" placeholder="e.g. Spouse, Parent" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Phone number</label><input value="{{ pEcPhone }}" onInput="{{ setPEcPhone }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Email (optional)</label><input value="{{ pEcEmail }}" onInput="{{ setPEcEmail }}" style="{{ inpStyle }}" /></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Insurance -->
+          <sc-if value="{{ isProfileInsurance }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:18px">Insurance Details</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div style="grid-column:1/-1"><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Insurance provider name</label><input value="{{ pInsProvider }}" onInput="{{ setPInsProvider }}" placeholder="e.g. Bupa, AXA Health" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Member ID</label><input value="{{ pInsMemberId }}" onInput="{{ setPInsMemberId }}" style="{{ inpStyle }}" /></div>
+                <div><label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:5px">Group number</label><input value="{{ pInsGroupNum }}" onInput="{{ setPInsGroupNum }}" style="{{ inpStyle }}" /></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- Preferences -->
+          <sc-if value="{{ isProfilePrefs }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:6px">Communication Preferences</div>
+              <div style="font-size:13px;color:#6b7884;margin-bottom:16px">How would you like us to reach you?</div>
+              <sc-for list="{{ commPrefToggles }}" as="tg" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f5f7f9"><span style="font-size:14px;color:#14202e">{{ tg.label }}</span><button onClick="{{ tg.onToggle }}" style="{{ tg.trackStyle }}"><div style="{{ tg.knobStyle }}"></div></button></div>
+              </sc-for>
+            </div>
+            <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:26px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;margin-bottom:6px">Notification Preferences</div>
+              <div style="font-size:13px;color:#6b7884;margin-bottom:16px">What would you like to be notified about?</div>
+              <sc-for list="{{ notifPrefToggles }}" as="tg" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f5f7f9"><span style="font-size:14px;color:#14202e">{{ tg.label }}</span><button onClick="{{ tg.onToggle }}" style="{{ tg.trackStyle }}"><div style="{{ tg.knobStyle }}"></div></button></div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <button onClick="{{ saveProfile }}" style="background:#16b5a7;border:none;border-radius:999px;padding:13px 30px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 4px 14px rgba(22,181,167,.3)">Save Changes</button>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- BOOK MODAL -->
+  <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closePicker }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:50px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:520px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">{{ pickerTitle }}</div><button onClick="{{ closePicker }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px">
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:10px">Select a day</div>
+          <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:20px">
+            <sc-for list="{{ pdays }}" as="day" hint-placeholder-count="7"><button onClick="{{ day.onSelect }}" disabled="{{ day.disabled }}" style="{{ day.style }}"><span style="font-size:11px;font-weight:600;text-transform:uppercase">{{ day.dow }}</span><span style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700">{{ day.date }}</span><span style="font-size:10px">{{ day.mon }}</span></button></sc-for>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:10px">Available times</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+            <sc-for list="{{ pslots }}" as="slot" hint-placeholder-count="8"><button onClick="{{ slot.onSelect }}" disabled="{{ slot.taken }}" style="{{ slot.style }}">{{ slot.time }}</button></sc-for>
+          </div>
+          <sc-if value="{{ pickerError }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-top:12px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please choose a day and time.</div></sc-if>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closePicker }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ confirmPicker }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">{{ pickerCta }}</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FILL FORM MODAL -->
+  <sc-if value="{{ fillFormOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeFillForm }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:560px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">{{ fillFormTitle }}</div><div style="font-size:12px;color:#6b7884">{{ fillFormDesc }}</div></div><button onClick="{{ closeFillForm }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <sc-if value="{{ formSubmitted }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="padding:40px 24px;text-align:center"><div style="width:60px;height:60px;border-radius:50%;background:#f0faf9;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><i class="fa-solid fa-circle-check" style="font-size:26px;color:#16b5a7"></i></div><div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin-bottom:8px">Form submitted</div><p style="font-size:14px;color:#6b7884;margin:0 0 22px">Your response has been sent to your care team.</p><button onClick="{{ closeFillForm }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Close</button></div>
+        </sc-if>
+        <sc-if value="{{ notFormSubmitted }}" hint-placeholder-val="{{ boolTrue }}">
+          <div style="padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ fillFormFields }}" as="field" hint-placeholder-count="4">
+              <div>
+                <label style="display:block;font-size:12px;font-weight:600;color:#14202e;margin-bottom:6px">{{ field.label }}{{ field.reqMark }}</label>
+                <sc-if value="{{ field.isText }}" hint-placeholder-val="{{ boolTrue }}"><input value="{{ field.value }}" onInput="{{ field.onInput }}" placeholder="{{ field.placeholder }}" style="width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none" /></sc-if>
+                <sc-if value="{{ field.isTextarea }}" hint-placeholder-val="{{ boolFalse }}"><textarea value="{{ field.value }}" onInput="{{ field.onInput }}" rows="3" placeholder="{{ field.placeholder }}" style="width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;resize:vertical"></textarea></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closeFillForm }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ submitForm }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Submit Form</button></div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- VIEW RESPONSES MODAL -->
+  <sc-if value="{{ viewResponsesOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeViewResponses }}" style="position:fixed;inset:0;z-index:1000;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:580px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .26s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Past Responses</div><button onClick="{{ closeViewResponses }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        <div style="padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ viewResponsesList }}" as="resp" hint-placeholder-count="2">
+            <div style="background:#f5f7f9;border-radius:12px;padding:16px 18px;border:1px solid #e2e7ec">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #e2e7ec"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">Submitted {{ resp.date }}</div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Received</x-import></div>
+              <sc-for list="{{ resp.answers }}" as="ans" hint-placeholder-count="3">
+                <div style="margin-bottom:10px"><div style="font-size:12px;font-weight:600;color:#6b7884;margin-bottom:3px">{{ ans.q }}</div><div style="font-size:14px;color:#14202e">{{ ans.a }}</div></div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;text-align:right"><button onClick="{{ closeViewResponses }}" style="background:#14202e;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">Close</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CONFIRM DIALOG -->
+  <sc-if value="{{ dialogOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeDialog }}" style="position:fixed;inset:0;z-index:1100;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:100%;max-width:400px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);padding:28px;text-align:center;animation:modalIn .24s cubic-bezier(.16,1,.3,1)">
+        <div style="{{ dialogIconWrap }}"><i class="{{ dialogIcon }}" style="font-size:24px;color:{{ dialogIconColor }}"></i></div>
+        <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin:16px 0 8px">{{ dialogTitle }}</div>
+        <p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 22px">{{ dialogBody }}</p>
+        <div style="display:flex;gap:10px"><button onClick="{{ closeDialog }}" style="flex:1;background:#f5f7f9;border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#6b7884">{{ dialogCancel }}</button><button onClick="{{ dialogConfirm }}" style="{{ dialogConfirmStyle }}">{{ dialogConfirmLabel }}</button></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- TOAST -->
+  <sc-if value="{{ toastShown }}" hint-placeholder-val="{{ boolFalse }}">
+    <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:1200;background:#14202e;color:#fff;border-radius:999px;padding:13px 24px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 36px rgba(0,0,0,.3);animation:toastIn .25s ease"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:15px"></i><span style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600">{{ toast }}</span></div>
+  </sc-if>
+
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    authView: 'login', showPw: false,
+    loginEmail: '', loginPassword: '', loginErrors: false,
+    suFirst: '', suLast: '', suEmail: '', suPhone: '', suPw: '', suConfirm: '', suErrors: false,
+    forgotEmail: '', forgotSent: false, forgotError: false,
+    view: 'overview',
+    apptTab: 'upcoming',
+    profileTab: 'personal',
+    upcoming: [
+      { id: 'a1', title: 'Spinal Adjustment Session', prac: 'Dr. Sarah Mitchell', date: 'Thu 29 June 2026', time: '10:00 AM · 45 min', room: 'Room 3, Floor 2', note: 'Please avoid heavy lifting for 48 hours after this session. Continue the lumbar flexion exercises daily.' },
+    ],
+    notifications: [
+      { id: 'n1', title: 'Appointment Reminder', body: 'Your Spinal Adjustment Session is tomorrow at 10:00 AM with Dr. Mitchell.', time: '2 hours ago', type: 'appt', unread: true },
+      { id: 'n2', title: 'New Form Available', body: 'Your practitioner has shared a Monthly Progress Check form for you to complete.', time: '1 day ago', type: 'form', unread: true },
+      { id: 'n3', title: 'Invoice Paid', body: 'Payment of £120 confirmed via Stripe for Chiropractic Care on 20 Jun 2026.', time: '7 days ago', type: 'invoice', unread: false },
+      { id: 'n4', title: 'Appointment Confirmed', body: 'Your booking on Thu 29 Jun at 10:00 AM has been confirmed.', time: '8 days ago', type: 'appt', unread: false },
+      { id: 'n5', title: 'Treatment Plan Updated', body: 'Dr. Mitchell has updated your treatment plan. Please review before your next visit.', time: '10 days ago', type: 'note', unread: false },
+    ],
+    invoices: [
+      { id: 'INV-2048', service: 'Chiropractic Care', amount: '£120', date: '20 Jun 2026', stripeRef: 'pi_3Oaq2HLF' },
+      { id: 'INV-2041', service: 'Physical Therapy Session', amount: '£95', date: '13 Jun 2026', stripeRef: 'pi_3OaM1GKD' },
+      { id: 'INV-2035', service: 'Chiropractic Assessment', amount: '£120', date: '6 Jun 2026', stripeRef: 'pi_3OZ9xCJA' },
+      { id: 'INV-2028', service: 'Initial Consultation', amount: '£85', date: '2 Jun 2026', stripeRef: 'pi_3OYVpBH2' },
+    ],
+    forms: [
+      { id: 'f1', name: 'New Patient Intake', desc: 'Complete before your first visit', icon: 'fa-solid fa-file-medical', fields: [
+        { id: 'fq1', label: 'What is the main reason for your visit today?', type: 'textarea', required: true, placeholder: 'Describe your symptoms or condition…' },
+        { id: 'fq2', label: 'How long have you had this condition?', type: 'text', required: true, placeholder: 'e.g. 3 months' },
+        { id: 'fq3', label: 'Rate your pain level (1–10)', type: 'text', required: true, placeholder: 'e.g. 6' },
+        { id: 'fq4', label: 'Any previous treatment or surgeries?', type: 'textarea', required: false, placeholder: 'Optional' },
+      ], responses: [{ date: '6 Jun 2026', answers: [{ q: 'Main reason for visit', a: 'Lower back pain radiating to left leg' }, { q: 'Duration', a: '3 months' }, { q: 'Pain level', a: '7/10' }] }] },
+      { id: 'f2', name: 'Monthly Progress Check', desc: 'Track your recovery each month', icon: 'fa-solid fa-chart-line', fields: [
+        { id: 'fq5', label: 'Current pain level (1–10)', type: 'text', required: true, placeholder: 'e.g. 3' },
+        { id: 'fq6', label: 'Activities improved since last session?', type: 'textarea', required: true, placeholder: 'e.g. Walking longer distances, sleeping better' },
+        { id: 'fq7', label: 'Any new or worsening symptoms?', type: 'textarea', required: false, placeholder: 'Optional — leave blank if none' },
+      ], responses: [] },
+      { id: 'f3', name: 'Discharge Feedback', desc: 'Complete when your treatment ends', icon: 'fa-solid fa-file-circle-check', fields: [
+        { id: 'fq8', label: 'How would you rate your overall experience? (1–5)', type: 'text', required: true, placeholder: 'e.g. 5' },
+        { id: 'fq9', label: 'What helped most during your treatment?', type: 'textarea', required: false, placeholder: 'Your feedback helps us improve' },
+      ], responses: [] },
+    ],
+    fillFormId: null, fillFormOpen: false, fillAnswers: {}, formSubmitted: false,
+    viewResponsesFormId: null,
+    pickerOpen: false, pickerMode: null, pickerApptId: null, pickerDay: null, pickerSlot: null, pickerError: false,
+    dialog: null, toast: null,
+    // Profile
+    pLegalName: 'Alexander Thompson', pPreferredName: 'Alex', pDob: '1990-05-14',
+    pPhone: '+44 7700 900821', pEmail: 'alex.thompson@email.com',
+    pAddr1: '42 Brunswick Gardens', pAddr2: '', pCity: 'London', pPostcode: 'W8 4AT', pCountry: 'United Kingdom',
+    pEcName: 'Sarah Thompson', pEcRel: 'Spouse', pEcPhone: '+44 7700 900501', pEcEmail: 'sarah.t@email.com',
+    pInsProvider: 'Bupa', pInsMemberId: 'B-8421-9034', pInsGroupNum: 'GRP-004',
+    commPrefs: { email: true, sms: true, phone: false },
+    notifPrefs: { apptReminders: true, invoices: true, healthTips: false, forms: true },
+  };
+
+  PAST = [
+    { title: 'Physical Therapy Session', date: '20 Jun 2026', prac: 'Dr. Okafor', note: 'Good progress with lumbar flexion. Continue home exercises 3x daily.' },
+    { title: 'Chiropractic Assessment', date: '13 Jun 2026', prac: 'Dr. Mitchell', note: '' },
+    { title: 'Initial Consultation', date: '6 Jun 2026', prac: 'Dr. Mitchell', note: '' },
+    { title: 'Spine X-Ray Review', date: '2 Jun 2026', prac: 'Dr. Nair', note: '' },
+  ];
+  DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  SLOTS = ['8:00','9:00','10:00','11:00','1:30','2:30','3:30','4:30'];
+
+  buildDays() {
+    const out = []; const base = new Date(2026,5,26);
+    for (let i = 1; i <= 7; i++) { const d = new Date(base); d.setDate(base.getDate()+i); out.push({date:d.getDate(),dow:this.DOW[d.getDay()],mon:this.MON[d.getMonth()],closed:d.getDay()===0}); }
+    return out;
+  }
+  slotsFor(idx) { if (idx==null) return []; return this.SLOTS.map((t,i)=>({time:t,taken:(idx+i)%3===0})); }
+
+  showToast(msg) { this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
+  go(view) { this.setState({view}); }
+
+  doLogin() {
+    const s = this.state;
+    if (!s.loginEmail.trim() || s.loginPassword.trim().length < 6) { this.setState({loginErrors:true}); return; }
+    try { localStorage.setItem('ss_user', JSON.stringify({name:'Alex Thompson',email:s.loginEmail.trim()})); } catch(e) {}
+    this.setState({authView:'app', loginErrors:false});
+  }
+  doSignup() {
+    const s = this.state;
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.suEmail.trim());
+    if (!s.suFirst.trim()||!s.suLast.trim()||!emailOk||s.suPhone.trim().length<7||s.suPw.length<8||s.suPw!==s.suConfirm) { this.setState({suErrors:true}); return; }
+    try { localStorage.setItem('ss_user', JSON.stringify({name:s.suFirst+' '+s.suLast,email:s.suEmail.trim()})); } catch(e) {}
+    this.setState({authView:'app', suErrors:false});
+  }
+  doForgot() {
+    const s = this.state;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.forgotEmail.trim())) { this.setState({forgotError:true}); return; }
+    this.setState({forgotSent:true, forgotError:false});
+  }
+  doSignout() {
+    try { localStorage.removeItem('ss_user'); } catch(e) {}
+    this.setState({authView:'login', dialog:null, loginEmail:'', loginPassword:''});
+  }
+
+  openPicker(mode, apptId) { this.setState({pickerOpen:true, pickerMode:mode, pickerApptId:apptId||null, pickerDay:null, pickerSlot:null, pickerError:false}); }
+  confirmPicker() {
+    const s = this.state;
+    if (s.pickerDay==null||!s.pickerSlot) { this.setState({pickerError:true}); return; }
+    const day = this.buildDays()[s.pickerDay];
+    const dateStr = `${day.dow} ${day.date} ${day.mon} 2026`;
+    if (s.pickerMode==='reschedule') {
+      const up = s.upcoming.map(a => a.id===s.pickerApptId ? {...a,date:dateStr,time:`${s.pickerSlot} · 45 min`} : a);
+      this.setState({upcoming:up, pickerOpen:false});
+      this.showToast('Appointment rescheduled');
+    } else {
+      const newA = {id:'a'+Date.now(), title:'Treatment Session', prac:'Dr. Sarah Mitchell', date:dateStr, time:`${s.pickerSlot} · 45 min`, room:'Room 3, Floor 2', note:''};
+      this.setState({upcoming:[...s.upcoming, newA], pickerOpen:false, apptTab:'upcoming'});
+      this.showToast('Appointment booked');
+    }
+  }
+  doCancel(apptId) {
+    this.setState({upcoming:this.state.upcoming.filter(a=>a.id!==apptId), dialog:null});
+    this.showToast('Appointment cancelled');
+  }
+
+  openFillForm(formId) { this.setState({fillFormOpen:true, fillFormId:formId, fillAnswers:{}, formSubmitted:false}); }
+  submitForm() {
+    const s = this.state;
+    const form = s.forms.find(f=>f.id===s.fillFormId);
+    if (!form) return;
+    const required = form.fields.filter(f=>f.required);
+    const allFilled = required.every(f => (s.fillAnswers[f.id]||'').trim().length>0);
+    if (!allFilled) { this.showToast('Please fill in all required fields'); return; }
+    const newResp = { date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), answers: form.fields.map(f=>({q:f.label, a:s.fillAnswers[f.id]||'—'})) };
+    const forms = s.forms.map(f => f.id===s.fillFormId ? {...f, responses:[...f.responses, newResp]} : f);
+    this.setState({forms, formSubmitted:true});
+    this.showToast('Form submitted successfully');
+  }
+
+  markAllRead() {
+    this.setState({notifications:this.state.notifications.map(n=>({...n, unread:false}))});
+    this.showToast('All notifications marked as read');
+  }
+
+  inp() { return 'width:100%;padding:11px 13px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:\'Open Sans\',sans-serif;font-size:14px;color:#14202e;outline:none'; }
+  toggle(on, i, key) {
+    return () => {
+      const prefs = {...this.state[key]};
+      const keys = Object.keys(prefs);
+      prefs[keys[i]] = !prefs[keys[i]];
+      this.setState({[key]:prefs});
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const teal = '#16b5a7';
+
+    const navItems = [
+      {key:'overview', label:'Overview', icon:'fa-solid fa-house'},
+      {key:'appointments', label:'Appointments', icon:'fa-solid fa-calendar-days'},
+      {key:'invoices', label:'Invoices', icon:'fa-solid fa-file-invoice-dollar'},
+      {key:'notifications', label:'Notifications', icon:'fa-solid fa-bell', badge: s.notifications.filter(n=>n.unread).length},
+      {key:'forms', label:'Forms', icon:'fa-solid fa-file-pen', badge: s.forms.filter(f=>f.responses.length===0).length},
+    ];
+    const nav = navItems.map(it => {
+      const active = s.view===it.key;
+      const showBadge = it.badge && it.badge>0;
+      return {
+        label:it.label, icon:it.icon,
+        style:`display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:${active?'rgba(22,181,167,.1)':'transparent'};color:${active?teal:'#6b7884'};font-family:Poppins,sans-serif;font-weight:${active?700:500};font-size:14px;width:100%;text-align:left`,
+        badge: showBadge ? String(it.badge) : '',
+        badgeStyle: showBadge ? `margin-left:auto;background:${it.badge>0?'#e74c3c':teal};color:#fff;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 7px` : 'display:none',
+        onSelect: () => this.go(it.key),
+      };
+    });
+
+    const profileNavStyle = `display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:${s.view==='profile'?'rgba(22,181,167,.1)':'transparent'};color:${s.view==='profile'?teal:'#6b7884'};font-family:Poppins,sans-serif;font-weight:${s.view==='profile'?700:500};font-size:14px;width:100%;text-align:left`;
+
+    const headers = {
+      overview: ['Good morning, Alex', 'Thursday, 26 June 2026'],
+      appointments: ['My Appointments', 'Manage your upcoming and past sessions'],
+      invoices: ['Invoices', 'Your billing history — all paid via Stripe'],
+      notifications: ['Notifications', 'Stay up to date with your care'],
+      forms: ['Forms', 'Complete forms from your care team'],
+      profile: ['My Profile', 'Manage your personal and medical details'],
+    };
+
+    const top = s.upcoming[0];
+    const upcomingAppts = s.upcoming.map(a=>({
+      ...a,
+      hasNote: !!a.note,
+      onReschedule: ()=>this.openPicker('reschedule',a.id),
+      onCancel: ()=>this.setState({dialog:{type:'cancel',apptId:a.id}}),
+    }));
+    const topAppt = top ? {
+      title:top.title, prac:top.prac, date:top.date, time:top.time, room:top.room, note:top.note,
+      onReschedule:()=>this.openPicker('reschedule',top.id),
+      onCancel:()=>this.setState({dialog:{type:'cancel',apptId:top.id}}),
+    } : {title:'',prac:'',date:'',time:'',room:'',note:'', onReschedule:()=>{}, onCancel:()=>{}};
+
+    const pastAppts = this.PAST.map(p=>({...p, hasNote:!!p.note}));
+    const recentPastAppts = this.PAST.slice(0,3);
+
+    const unreadNotifCount = s.notifications.filter(n=>n.unread).length;
+    const notifIconMap = {appt:{icon:'fa-solid fa-calendar-check',color:teal,bg:'rgba(22,181,167,.1)'}, form:{icon:'fa-solid fa-file-pen',color:'#f39c12',bg:'rgba(249,168,40,.1)'}, invoice:{icon:'fa-solid fa-file-invoice-dollar',color:'#27ae60',bg:'rgba(39,174,96,.1)'}, note:{icon:'fa-solid fa-note-sticky',color:'#9b59b6',bg:'rgba(155,89,182,.1)'}};
+    const notifications = s.notifications.map(n=>{
+      const m = notifIconMap[n.type]||{icon:'fa-solid fa-bell',color:teal,bg:'rgba(22,181,167,.1)'};
+      return {...n, icon:m.icon, iconColor:m.color, iconWrap:`width:38px;height:38px;border-radius:9px;background:${m.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0`, fw:n.unread?700:500, itemStyle:`padding:16px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:flex-start;gap:14px;background:${n.unread?'rgba(22,181,167,.02)':'#fff'}`};
+    });
+    const notifPreview = notifications.slice(0,3);
+
+    const invoiceTotalPaid = s.invoices.reduce((sum,i)=>sum+parseInt(i.amount.replace('£','')),0);
+    const invoices = s.invoices;
+
+    const patientForms = s.forms.map(f=>({
+      id:f.id, name:f.name, desc:f.desc, icon:f.icon,
+      iconBg: f.responses.length>0?'rgba(39,174,96,.1)':'rgba(249,168,40,.1)',
+      iconColor: f.responses.length>0?'#27ae60':'#f39c12',
+      fieldCount: String(f.fields.length),
+      statusColor: f.responses.length>0?'success':'warning',
+      statusLabel: f.responses.length>0?'Completed':'Pending',
+      hasResponses: f.responses.length>0,
+      responseCount: String(f.responses.length),
+      fillLabel: f.responses.length>0?'Fill Again':'Fill Now',
+      fillBtnStyle: `background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em`,
+      onFill: ()=>this.openFillForm(f.id),
+      onViewResponses: ()=>this.setState({viewResponsesFormId:f.id}),
+    }));
+    const pendingForms = patientForms.filter(f=>f.statusLabel==='Pending').slice(0,2);
+
+    // Fill form modal
+    const fillFormObj = s.fillFormOpen ? s.forms.find(f=>f.id===s.fillFormId) : null;
+    const fillFormFields = fillFormObj ? fillFormObj.fields.map(field=>({
+      label:field.label, reqMark:field.required?' *':'',
+      isText: field.type==='text', isTextarea: field.type==='textarea',
+      placeholder:field.placeholder||'',
+      value: s.fillAnswers[field.id]||'',
+      onInput: (e)=>this.setState({fillAnswers:{...s.fillAnswers, [field.id]:e.target.value}}),
+    })) : [];
+
+    // View responses
+    const viewRespForm = s.viewResponsesFormId ? s.forms.find(f=>f.id===s.viewResponsesFormId) : null;
+    const viewResponsesList = viewRespForm ? viewRespForm.responses : [];
+
+    // Profile tabs
+    const tabs = ['personal','address','emergency','insurance','preferences'];
+    const tabLabels = ['Personal','Address','Emergency','Insurance','Preferences'];
+    const profileTabs = tabs.map((t,i)=>({
+      label:tabLabels[i],
+      style:`padding:8px 16px;border-radius:999px;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:${s.profileTab===t?700:500};background:${s.profileTab===t?teal:'transparent'};color:${s.profileTab===t?'#fff':'#6b7884'}`,
+      onSelect:()=>this.setState({profileTab:t}),
+    }));
+
+    const commPrefToggles = [
+      {label:'Email updates',key:'email'},{label:'SMS reminders',key:'sms'},{label:'Phone calls',key:'phone'},
+    ].map((item,i)=>({
+      label:item.label,
+      trackStyle:`width:42px;height:24px;border-radius:999px;border:none;cursor:pointer;position:relative;background:${s.commPrefs[item.key]?teal:'#cbd3da'};transition:background .15s`,
+      knobStyle:`position:absolute;top:3px;left:${s.commPrefs[item.key]?'21px':'3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s`,
+      onToggle:()=>{const p={...s.commPrefs};p[item.key]=!p[item.key];this.setState({commPrefs:p});},
+    }));
+    const notifPrefToggles = [
+      {label:'Appointment reminders',key:'apptReminders'},{label:'Invoice notifications',key:'invoices'},{label:'Health tips & news',key:'healthTips'},{label:'Form requests',key:'forms'},
+    ].map((item)=>({
+      label:item.label,
+      trackStyle:`width:42px;height:24px;border-radius:999px;border:none;cursor:pointer;position:relative;background:${s.notifPrefs[item.key]?teal:'#cbd3da'};transition:background .15s`,
+      knobStyle:`position:absolute;top:3px;left:${s.notifPrefs[item.key]?'21px':'3px'};width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s`,
+      onToggle:()=>{const p={...s.notifPrefs};p[item.key]=!p[item.key];this.setState({notifPrefs:p});},
+    }));
+
+    // Picker
+    const pdays = this.buildDays().map((d,i)=>{
+      const sel=s.pickerDay===i, dis=d.closed;
+      return {dow:d.dow, date:String(d.date), mon:d.mon, disabled:dis,
+        style:`flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;padding:10px 0;border-radius:12px;cursor:${dis?'not-allowed':'pointer'};border:2px solid ${sel?teal:'#e2e7ec'};background:${sel?'#f0faf9':dis?'#f5f7f9':'#fff'};color:${dis?'#cbd3da':sel?teal:'#14202e'};opacity:${dis?'.6':'1'}`,
+        onSelect:dis?(()=>{}):(()=>this.setState({pickerDay:i, pickerSlot:null, pickerError:false}))};
+    });
+    const pslots = this.slotsFor(s.pickerDay).map(sl=>{
+      const sel=s.pickerSlot===sl.time;
+      return {time:sl.time, taken:sl.taken,
+        style:`padding:11px 0;text-align:center;border-radius:9px;cursor:${sl.taken?'not-allowed':'pointer'};font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${sel?teal:'#e2e7ec'};background:${sel?teal:sl.taken?'#f5f7f9':'#fff'};color:${sel?'#fff':sl.taken?'#cbd3da':'#14202e'};text-decoration:${sl.taken?'line-through':'none'}`,
+        onSelect:sl.taken?(()=>{}):(()=>this.setState({pickerSlot:sl.time, pickerError:false}))};
+    });
+
+    // Dialog
+    const dlg = s.dialog;
+    const isCancel = dlg&&dlg.type==='cancel';
+    const isSignout = dlg&&dlg.type==='signout';
+
+    const inp = this.inp();
+
+    return {
+      boolTrue:true, boolFalse:false,
+      nav, profileNavStyle,
+      goNotifications:()=>this.go('notifications'), goAppts:()=>this.go('appointments'),
+      goForms:()=>this.go('forms'), goProfile:()=>this.go('profile'),
+      confirmSignout:()=>this.setState({dialog:{type:'signout'}}),
+      headerTitle: (headers[s.view]||headers.overview)[0],
+      headerSub: (headers[s.view]||headers.overview)[1],
+      hasUnreadNotifs: unreadNotifCount>0,
+
+      isOverview:s.view==='overview', isAppts:s.view==='appointments',
+      isInvoices:s.view==='invoices', isNotifications:s.view==='notifications',
+      isForms:s.view==='forms', isProfile:s.view==='profile',
+
+      // Overview
+      nextApptDate: top ? top.date.split(' ').slice(1,3).join(' ') : '—',
+      nextApptSub: top ? top.time.split(' · ')[0]+' · '+top.prac.split(' ')[1] : 'No appointment',
+      totalBookings: String(s.upcoming.length + this.PAST.length),
+      pastCount: String(this.PAST.length), futureCount: String(s.upcoming.length),
+      invoiceCount: String(s.invoices.length), invoiceTotalPaid: String(invoiceTotalPaid),
+      unreadNotifCount: String(unreadNotifCount),
+      hasUpcoming:s.upcoming.length>0, noUpcoming:s.upcoming.length===0,
+      topAppt, recentPastAppts, notifPreview, pendingForms,
+      openBook:()=>this.openPicker('book',null),
+
+      // Appointments
+      apptTab:s.apptTab,
+      tabUpStyle:`padding:8px 18px;border-radius:999px;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;background:${s.apptTab==='upcoming'?teal:'transparent'};color:${s.apptTab==='upcoming'?'#fff':'#6b7884'}`,
+      tabPastStyle:`padding:8px 18px;border-radius:999px;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;background:${s.apptTab==='past'?teal:'transparent'};color:${s.apptTab==='past'?'#fff':'#6b7884'}`,
+      tabUpcoming:()=>this.setState({apptTab:'upcoming'}), tabPast:()=>this.setState({apptTab:'past'}),
+      showUpcoming:s.apptTab==='upcoming', showPast:s.apptTab==='past',
+      upcomingAppts, pastAppts,
+
+      // Invoices
+      invoices,
+
+      // Notifications
+      notifications, markAllRead:()=>this.markAllRead(),
+
+      // Forms
+      patientForms,
+      fillFormOpen:s.fillFormOpen, formSubmitted:s.formSubmitted, notFormSubmitted:!s.formSubmitted,
+      fillFormTitle: fillFormObj?fillFormObj.name:'',
+      fillFormDesc: fillFormObj?fillFormObj.desc:'',
+      fillFormFields, submitForm:()=>this.submitForm(), closeFillForm:()=>this.setState({fillFormOpen:false}),
+      viewResponsesOpen: !!s.viewResponsesFormId,
+      viewResponsesList, closeViewResponses:()=>this.setState({viewResponsesFormId:null}),
+
+      // Profile
+      profileTabs,
+      isProfilePersonal:s.profileTab==='personal', isProfileAddress:s.profileTab==='address',
+      isProfileEmergency:s.profileTab==='emergency', isProfileInsurance:s.profileTab==='insurance',
+      isProfilePrefs:s.profileTab==='preferences',
+      inpStyle: inp,
+      pLegalName:s.pLegalName, pPreferredName:s.pPreferredName, pDob:s.pDob, pPhone:s.pPhone, pEmail:s.pEmail,
+      pAddr1:s.pAddr1, pAddr2:s.pAddr2, pCity:s.pCity, pPostcode:s.pPostcode, pCountry:s.pCountry,
+      pEcName:s.pEcName, pEcRel:s.pEcRel, pEcPhone:s.pEcPhone, pEcEmail:s.pEcEmail,
+      pInsProvider:s.pInsProvider, pInsMemberId:s.pInsMemberId, pInsGroupNum:s.pInsGroupNum,
+      commPrefToggles, notifPrefToggles,
+      setPLegalName:(e)=>this.setState({pLegalName:e.target.value}),
+      setPPreferredName:(e)=>this.setState({pPreferredName:e.target.value}),
+      setPDob:(e)=>this.setState({pDob:e.target.value}),
+      setPPhone:(e)=>this.setState({pPhone:e.target.value}),
+      setPEmail:(e)=>this.setState({pEmail:e.target.value}),
+      setPAddr1:(e)=>this.setState({pAddr1:e.target.value}),
+      setPAddr2:(e)=>this.setState({pAddr2:e.target.value}),
+      setPCity:(e)=>this.setState({pCity:e.target.value}),
+      setPPostcode:(e)=>this.setState({pPostcode:e.target.value}),
+      setPCountry:(e)=>this.setState({pCountry:e.target.value}),
+      setPEcName:(e)=>this.setState({pEcName:e.target.value}),
+      setPEcRel:(e)=>this.setState({pEcRel:e.target.value}),
+      setPEcPhone:(e)=>this.setState({pEcPhone:e.target.value}),
+      setPEcEmail:(e)=>this.setState({pEcEmail:e.target.value}),
+      setPInsProvider:(e)=>this.setState({pInsProvider:e.target.value}),
+      setPInsMemberId:(e)=>this.setState({pInsMemberId:e.target.value}),
+      setPInsGroupNum:(e)=>this.setState({pInsGroupNum:e.target.value}),
+      saveProfile:()=>this.showToast('Profile saved successfully'),
+
+      // Picker
+      pickerOpen:s.pickerOpen, pickerError:s.pickerError,
+      pickerTitle:s.pickerMode==='reschedule'?'Reschedule Appointment':'Book Appointment',
+      pickerCta:s.pickerMode==='reschedule'?'Confirm New Time':'Confirm Booking',
+      pdays, pslots,
+      closePicker:()=>this.setState({pickerOpen:false}),
+      confirmPicker:()=>this.confirmPicker(),
+
+      // Dialog
+      dialogOpen:!!dlg,
+      dialogIcon:isCancel?'fa-solid fa-calendar-xmark':'fa-solid fa-arrow-right-from-bracket',
+      dialogIconColor:isCancel?'#e74c3c':'#16b5a7',
+      dialogIconWrap:`width:56px;height:56px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:${isCancel?'rgba(231,76,60,.1)':'rgba(22,181,167,.1)'}`,
+      dialogTitle:isCancel?'Cancel this appointment?':'Sign out?',
+      dialogBody:isCancel?'This will free up your slot. You can re-book any time.':'You will need to sign in again to access your account.',
+      dialogCancel:isCancel?'Keep It':'Stay',
+      dialogConfirmLabel:isCancel?'Yes, Cancel':'Sign Out',
+      dialogConfirmStyle:`flex:1;background:${isCancel?'#e74c3c':'#14202e'};border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em`,
+      closeDialog:()=>this.setState({dialog:null}),
+      dialogConfirm:()=>{ if(isCancel) this.doCancel(dlg.apptId); else this.doSignout(); },
+
+      toastShown:!!s.toast, toast:s.toast||'',
+      stop:(e)=>e.stopPropagation(),
+
+      // Auth
+      isAuth:s.authView!=='app', isApp:s.authView==='app',
+      isLoginView:s.authView==='login', isSignupView:s.authView==='signup', isForgotView:s.authView==='forgot',
+      goLogin:()=>this.setState({authView:'login',loginErrors:false}),
+      goSignup:()=>this.setState({authView:'signup',suErrors:false}),
+      goForgot:()=>this.setState({authView:'forgot',forgotSent:false,forgotError:false}),
+      doLogin:()=>this.doLogin(), doSignup:()=>this.doSignup(), doForgot:()=>this.doForgot(),
+      loginEmail:s.loginEmail, loginPassword:s.loginPassword,
+      setLoginEmail:(e)=>this.setState({loginEmail:e.target.value,loginErrors:false}),
+      setLoginPassword:(e)=>this.setState({loginPassword:e.target.value,loginErrors:false}),
+      loginErr:s.loginErrors,
+      loginErrMsg:!s.loginEmail.trim()?'Please enter your email.':'Password must be at least 6 characters.',
+      loginEmailStyle:`width:100%;padding:11px 13px 11px 38px;border-radius:8px;border:1px solid ${s.loginErrors&&!s.loginEmail.trim()?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      loginPwStyle:`width:100%;padding:11px 38px 11px 38px;border-radius:8px;border:1px solid ${s.loginErrors&&s.loginPassword.trim().length<6?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      pwType:s.showPw?'text':'password', pwIcon:s.showPw?'fa-solid fa-eye-slash':'fa-solid fa-eye',
+      togglePw:()=>this.setState({showPw:!s.showPw}),
+      suFirst:s.suFirst, suLast:s.suLast, suEmail:s.suEmail, suPhone:s.suPhone, suPw:s.suPw, suConfirm:s.suConfirm,
+      setSuFirst:(e)=>this.setState({suFirst:e.target.value}), setSuLast:(e)=>this.setState({suLast:e.target.value}),
+      setSuEmail:(e)=>this.setState({suEmail:e.target.value}), setSuPhone:(e)=>this.setState({suPhone:e.target.value}),
+      setSuPw:(e)=>this.setState({suPw:e.target.value}), setSuConfirm:(e)=>this.setState({suConfirm:e.target.value}),
+      signupErr:s.suErrors,
+      suFirstStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&!s.suFirst.trim()?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      suLastStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&!s.suLast.trim()?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      suEmailStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.suEmail.trim())?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      suPhoneStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&s.suPhone.trim().length<7?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      suPwStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&s.suPw.length<8?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      suConfirmStyle:`width:100%;padding:11px 13px;border-radius:8px;border:1px solid ${s.suErrors&&s.suPw!==s.suConfirm?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+      forgotEmail:s.forgotEmail, forgotEmailVal:s.forgotEmail,
+      setForgotEmail:(e)=>this.setState({forgotEmail:e.target.value,forgotError:false}),
+      forgotSent:s.forgotSent, notForgotSent:!s.forgotSent, forgotError:s.forgotError,
+      forgotEmailStyle:`width:100%;padding:11px 13px 11px 38px;border-radius:8px;border:1px solid ${s.forgotError?'#e74c3c':'#cbd3da'};background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none`,
+    };
+  }
+}
+</script>
+</body>
+</html>

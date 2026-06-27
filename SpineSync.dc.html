@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
+  <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #f5f7f9; }
+    a { transition: color .15s; }
+    a:hover { color: #16b5a7 !important; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .hero-img-col { display: none !important; }
+      .services-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .about-grid { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .team-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .testi-grid { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: repeat(2,1fr) !important; }
+      .nav-links { display: none !important; }
+      .booking-form-row { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: 1fr !important; }
+      .team-grid { grid-template-columns: 1fr !important; }
+      .footer-grid { grid-template-columns: 1fr !important; }
+      .dash-wrap { flex-direction: column !important; }
+      .dash-sidebar { width: 100% !important; min-height: auto !important; }
+      .patient-stats { grid-template-columns: repeat(2,1fr) !important; }
+      .patient-mid { grid-template-columns: 1fr !important; }
+      .patient-bot { grid-template-columns: 1fr !important; }
+      .admin-stats { grid-template-columns: repeat(2,1fr) !important; }
+      .admin-main { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</helmet>
+
+<!-- ═══ FIXED SWITCHER BAR ═══ -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;height:50px;background:#14202e;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:0 2px 12px rgba(0,0,0,.35)">
+  <div style="display:flex;align-items:center;gap:8px">
+    <div style="width:26px;height:26px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center">
+      <i class="fa-solid fa-heart-pulse" style="font-size:11px;color:#fff"></i>
+    </div>
+    <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:15px;color:#fff;letter-spacing:-.01em">Spine<span style="color:#16b5a7">Sync</span></span>
+  </div>
+  <div style="display:flex;gap:4px">
+    <button onClick="{{ setPublic }}" style="{{ swPublic }}">Public Website</button>
+    <button onClick="{{ setPatient }}" style="{{ swPatient }}">Patient Portal</button>
+    <button onClick="{{ setAdmin }}" style="{{ swAdmin }}">Admin Dashboard</button>
+  </div>
+  <div style="width:130px;text-align:right">
+    <span style="font-family:'Open Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.02em">SPINESYNC · 2026</span>
+  </div>
+</div>
+<div style="height:50px"></div>
+
+<!-- ══════════════════════════════════════════════
+     PUBLIC WEBSITE
+══════════════════════════════════════════════ -->
+<sc-if value="{{ isPublic }}" hint-placeholder-val="{{ boolTrue }}">
+<div style="animation:fadeIn .25s ease">
+
+  <!-- NAV -->
+  <nav style="position:sticky;top:50px;z-index:100;background:#fff;border-bottom:1px solid #e2e7ec;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+    <div style="max-width:1170px;margin:0 auto;padding:0 30px;display:flex;align-items:center;justify-content:space-between;height:68px">
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="width:32px;height:32px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center">
+          <i class="fa-solid fa-heart-pulse" style="font-size:13px;color:#fff"></i>
+        </div>
+        <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:19px;color:#14202e;letter-spacing:-.01em">Spine<span style="color:#16b5a7">Sync</span></span>
+      </div>
+      <div class="nav-links" style="display:flex;align-items:center;gap:30px">
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e;text-decoration:none">Home</a>
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:500;color:#6b7884;text-decoration:none">Services</a>
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:500;color:#6b7884;text-decoration:none">About</a>
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:500;color:#6b7884;text-decoration:none">Team</a>
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:500;color:#6b7884;text-decoration:none">Blog</a>
+        <a href="#" style="font-family:Poppins,sans-serif;font-size:14px;font-weight:500;color:#6b7884;text-decoration:none">Contact</a>
+      </div>
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" hint-size="auto,42px">Book Appointment</x-import>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section style="background:#14202e;padding:96px 30px;position:relative;overflow:hidden">
+    <div style="position:absolute;right:0;top:0;width:55%;height:100%;background:radial-gradient(ellipse at 80% 50%,rgba(22,181,167,.13) 0%,transparent 65%);pointer-events:none"></div>
+    <div style="position:absolute;left:-180px;bottom:-180px;width:480px;height:480px;border-radius:50%;background:rgba(22,181,167,.04);pointer-events:none"></div>
+    <div class="hero-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:55% 1fr;gap:64px;align-items:center">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(22,181,167,.12);border:1px solid rgba(22,181,167,.25);border-radius:999px;padding:5px 14px;margin-bottom:22px">
+          <div style="width:6px;height:6px;border-radius:50%;background:#16b5a7"></div>
+          <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#16b5a7">Expert Spine Care · London</span>
+        </div>
+        <h1 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(34px,4.5vw,54px);line-height:1.12;color:#fff;margin:0 0 22px;letter-spacing:-.025em">Move Better,<br>Live Without Pain</h1>
+        <p style="font-family:'Open Sans',sans-serif;font-size:17px;line-height:1.8;color:rgba(255,255,255,.68);margin:0 0 38px;max-width:490px">Personalised spine and physiotherapy care delivered by expert practitioners who take time to understand your unique recovery journey.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:36px">
+          <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" size="lg" hint-size="auto,52px">Book Your Assessment</x-import>
+          <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" size="lg" hint-size="auto,52px">Our Services</x-import>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding-top:32px;border-top:1px solid rgba(255,255,255,.09)">
+          <div style="display:flex">
+            <div style="width:30px;height:30px;border-radius:50%;background:#16b5a7;border:2px solid #14202e;margin-right:-8px;flex-shrink:0"></div>
+            <div style="width:30px;height:30px;border-radius:50%;background:#2d7dd2;border:2px solid #14202e;margin-right:-8px;flex-shrink:0"></div>
+            <div style="width:30px;height:30px;border-radius:50%;background:#8b5cf6;border:2px solid #14202e;flex-shrink:0"></div>
+          </div>
+          <div>
+            <div style="display:flex;gap:2px;margin-bottom:3px">
+              <i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:11px;color:#f5a623"></i>
+            </div>
+            <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.5)">3,200+ patients recovered and pain-free</span>
+          </div>
+        </div>
+      </div>
+      <!-- Hero visual panel -->
+      <div class="hero-img-col">
+        <div style="background:rgba(22,181,167,.07);border-radius:20px;padding:28px;border:1px solid rgba(22,181,167,.14);position:relative">
+          <div style="background:rgba(255,255,255,.05);border-radius:14px;padding:22px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+              <div style="width:42px;height:42px;background:rgba(22,181,167,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-calendar-check" style="color:#16b5a7;font-size:17px"></i>
+              </div>
+              <div>
+                <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">Next Available Slot</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.45)">Today · 2:30 PM with Dr. Mitchell</div>
+              </div>
+            </div>
+            <div style="background:#16b5a7;border-radius:8px;padding:10px;text-align:center;cursor:pointer">
+              <span style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em">Reserve This Slot</span>
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border-radius:14px;padding:22px">
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:14px">Your Recovery Progress</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px">
+              <div style="flex:1;height:8px;background:#16b5a7;border-radius:4px"></div>
+              <div style="flex:1;height:8px;background:#16b5a7;border-radius:4px;opacity:.85"></div>
+              <div style="flex:1;height:8px;background:#16b5a7;border-radius:4px;opacity:.6"></div>
+              <div style="flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px"></div>
+              <div style="flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:4px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:'Open Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.35)">Start</span>
+              <span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#16b5a7">60% Complete</span>
+              <span style="font-family:'Open Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.35)">Goal</span>
+            </div>
+          </div>
+          <!-- Float card -->
+          <div style="position:absolute;bottom:-18px;left:-22px;background:#fff;border-radius:12px;padding:13px 16px;box-shadow:0 8px 28px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:34px;background:rgba(22,181,167,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:15px"></i>
+            </div>
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">98% Satisfied</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">Patient satisfaction rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section style="padding:96px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="OUR TREATMENTS" title="Comprehensive Spine &amp; Physio Care" intro="From acute injury to long-term pain management, our evidence-based treatment plans are tailored to your goals and your life." hint-size="100%,auto"></x-import>
+      <div class="services-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px">
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-bone" title="Chiropractic Care" framed="{{ boolTrue }}" hint-size="100%,auto">Targeted spinal adjustments to restore alignment, reduce nerve pressure and relieve pain at the source.</x-import>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-hand-holding-medical" title="Physical Therapy" framed="{{ boolTrue }}" hint-size="100%,auto">Evidence-based rehabilitation programmes designed to rebuild strength, mobility and function after injury.</x-import>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-dumbbell" title="Sports Rehabilitation" framed="{{ boolTrue }}" hint-size="100%,auto">Get back to peak performance faster with sport-specific recovery protocols and injury prevention strategies.</x-import>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-person-walking" title="Posture Correction" framed="{{ boolTrue }}" hint-size="100%,auto">Address the root causes of postural imbalances with targeted corrective exercises and ergonomic guidance.</x-import>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-bed-pulse" title="Pain Management" framed="{{ boolTrue }}" hint-size="100%,auto">Multi-modal approaches to chronic and acute pain, helping you move more freely and live more fully.</x-import>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.IconBox" icon="fa-solid fa-stethoscope" title="Post-Surgery Recovery" framed="{{ boolTrue }}" hint-size="100%,auto">Specialist post-operative rehabilitation to restore function safely and reduce your recovery time after surgery.</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section style="padding:96px 30px;background:#fff">
+    <div class="about-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center">
+      <div style="position:relative">
+        <div style="background:#f0faf9;border-radius:20px;height:440px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(22,181,167,.15);overflow:hidden">
+          <div style="text-align:center">
+            <div style="width:68px;height:68px;background:rgba(22,181,167,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+              <i class="fa-solid fa-stethoscope" style="font-size:28px;color:#16b5a7"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;color:#6b7884;font-size:12px;text-transform:uppercase;letter-spacing:.06em">Clinic Photography</span>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:24px;right:-14px;background:#16b5a7;border-radius:14px;padding:18px 22px;text-align:center;box-shadow:0 8px 28px rgba(22,181,167,.4)">
+          <div style="font-family:Poppins,sans-serif;font-size:36px;font-weight:700;color:#fff;line-height:1">12+</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.85);margin-top:4px">Years of Care</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-size:12px;color:#16b5a7;margin-bottom:12px">ABOUT SPINESYNC</div>
+        <h2 style="font-family:Poppins,sans-serif;font-weight:700;font-size:clamp(26px,2.8vw,38px);line-height:1.2;color:#14202e;margin:0 0 18px;letter-spacing:-.015em">A clinic built around your recovery</h2>
+        <p style="font-family:'Open Sans',sans-serif;font-size:16px;line-height:1.8;color:#6b7884;margin:0 0 26px">We take the time to understand you — your history, your goals and your day-to-day — so every plan fits your life, not just your diagnosis. Our multidisciplinary team works together to deliver care that is as individual as you are.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px;flex-shrink:0"></i>
+            <span style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.65;color:#6b7884">Fully accredited practitioners with specialist spine training</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px;flex-shrink:0"></i>
+            <span style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.65;color:#6b7884">Most patients seen within 48 hours of referral</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:16px;margin-top:3px;flex-shrink:0"></i>
+            <span style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.65;color:#6b7884">Ongoing digital progress tracking via the SpineSync portal</span>
+          </div>
+        </div>
+        <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" hint-size="auto,46px">Meet Our Team</x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <section style="background:#16b5a7;padding:56px 30px">
+    <div class="stats-grid" style="max-width:1170px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center">
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">3,200+</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Patients Treated</div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">98%</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Satisfaction Rate</div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">12+</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Years Experience</div>
+      </div>
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:46px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.025em">48h</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.8);margin-top:8px;font-weight:600">Max Wait Time</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section style="padding:96px 30px;background:#f5f7f9">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="MEET THE TEAM" title="Expert practitioners, dedicated to your care" hint-size="100%,auto"></x-import>
+      <div class="team-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px">
+        <div style="background:#fff;border-radius:14px;border:1px solid #e2e7ec;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;text-align:center;transition:transform .2s,box-shadow .2s" onMouseEnter="e=>{ e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'; }" onMouseLeave="e=>{ e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'; }">
+          <div style="height:200px;background:linear-gradient(135deg,#0a4f47 0%,#16b5a7 100%);display:flex;align-items:center;justify-content:center">
+            <div style="width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-user-doctor" style="font-size:36px;color:#fff"></i>
+            </div>
+          </div>
+          <div style="padding:22px">
+            <div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">Dr. Sarah Mitchell</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Lead Chiropractor</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:14px">Specialist in spinal disc conditions and chronic back pain with 10 years of clinical experience.</div>
+            <div style="display:flex;justify-content:center;gap:8px">
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Chiropractic</x-import>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="navy" hint-size="auto,22px">Spine</x-import>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:14px;border:1px solid #e2e7ec;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;text-align:center;transition:transform .2s,box-shadow .2s" onMouseEnter="e=>{ e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'; }" onMouseLeave="e=>{ e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'; }">
+          <div style="height:200px;background:linear-gradient(135deg,#14202e 0%,#2d5a8e 100%);display:flex;align-items:center;justify-content:center">
+            <div style="width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-user-doctor" style="font-size:36px;color:#fff"></i>
+            </div>
+          </div>
+          <div style="padding:22px">
+            <div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">Dr. James Okafor</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Sports Physiotherapist</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:14px">Sports injury specialist helping athletes return to peak performance safely and with confidence.</div>
+            <div style="display:flex;justify-content:center;gap:8px">
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Sports</x-import>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="navy" hint-size="auto,22px">Rehab</x-import>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:14px;border:1px solid #e2e7ec;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;text-align:center;transition:transform .2s,box-shadow .2s" onMouseEnter="e=>{ e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'; }" onMouseLeave="e=>{ e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,.06)'; }">
+          <div style="height:200px;background:linear-gradient(135deg,#4a1f6e 0%,#7c5cbf 100%);display:flex;align-items:center;justify-content:center">
+            <div style="width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-user-doctor" style="font-size:36px;color:#fff"></i>
+            </div>
+          </div>
+          <div style="padding:22px">
+            <div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">Dr. Priya Nair</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#16b5a7;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Rehabilitation Specialist</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:14px;color:#6b7884;line-height:1.6;margin-bottom:14px">Post-surgical rehabilitation expert focused on safe, structured recovery and long-term patient outcomes.</div>
+            <div style="display:flex;justify-content:center;gap:8px">
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Post-Op</x-import>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="navy" hint-size="auto,22px">Recovery</x-import>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section style="background:#14202e;padding:96px 30px">
+    <div style="max-width:1170px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="PATIENT STORIES" title="Real results, real recovery" on-dark="{{ boolTrue }}" hint-size="100%,auto"></x-import>
+      <div class="testi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px">
+        <div style="background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08);padding:30px">
+          <i class="fa-solid fa-quote-left" style="font-size:22px;color:#16b5a7;margin-bottom:16px;display:block"></i>
+          <p style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.8;color:rgba(255,255,255,.72);margin:0 0 22px">After two years of chronic lower back pain, I finally found relief. The team created a plan that worked around my lifestyle. I am back to hiking every weekend — pain-free.</p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,181,167,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fa-solid fa-user" style="color:#16b5a7;font-size:15px"></i>
+            </div>
+            <div style="flex:1">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#fff">Michael T.</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.35)">Lumbar Disc Patient</div>
+            </div>
+            <div style="display:flex;gap:2px">
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08);padding:30px">
+          <i class="fa-solid fa-quote-left" style="font-size:22px;color:#16b5a7;margin-bottom:16px;display:block"></i>
+          <p style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.8;color:rgba(255,255,255,.72);margin:0 0 22px">Post-surgery, I was terrified of re-injuring myself. Dr. Nair built my confidence back step by step. Six months on and I feel stronger than before the surgery. Cannot recommend them enough.</p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,181,167,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fa-solid fa-user" style="color:#16b5a7;font-size:15px"></i>
+            </div>
+            <div style="flex:1">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#fff">Rachel K.</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.35)">Post-Op Recovery Patient</div>
+            </div>
+            <div style="display:flex;gap:2px">
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08);padding:30px">
+          <i class="fa-solid fa-quote-left" style="font-size:22px;color:#16b5a7;margin-bottom:16px;display:block"></i>
+          <p style="font-family:'Open Sans',sans-serif;font-size:15px;line-height:1.8;color:rgba(255,255,255,.72);margin:0 0 22px">As a marathon runner, I needed my hip and knee sorted quickly. Dr. Okafor had me back in training within six weeks. The whole team genuinely cares about getting you back to what you love.</p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:38px;height:38px;border-radius:50%;background:rgba(22,181,167,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i class="fa-solid fa-user" style="color:#16b5a7;font-size:15px"></i>
+            </div>
+            <div style="flex:1">
+              <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#fff">David L.</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.35)">Sports Rehab Patient</div>
+            </div>
+            <div style="display:flex;gap:2px">
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star" style="font-size:10px;color:#f5a623"></i>
+              <i class="fa-solid fa-star-half-stroke" style="font-size:10px;color:#f5a623"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING CTA -->
+  <section style="padding:96px 30px;background:#fff">
+    <div style="max-width:680px;margin:0 auto">
+      <x-import component-from-global-scope="PhysioDesignSystem_c34588.SectionHeading" eyebrow="MAKE AN APPOINTMENT" title="Ready to start your recovery?" intro="Most patients are seen within 48 hours. Fill in your details and we will confirm your appointment promptly." hint-size="100%,auto"></x-import>
+      <div style="background:#f5f7f9;border-radius:16px;padding:36px;margin-top:44px;border:1px solid #e2e7ec">
+        <div class="booking-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div style="position:relative">
+            <i class="fa-solid fa-user" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i>
+            <input placeholder="First name" style="width:100%;padding:12px 14px 12px 38px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;transition:border-color .15s" onFocus="e=>e.target.style.borderColor='#16b5a7'" onBlur="e=>e.target.style.borderColor='#cbd3da'" />
+          </div>
+          <input placeholder="Last name" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;transition:border-color .15s" onFocus="e=>e.target.style.borderColor='#16b5a7'" onBlur="e=>e.target.style.borderColor='#cbd3da'" />
+          <div style="position:relative">
+            <i class="fa-solid fa-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i>
+            <input type="email" placeholder="Email address" style="width:100%;padding:12px 14px 12px 38px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;transition:border-color .15s" onFocus="e=>e.target.style.borderColor='#16b5a7'" onBlur="e=>e.target.style.borderColor='#cbd3da'" />
+          </div>
+          <div style="position:relative">
+            <i class="fa-solid fa-phone" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i>
+            <input type="tel" placeholder="Phone number" style="width:100%;padding:12px 14px 12px 38px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;transition:border-color .15s" onFocus="e=>e.target.style.borderColor='#16b5a7'" onBlur="e=>e.target.style.borderColor='#cbd3da'" />
+          </div>
+        </div>
+        <textarea placeholder="Briefly describe your condition or concern..." rows="3" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #cbd3da;background:#fff;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none;transition:border-color .15s;resize:vertical;margin-bottom:14px;display:block" onFocus="e=>e.target.style.borderColor='#16b5a7'" onBlur="e=>e.target.style.borderColor='#cbd3da'"></textarea>
+        <div style="background:#16b5a7;border-radius:999px;padding:15px;text-align:center;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;box-shadow:0 4px 16px rgba(22,181,167,.4);transition:background .15s" onMouseEnter="e=>e.target.style.background='#0fa89c'" onMouseLeave="e=>e.target.style.background='#16b5a7'">Request My Appointment</div>
+        <p style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884;margin:14px 0 0;text-align:center">Most patients confirmed within 24 hours. No commitment required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#14202e;padding:60px 30px 28px">
+    <div style="max-width:1170px;margin:0 auto">
+      <div class="footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.09)">
+        <div>
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px">
+            <div style="width:30px;height:30px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-heart-pulse" style="font-size:13px;color:#fff"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:17px;color:#fff">Spine<span style="color:#16b5a7">Sync</span></span>
+          </div>
+          <p style="font-family:'Open Sans',sans-serif;font-size:14px;line-height:1.75;color:rgba(255,255,255,.45);margin:0 0 22px;max-width:240px">Expert spine and physiotherapy care tailored to your recovery.</p>
+          <div style="display:flex;gap:10px">
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-facebook-f" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div>
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-instagram" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div>
+            <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="fa-brands fa-linkedin-in" style="font-size:13px;color:rgba(255,255,255,.55)"></i></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Chiropractic Care</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Physical Therapy</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Sports Rehab</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Pain Management</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Post-Surgery</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Company</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">About Us</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Our Team</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Blog</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Careers</a>
+            <a href="#" style="font-family:'Open Sans',sans-serif;font-size:14px;color:rgba(255,255,255,.45);text-decoration:none">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;margin-bottom:18px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:flex-start;gap:9px">
+              <i class="fa-solid fa-phone" style="font-size:12px;color:#16b5a7;margin-top:3px;flex-shrink:0"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.45)">+44 (0)20 7946 0321</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px">
+              <i class="fa-solid fa-envelope" style="font-size:12px;color:#16b5a7;margin-top:3px;flex-shrink:0"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.45)">hello@spinesync.co.uk</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px">
+              <i class="fa-solid fa-location-dot" style="font-size:12px;color:#16b5a7;margin-top:3px;flex-shrink:0"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.45)">12 Harley Street, London W1G 9PQ</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:9px">
+              <i class="fa-solid fa-clock" style="font-size:12px;color:#16b5a7;margin-top:3px;flex-shrink:0"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.45)">Mon–Fri 8am–8pm · Sat 9am–4pm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.28)">© 2026 SpineSync Ltd. All rights reserved.</span>
+        <div style="display:flex;gap:20px">
+          <a href="#" style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.28);text-decoration:none">Privacy Policy</a>
+          <a href="#" style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.28);text-decoration:none">Terms</a>
+          <a href="#" style="font-family:'Open Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.28);text-decoration:none">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</sc-if>
+
+<!-- ══════════════════════════════════════════════
+     PATIENT PORTAL
+══════════════════════════════════════════════ -->
+<sc-if value="{{ isPatient }}" hint-placeholder-val="{{ boolFalse }}">
+<div class="dash-wrap" style="display:flex;min-height:calc(100vh - 50px);animation:fadeIn .25s ease">
+
+  <!-- SIDEBAR -->
+  <div class="dash-sidebar" style="width:238px;flex-shrink:0;background:#fff;border-right:1px solid #e2e7ec;display:flex;flex-direction:column;position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto">
+    <div style="padding:20px 16px;border-bottom:1px solid #e2e7ec">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#fff">AT</div>
+        <div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">Alex Thompson</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">Patient #SS-4821</div>
+        </div>
+      </div>
+    </div>
+    <nav style="padding:14px 10px;flex:1">
+      <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7884;padding:0 8px;margin-bottom:8px">Navigation</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:rgba(22,181,167,.1);color:#16b5a7;font-family:Poppins,sans-serif;font-weight:700;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-house" style="width:15px;font-size:14px;flex-shrink:0"></i>Overview
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-calendar-days" style="width:15px;font-size:14px;flex-shrink:0"></i>Appointments
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-dumbbell" style="width:15px;font-size:14px;flex-shrink:0"></i>My Exercises
+          <span style="margin-left:auto;background:#16b5a7;color:#fff;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 7px">3</span>
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-chart-line" style="width:15px;font-size:14px;flex-shrink:0"></i>Progress
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-envelope" style="width:15px;font-size:14px;flex-shrink:0"></i>Messages
+          <span style="margin-left:auto;background:#e74c3c;color:#fff;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 7px">2</span>
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-file-medical" style="width:15px;font-size:14px;flex-shrink:0"></i>Documents
+        </button>
+      </div>
+      <div style="margin-top:20px;background:linear-gradient(135deg,#16b5a7,#0a8a7e);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">Next Session</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.8);margin-bottom:11px">Thu 29 Jun · 10:00 AM</div>
+        <div style="background:rgba(255,255,255,.18);border-radius:6px;padding:7px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;cursor:pointer">View Details</div>
+      </div>
+    </nav>
+    <div style="padding:12px 10px;border-top:1px solid #e2e7ec">
+      <button style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-gear" style="width:15px"></i>Settings</button>
+      <button style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:15px"></i>Sign Out</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1;background:#f5f7f9;overflow-y:auto">
+    <div style="background:#fff;border-bottom:1px solid #e2e7ec;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e">Good morning, Alex</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">Thursday, 26 June 2026 · Treatment week 8 of 12</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="position:relative;cursor:pointer">
+          <div style="width:36px;height:36px;border-radius:50%;background:#f5f7f9;border:1px solid #e2e7ec;display:flex;align-items:center;justify-content:center">
+            <i class="fa-solid fa-bell" style="font-size:14px;color:#6b7884"></i>
+          </div>
+          <div style="position:absolute;top:1px;right:1px;width:9px;height:9px;background:#e74c3c;border-radius:50%;border:2px solid #fff"></div>
+        </div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff">AT</div>
+      </div>
+    </div>
+    <div style="padding:26px 28px">
+
+      <!-- Stats row -->
+      <div class="patient-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px">
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="width:38px;height:38px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-calendar-check" style="color:#16b5a7;font-size:16px"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Next Appt</span>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:3px">Jun 29</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">10:00 AM · Dr. Mitchell</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="width:38px;height:38px;background:rgba(39,174,96,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-circle-check" style="color:#27ae60;font-size:16px"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Sessions</span>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:6px">8 <span style="font-size:14px;font-weight:400;color:#6b7884">of 12</span></div>
+          <div style="background:#e2e7ec;border-radius:4px;height:4px;overflow:hidden">
+            <div style="background:#27ae60;width:67%;height:100%;border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="width:38px;height:38px;background:rgba(241,196,15,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-heart-pulse" style="color:#f39c12;font-size:16px"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Pain Level</span>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:3px">3 <span style="font-size:14px;font-weight:400;color:#6b7884">/ 10</span></div>
+          <div style="display:flex;align-items:center;gap:4px">
+            <i class="fa-solid fa-arrow-trend-down" style="font-size:11px;color:#27ae60"></i>
+            <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#27ae60">Down from 7 · Improving</span>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div style="width:38px;height:38px;background:rgba(155,89,182,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-dumbbell" style="color:#9b59b6;font-size:16px"></i>
+            </div>
+            <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Exercises</span>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:6px">2 <span style="font-size:14px;font-weight:400;color:#6b7884">of 3 today</span></div>
+          <div style="background:#e2e7ec;border-radius:4px;height:4px;overflow:hidden">
+            <div style="background:#9b59b6;width:67%;height:100%;border-radius:4px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mid row: Appointment + Exercises -->
+      <div class="patient-mid" style="display:grid;grid-template-columns:1fr 340px;gap:18px;margin-bottom:18px">
+        <!-- Upcoming appointment -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Upcoming Appointment</div>
+            <a href="#" style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-decoration:none;text-transform:uppercase;letter-spacing:.05em">View All</a>
+          </div>
+          <div style="border:2px solid rgba(22,181,167,.2);border-left:4px solid #16b5a7;border-radius:10px;padding:18px;background:rgba(22,181,167,.03);margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div>
+                <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">Spinal Adjustment Session</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">with Dr. Sarah Mitchell · Chiropractic</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Confirmed</x-import>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px">
+              <div style="display:flex;align-items:center;gap:6px">
+                <i class="fa-solid fa-calendar" style="font-size:12px;color:#16b5a7"></i>
+                <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Thu 29 June 2026</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <i class="fa-solid fa-clock" style="font-size:12px;color:#16b5a7"></i>
+                <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">10:00 AM · 45 min</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <i class="fa-solid fa-location-dot" style="font-size:12px;color:#16b5a7"></i>
+                <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Room 3, Floor 2</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" size="sm" hint-size="auto,34px">Add to Calendar</x-import>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" size="sm" hint-size="auto,34px">Reschedule</x-import>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="padding:13px 0;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;gap:12px">
+              <div style="width:38px;height:38px;background:#f0faf9;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-calendar-check" style="color:#27ae60;font-size:16px"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Physical Therapy Session</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">20 Jun 2026 · Dr. Okafor</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Completed</x-import>
+            </div>
+            <div style="padding:13px 0;display:flex;align-items:center;gap:12px">
+              <div style="width:38px;height:38px;background:#f0faf9;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-calendar-check" style="color:#27ae60;font-size:16px"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Chiropractic Assessment</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">13 Jun 2026 · Dr. Mitchell</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Completed</x-import>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's exercises -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Today's Exercises</div>
+            <a href="#" style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-decoration:none;text-transform:uppercase;letter-spacing:.05em">All</a>
+          </div>
+          <div style="text-align:center;padding:12px 0 16px">
+            <div style="width:76px;height:76px;border-radius:50%;border:6px solid #e2e7ec;border-top-color:#16b5a7;border-right-color:#16b5a7;margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+              <div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e">67%</div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">2 of 3 completed</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;padding:11px;border-radius:8px;background:#f0faf9">
+              <div style="width:26px;height:26px;border-radius:50%;background:#16b5a7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-check" style="font-size:11px;color:#fff"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Lumbar Flexion Stretch</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">3 sets × 10 reps</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,18px">Done</x-import>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:11px;border-radius:8px;background:#f0faf9">
+              <div style="width:26px;height:26px;border-radius:50%;background:#16b5a7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-check" style="font-size:11px;color:#fff"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Pelvic Tilt</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">2 sets × 15 reps</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,18px">Done</x-import>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:11px;border-radius:8px;background:#f5f7f9;border:1px dashed #cbd3da">
+              <div style="width:26px;height:26px;border-radius:50%;background:#e2e7ec;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <i class="fa-solid fa-dumbbell" style="font-size:10px;color:#6b7884"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Cat-Cow Stretch</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">3 sets × 12 reps</div>
+              </div>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="warning" size="sm" hint-size="auto,18px">Pending</x-import>
+            </div>
+          </div>
+          <div style="margin-top:14px;background:#16b5a7;border-radius:8px;padding:10px;text-align:center;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em">Mark as Complete</div>
+        </div>
+      </div>
+
+      <!-- Bottom row: Progress + Messages -->
+      <div class="patient-bot" style="display:grid;grid-template-columns:1fr 340px;gap:18px">
+        <!-- Progress chart -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Recovery Progress</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">Pain score trend — last 8 weeks</div>
+            </div>
+            <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" hint-size="auto,22px">
+              <i class="fa-solid fa-arrow-trend-down" style="margin-right:4px"></i>Improving
+            </x-import>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:10px;height:110px;padding-bottom:8px;border-bottom:1px solid #f0f3f5;margin-bottom:16px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:90%"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W1</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:78%;opacity:.9"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W2</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:68%;opacity:.85"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W3</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:58%;opacity:.8"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W4</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:50%;opacity:.75"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W5</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:40%;opacity:.7"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W6</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:34%"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W7</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div style="background:#16b5a7;width:100%;border-radius:4px 4px 0 0;height:30%"></div><span style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884">W8</span></div>
+          </div>
+          <div style="display:flex;gap:28px">
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:3px">Starting</div>
+              <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#e74c3c">7/10</div>
+            </div>
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:3px">Current</div>
+              <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#27ae60">3/10</div>
+            </div>
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:3px">Improvement</div>
+              <div style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#16b5a7">57%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Messages</div>
+            <span style="background:#e74c3c;color:#fff;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 8px">2 new</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+            <div style="padding:14px;border-radius:10px;background:#f0faf9;border:1px solid rgba(22,181,167,.12)">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff">SM</div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                    <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">Dr. Sarah Mitchell</div>
+                    <span style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">2h ago</span>
+                  </div>
+                  <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884;line-height:1.5">Your exercise plan for this week has been updated. Please complete the new stretching routine before your next session.</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:14px;border-radius:10px;background:#f0faf9;border:1px solid rgba(22,181,167,.12)">
+              <div style="display:flex;align-items:flex-start;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:#16b5a7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <i class="fa-solid fa-heart-pulse" style="font-size:14px;color:#fff"></i>
+                </div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                    <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">SpineSync Team</div>
+                    <span style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">Yesterday</span>
+                  </div>
+                  <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884;line-height:1.5">Reminder: Appointment tomorrow at 10:00 AM with Dr. Mitchell. Please arrive 10 minutes early.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="border:1.5px solid #16b5a7;border-radius:999px;padding:9px;text-align:center;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.06em">
+            <i class="fa-solid fa-envelope" style="margin-right:6px"></i>View All Messages
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</sc-if>
+
+<!-- ══════════════════════════════════════════════
+     ADMIN DASHBOARD
+══════════════════════════════════════════════ -->
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ boolFalse }}">
+<div class="dash-wrap" style="display:flex;min-height:calc(100vh - 50px);animation:fadeIn .25s ease">
+
+  <!-- ADMIN SIDEBAR (dark navy) -->
+  <div class="dash-sidebar" style="width:250px;flex-shrink:0;background:#14202e;display:flex;flex-direction:column;position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto">
+    <div style="padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(22,181,167,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="fa-solid fa-user-shield" style="font-size:16px;color:#16b5a7"></i>
+        </div>
+        <div>
+          <div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#fff">Admin Panel</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.4)">Dr. James Okafor</div>
+        </div>
+      </div>
+    </div>
+    <nav style="padding:14px 10px;flex:1">
+      <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.28);padding:0 8px;margin-bottom:8px">Main Menu</div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:rgba(22,181,167,.14);color:#16b5a7;font-family:Poppins,sans-serif;font-weight:700;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-chart-pie" style="width:15px;font-size:14px;flex-shrink:0"></i>Overview
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-users" style="width:15px;font-size:14px;flex-shrink:0"></i>Patients
+          <span style="margin-left:auto;background:rgba(255,255,255,.09);color:rgba(255,255,255,.55);border-radius:999px;font-size:10px;font-weight:700;padding:2px 7px">247</span>
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-calendar-days" style="width:15px;font-size:14px;flex-shrink:0"></i>Schedule
+          <span style="margin-left:auto;background:rgba(22,181,167,.25);color:#16b5a7;border-radius:999px;font-size:10px;font-weight:700;padding:2px 7px">18</span>
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-chart-bar" style="width:15px;font-size:14px;flex-shrink:0"></i>Reports
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-envelope" style="width:15px;font-size:14px;flex-shrink:0"></i>Messages
+          <span style="margin-left:auto;background:#e74c3c;color:#fff;border-radius:999px;font-size:10px;font-weight:700;padding:2px 7px">5</span>
+        </button>
+        <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+          <i class="fa-solid fa-user-plus" style="width:15px;font-size:14px;flex-shrink:0"></i>Add Patient
+        </button>
+      </div>
+      <div style="margin-top:20px">
+        <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.28);padding:0 8px;margin-bottom:8px">Clinic</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+            <i class="fa-solid fa-user-doctor" style="width:15px;font-size:14px;flex-shrink:0"></i>Practitioners
+          </button>
+          <button style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left">
+            <i class="fa-solid fa-sterling-sign" style="width:15px;font-size:14px;flex-shrink:0"></i>Billing
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div style="padding:12px 10px;border-top:1px solid rgba(255,255,255,.07)">
+      <button style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.45);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-gear" style="width:15px"></i>Settings</button>
+      <button style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.45);font-family:Poppins,sans-serif;font-weight:500;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:15px"></i>Sign Out</button>
+    </div>
+  </div>
+
+  <!-- ADMIN MAIN -->
+  <div style="flex:1;background:#f5f7f9;overflow-y:auto">
+    <!-- Top bar -->
+    <div style="background:#fff;border-bottom:1px solid #e2e7ec;padding:0 28px;height:62px;display:flex;align-items:center;gap:14px">
+      <div style="flex:1;max-width:380px;position:relative">
+        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i>
+        <input placeholder="Search patients, appointments..." style="width:100%;padding:9px 14px 9px 36px;border-radius:999px;border:1px solid #e2e7ec;background:#f5f7f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none" />
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+        <div style="position:relative;cursor:pointer">
+          <div style="width:36px;height:36px;border-radius:50%;background:#f5f7f9;border:1px solid #e2e7ec;display:flex;align-items:center;justify-content:center">
+            <i class="fa-solid fa-bell" style="font-size:14px;color:#6b7884"></i>
+          </div>
+          <div style="position:absolute;top:1px;right:1px;width:9px;height:9px;background:#e74c3c;border-radius:50%;border:2px solid #fff"></div>
+        </div>
+        <div style="width:1px;height:28px;background:#e2e7ec"></div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14202e,#2d5a8e);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff">JO</div>
+          <div>
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">Dr. J. Okafor</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">Physiotherapist</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:24px 28px">
+      <div style="margin-bottom:20px">
+        <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#14202e;margin-bottom:3px">Clinic Overview</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Thursday, 26 June 2026 · All systems normal</div>
+      </div>
+
+      <!-- KPI Stats -->
+      <div class="admin-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px">
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-users" style="color:#16b5a7;font-size:17px"></i>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <i class="fa-solid fa-arrow-up" style="font-size:9px;color:#27ae60"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#27ae60;font-weight:700">+12 this month</span>
+            </div>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e;margin-bottom:3px">247</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Active Patients</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:rgba(52,152,219,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-calendar-day" style="color:#3498db;font-size:17px"></i>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <i class="fa-solid fa-clock" style="font-size:9px;color:#f39c12"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#f39c12;font-weight:700">3 pending</span>
+            </div>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e;margin-bottom:3px">18</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Today's Appointments</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:rgba(231,76,60,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-clipboard-list" style="color:#e74c3c;font-size:17px"></i>
+            </div>
+            <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="danger" size="sm" hint-size="auto,18px">Action needed</x-import>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e;margin-bottom:3px">4</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Pending Reviews</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-sterling-sign" style="color:#16b5a7;font-size:17px"></i>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px">
+              <i class="fa-solid fa-arrow-up" style="font-size:9px;color:#27ae60"></i>
+              <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#27ae60;font-weight:700">+8.4% MoM</span>
+            </div>
+          </div>
+          <div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e;margin-bottom:3px">£12,480</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Monthly Revenue</div>
+        </div>
+      </div>
+
+      <!-- Main grid -->
+      <div class="admin-main" style="display:grid;grid-template-columns:1fr 300px;gap:18px">
+
+        <!-- Patient table -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
+          <div style="padding:18px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Recent Patients</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">Last activity · 5 of 247 shown</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" variant="outline" size="sm" hint-size="auto,32px">Export</x-import>
+              <x-import component-from-global-scope="PhysioDesignSystem_c34588.Button" size="sm" hint-size="auto,32px">+ Add Patient</x-import>
+            </div>
+          </div>
+          <!-- Header -->
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:10px 22px;background:#f5f7f9;border-bottom:1px solid #e2e7ec">
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</div>
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</div>
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</div>
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</div>
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Last Visit</div>
+            <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Next Visit</div>
+          </div>
+          <!-- Rows -->
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:14px 22px;border-bottom:1px solid #f5f7f9;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">AT</div>
+              <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Alex Thompson</div><div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">#SS-4821</div></div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Lumbar Disc Herniation</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Dr. Mitchell</div>
+            <div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" size="sm" hint-size="auto,18px">Active</x-import></div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Jun 20</div>
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#16b5a7">Jun 29</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:14px 22px;border-bottom:1px solid #f5f7f9;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">MS</div>
+              <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Maria Santos</div><div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">#SS-4810</div></div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Sciatica</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Dr. Okafor</div>
+            <div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" size="sm" hint-size="auto,18px">Active</x-import></div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Jun 18</div>
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#16b5a7">Jun 25</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:14px 22px;border-bottom:1px solid #f5f7f9;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#3498db,#2980b9);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">JW</div>
+              <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">James Whitfield</div><div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">#SS-4798</div></div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Post-Op Recovery</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Dr. Nair</div>
+            <div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" size="sm" hint-size="auto,18px">Active</x-import></div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Jun 22</div>
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#16b5a7">Jun 26</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:14px 22px;border-bottom:1px solid #f5f7f9;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#d68910);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">SC</div>
+              <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Sarah Chen</div><div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">#SS-4782</div></div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Cervical Spondylosis</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Dr. Mitchell</div>
+            <div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="warning" size="sm" hint-size="auto,18px">Pending</x-import></div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Jun 15</div>
+            <div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#16b5a7">Jul 2</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 2fr 1.4fr 1fr 1fr 1fr;padding:14px 22px;align-items:center">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#9b59b6,#8e44ad);display:flex;align-items:center;justify-content:center;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">RD</div>
+              <div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">Robert Davies</div><div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884">#SS-4765</div></div>
+            </div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Sports Injury</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Dr. Okafor</div>
+            <div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="navy" size="sm" hint-size="auto,18px">Completed</x-import></div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">Jun 10</div>
+            <div style="font-family:'Open Sans',sans-serif;font-size:13px;color:#6b7884">—</div>
+          </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Today's Schedule</div>
+            <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#16b5a7;font-weight:700">Jun 26</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <!-- Slot 1 done -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">9:00</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884;opacity:.6">AM</div>
+              </div>
+              <div style="width:3px;background:#27ae60;border-radius:2px;min-height:52px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#f9fffc;border-radius:8px;padding:9px 11px;border:1px solid rgba(39,174,96,.15)">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Alex Thompson</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884;margin-bottom:5px">Spine Assessment · Mitchell</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,16px">Done</x-import>
+              </div>
+            </div>
+            <!-- Slot 2 done -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">10:00</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884;opacity:.6">AM</div>
+              </div>
+              <div style="width:3px;background:#27ae60;border-radius:2px;min-height:52px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#f9fffc;border-radius:8px;padding:9px 11px;border:1px solid rgba(39,174,96,.15)">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Maria Santos</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884;margin-bottom:5px">Physical Therapy · Okafor</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,16px">Done</x-import>
+              </div>
+            </div>
+            <!-- Slot 3 active -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7">11:30</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#16b5a7;opacity:.8">AM</div>
+              </div>
+              <div style="width:3px;background:#16b5a7;border-radius:2px;min-height:52px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#f0faf9;border-radius:8px;padding:9px 11px;border:2px solid rgba(22,181,167,.3)">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">James Whitfield</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884;margin-bottom:5px">Post-Op Check · Nair</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" size="sm" hint-size="auto,16px">In Progress</x-import>
+              </div>
+            </div>
+            <!-- Slot 4 available -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">1:00</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884;opacity:.6">PM</div>
+              </div>
+              <div style="width:3px;background:#e2e7ec;border-radius:2px;min-height:40px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#f5f7f9;border-radius:8px;padding:9px 11px;border:1px dashed #cbd3da;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:'Open Sans',sans-serif;font-size:12px;color:#6b7884">Available</span>
+                <span style="font-family:Poppins,sans-serif;font-size:11px;color:#16b5a7;font-weight:700;cursor:pointer">+ Book</span>
+              </div>
+            </div>
+            <!-- Slot 5 -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">2:00</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884;opacity:.6">PM</div>
+              </div>
+              <div style="width:3px;background:#e2e7ec;border-radius:2px;min-height:52px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#fff;border-radius:8px;padding:9px 11px;border:1px solid #e2e7ec">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Sarah Chen</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884;margin-bottom:5px">Initial Consult · Mitchell</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="warning" size="sm" hint-size="auto,16px">Upcoming</x-import>
+              </div>
+            </div>
+            <!-- Slot 6 -->
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="text-align:right;width:44px;flex-shrink:0;padding-top:2px">
+                <div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884">3:30</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:10px;color:#6b7884;opacity:.6">PM</div>
+              </div>
+              <div style="width:3px;background:#e2e7ec;border-radius:2px;min-height:52px;flex-shrink:0;margin-top:2px"></div>
+              <div style="flex:1;background:#fff;border-radius:8px;padding:9px 11px;border:1px solid #e2e7ec">
+                <div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#14202e">Robert Davies</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#6b7884;margin-bottom:5px">Discharge Review · Okafor</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="navy" size="sm" hint-size="auto,16px">Upcoming</x-import>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: 'public' };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.view !== this.state.view) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }
+
+  renderVals() {
+    const v = this.state.view;
+
+    const sw = (val) => ({
+      padding: '7px 16px',
+      borderRadius: '999px',
+      border: 'none',
+      cursor: 'pointer',
+      fontFamily: 'Poppins, sans-serif',
+      fontWeight: 600,
+      fontSize: '11px',
+      textTransform: 'uppercase',
+      letterSpacing: '.06em',
+      transition: 'all .15s ease',
+      background: v === val ? '#16b5a7' : 'rgba(255,255,255,.1)',
+      color: v === val ? '#fff' : 'rgba(255,255,255,.6)',
+    });
+
+    return {
+      isPublic:  v === 'public',
+      isPatient: v === 'patient',
+      isAdmin:   v === 'admin',
+      setPublic:  () => this.setState({ view: 'public' }),
+      setPatient: () => this.setState({ view: 'patient' }),
+      setAdmin:   () => this.setState({ view: 'admin' }),
+      swPublic:  sw('public'),
+      swPatient: sw('patient'),
+      swAdmin:   sw('admin'),
+      boolTrue:  true,
+      boolFalse: false,
+    };
+  }
+}
+</script>
+</body>
+</html>

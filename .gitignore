@@ -1,0 +1,7 @@
+.idea/
+.serena/
+.claude/
+.thumbnail
+screenshots/
+uploads/
+*.spec.md

@@ -1,0 +1,45 @@
+/* ============================================================
+   Physio — Typography Tokens
+   Headings: Poppins (geometric, often UPPERCASE for eyebrows/buttons)
+   Body:     Open Sans (humanist, highly legible)
+   NOTE: best-match Google Font defaults — see readme caveats.
+   ============================================================ */
+:root {
+  --font-heading: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body:    'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Type scale (rem, 16px root) */
+  --text-xs:   0.75rem;   /* 12px — meta, captions */
+  --text-sm:   0.875rem;  /* 14px — small / eyebrow */
+  --text-base: 1rem;      /* 16px — body */
+  --text-lg:   1.125rem;  /* 18px — lead body */
+  --text-xl:   1.375rem;  /* 22px — card titles */
+  --text-2xl:  1.75rem;   /* 28px — h3 */
+  --text-3xl:  2.25rem;   /* 36px — h2 section */
+  --text-4xl:  3rem;      /* 48px — h1 */
+  --text-5xl:  4rem;      /* 64px — hero display */
+
+  /* Weights */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* Line heights */
+  --leading-tight: 1.15;
+  --leading-snug:  1.35;
+  --leading-body:  1.7;
+
+  /* Letter spacing — Physio eyebrows/buttons are widely tracked uppercase */
+  --tracking-eyebrow: 0.14em;
+  --tracking-button:  0.06em;
+  --tracking-tight:   -0.01em;
+}
+
+/* Optional base element defaults consumers can opt into */
+.physio-type-base {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  color: var(--text-body);
+}
