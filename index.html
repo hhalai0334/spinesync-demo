@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpineSync — Interactive Prototype</title>
+<meta name="description" content="SpineSync physiotherapy platform — interactive prototype of the public website, patient portal and clinic dashboard.">
+<link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/colors.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--ink-900, #14202e);
+    color: #fff;
+    font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { text-decoration: none; color: inherit; }
+  .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  header { padding: 72px 0 0; }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Poppins', system-ui, sans-serif; font-weight: 700;
+    font-size: 19px; letter-spacing: -.01em; margin-bottom: 44px;
+  }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--teal-500, #16b5a7);
+    display: grid; place-items: center; font-size: 15px;
+  }
+  .eyebrow {
+    font-family: 'Poppins', system-ui, sans-serif; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .14em; color: var(--teal-400, #2ec3b4);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-family: 'Poppins', system-ui, sans-serif; font-weight: 700;
+    font-size: clamp(32px, 5vw, 52px); line-height: 1.08; letter-spacing: -.025em;
+    margin: 0 0 18px; max-width: 15ch;
+  }
+  .lede { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,.62); max-width: 60ch; margin: 0 0 56px; }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); padding-bottom: 72px; }
+  .card {
+    display: flex; flex-direction: column;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 16px; padding: 26px 24px 24px;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(22,181,167,.55);
+    background: rgba(22,181,167,.07);
+  }
+  .card .icon {
+    width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center;
+    background: rgba(22,181,167,.16); color: var(--teal-400, #2ec3b4);
+    font-size: 17px; margin-bottom: 18px;
+  }
+  .card h2 {
+    font-family: 'Poppins', system-ui, sans-serif; font-weight: 600;
+    font-size: 17px; letter-spacing: -.01em; margin: 0 0 8px;
+  }
+  .card p { font-size: 13.5px; line-height: 1.62; color: rgba(255,255,255,.55); margin: 0 0 20px; flex: 1; }
+  .card .go {
+    font-family: 'Poppins', system-ui, sans-serif; font-size: 12.5px; font-weight: 600;
+    color: var(--teal-400, #2ec3b4); display: inline-flex; align-items: center; gap: 7px;
+  }
+  .card:hover .go i { transform: translateX(3px); }
+  .card .go i { transition: transform .2s ease; font-size: 10px; }
+
+  footer {
+    margin-top: auto; border-top: 1px solid rgba(255,255,255,.08);
+    padding: 22px 0; font-size: 12.5px; color: rgba(255,255,255,.35);
+  }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .note {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+    border-radius: 999px; padding: 6px 14px; font-size: 12px; color: rgba(255,255,255,.5);
+    margin-bottom: 44px;
+  }
+  .note .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-400, #2ec3b4); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand"><span class="mark"><i class="fa-solid fa-notes-medical"></i></span>SpineSync</div>
+      <p class="eyebrow">Interactive prototype</p>
+      <h1>Three connected surfaces, one clinic.</h1>
+      <p class="lede">
+        A clickable prototype of the SpineSync physiotherapy platform. The three surfaces share a
+        single browser-local store, so a booking you make on the public site shows up in the patient
+        portal and the clinic dashboard.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="note"><span class="dot"></span>Demo data only — nothing leaves your browser.</div>
+    <div class="grid">
+      <a class="card" href="SpineSync-Public.dc.html">
+        <span class="icon"><i class="fa-solid fa-globe"></i></span>
+        <h2>Public Website</h2>
+        <p>Marketing site for prospective patients — services, practitioners, blog, and the full booking flow.</p>
+        <span class="go">Open site <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a class="card" href="SpineSync-Patient-Portal.dc.html">
+        <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
+        <h2>Patient Portal</h2>
+        <p>Signed-in patient view — appointments, prescribed exercises, recovery tracking and care-team messaging.</p>
+        <span class="go">Open portal <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      <a class="card" href="SpineSync-Admin-Dashboard.dc.html">
+        <span class="icon"><i class="fa-solid fa-chart-line"></i></span>
+        <h2>Clinic Dashboard</h2>
+        <p>Staff workspace — KPIs, patient records, schedule, reviews and billing for the whole practice.</p>
+        <span class="go">Open dashboard <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>SpineSync — HBit Technology LLC</span>
+      <span>Physio Design System</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>SpineSync — Clinic Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
@@ -15,6 +16,7 @@
   <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
   <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
   <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <script src="./spinesync-store.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: #f5f7f9; }
@@ -23,7 +25,18 @@
     @keyframes toastIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
     tr:hover td { background: rgba(22,181,167,.03); }
     @media (max-width:960px) { .admin-sidebar { width:200px !important; } .g4 { grid-template-columns:repeat(2,1fr) !important; } }
-    @media (max-width:600px) { .admin-sidebar { display:none !important; } }
+    @media (max-width:820px) {
+      div:has(> table.adm-table) { overflow-x:auto !important; }
+      table.adm-table { min-width:680px; }
+    }
+    @media (max-width:600px) {
+      .admin-sidebar { display:none !important; }
+      .admin-mobilenav { display:flex !important; }
+      .g4 { grid-template-columns:1fr !important; }
+      .adm-main { padding:16px !important; }
+      .adm-topbar { padding:0 16px !important; }
+      .adm-split { grid-template-columns:1fr !important; }
+    }
   </style>
 </helmet>
 
@@ -104,12 +117,18 @@
       </sc-for>
     </nav>
     <div style="padding:12px 10px;border-top:1px solid rgba(255,255,255,.07)">
+      <a href="SpineSync-Public.dc.html" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,.55);font-family:Poppins,sans-serif;font-weight:500;font-size:13px"><i class="fa-solid fa-globe" style="width:16px"></i>View website</a>
       <button onClick="{{ confirmSignout }}" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:rgba(255,255,255,.4);font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:15px"></i>Sign Out</button>
     </div>
   </div>
 
   <!-- MAIN -->
   <div style="flex:1;background:#f5f7f9;min-width:0">
+    <div class="admin-mobilenav" style="display:none;background:#14202e;padding:10px;gap:8px;overflow-x:auto;align-items:center">
+      <sc-for list="{{ mobileNavItems }}" as="mn" hint-placeholder-count="6">
+        <button onClick="{{ mn.onSelect }}" style="{{ mn.style }}"><i class="{{ mn.icon }}" style="font-size:12px"></i>{{ mn.label }}</button>
+      </sc-for>
+    </div>
     <div style="background:#fff;border-bottom:1px solid #e2e7ec;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
       <div style="flex:1;max-width:400px;position:relative"><i class="fa-solid fa-magnifying-glass" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#6b7884;font-size:13px;pointer-events:none"></i><input value="{{ searchQ }}" onInput="{{ setSearchQ }}" placeholder="Search patients..." style="width:100%;padding:9px 13px 9px 38px;border-radius:999px;border:1px solid #e2e7ec;background:#f5f7f9;font-family:'Open Sans',sans-serif;font-size:14px;color:#14202e;outline:none" /></div>
       <div style="display:flex;align-items:center;gap:12px">
@@ -122,7 +141,7 @@
       <!-- OVERVIEW -->
       <sc-if value="{{ isOverview }}" hint-placeholder-val="{{ boolTrue }}">
         <div class="g4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px">
-          <button onClick="{{ goPatients }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-users" style="color:#16b5a7;font-size:16px"></i></div><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">+12</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">247</div><div style="font-size:12px;color:#6b7884;font-weight:600">Active Patients</div></button>
+          <button onClick="{{ goPatients }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(22,181,167,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-users" style="color:#16b5a7;font-size:16px"></i></div><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">+12</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">{{ activePatientCount }}</div><div style="font-size:12px;color:#6b7884;font-weight:600">Active Patients</div></button>
           <button onClick="{{ goSchedule }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(45,90,142,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-calendar-days" style="color:#2d5a8e;font-size:16px"></i></div><span style="background:rgba(249,168,40,.12);color:#f39c12;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">3 pending</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">{{ todayApptCount }}</div><div style="font-size:12px;color:#6b7884;font-weight:600">Today's Appointments</div></button>
           <button onClick="{{ goContactMessages }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(249,168,40,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-envelope" style="color:#f39c12;font-size:16px"></i></div><span style="background:rgba(249,168,40,.1);color:#f39c12;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">3 new</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">{{ contactMsgCount }}</div><div style="font-size:12px;color:#6b7884;font-weight:600">Contact Messages</div></button>
           <button onClick="{{ goInvoices }}" style="text-align:left;background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);cursor:pointer"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(39,174,96,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-sterling-sign" style="color:#27ae60;font-size:16px"></i></div><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:3px 8px">+8.4%</span></div><div style="font-family:Poppins,sans-serif;font-size:24px;font-weight:700;color:#14202e;margin-bottom:3px">£12,480</div><div style="font-size:12px;color:#6b7884;font-weight:600">Monthly Revenue</div></button>
@@ -130,7 +149,7 @@
         <div style="display:grid;grid-template-columns:1fr 340px;gap:18px">
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
             <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Recent Patients</div><button onClick="{{ goPatients }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View All</button></div>
-            <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:10px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:10px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th></tr></thead><tbody><sc-for list="{{ recentPatients }}" as="p" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:11px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:13px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:13px 22px;text-align:right"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:6px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></td></tr></sc-for></tbody></table>
+            <table class="adm-table" style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:10px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:10px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:10px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th></tr></thead><tbody><sc-for list="{{ recentPatients }}" as="p" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:11px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:13px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:13px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:13px 22px;text-align:right"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:6px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></td></tr></sc-for></tbody></table>
           </div>
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04)">
             <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Today's Schedule</div>
@@ -149,7 +168,7 @@
         </div>
         <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
           <sc-if value="{{ hasFilteredPatients }}" hint-placeholder-val="{{ boolTrue }}">
-            <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Last Visit</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ filteredPatients }}" as="p" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px"><div style="display:flex;align-items:center;gap:11px"><div style="width:36px;height:36px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:12px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:14px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.lastVisit }}</td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></div></td></tr></sc-for></tbody></table>
+            <table class="adm-table" style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Condition</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Therapist</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Last Visit</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ filteredPatients }}" as="p" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px"><div style="display:flex;align-items:center;gap:11px"><div style="width:36px;height:36px;border-radius:50%;background:{{ p.avBg }};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff">{{ p.initials }}</div><div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ p.name }}</div><div style="font-size:12px;color:#6b7884">{{ p.id }}</div></div></div></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.condition }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.therapist }}</td><td style="padding:14px 16px"><span style="{{ p.statusStyle }}">{{ p.status }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ p.lastVisit }}</td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ p.onView }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">View</button></div></td></tr></sc-for></tbody></table>
           </sc-if>
           <sc-if value="{{ noFilteredPatients }}" hint-placeholder-val="{{ boolFalse }}"><div style="text-align:center;padding:52px 24px"><i class="fa-solid fa-magnifying-glass" style="font-size:30px;color:#cbd3da;display:block;margin-bottom:14px"></i><div style="font-size:15px;color:#6b7884">No patients match "{{ searchQ }}"</div><button onClick="{{ clearSearch }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;margin-top:14px">Clear Search</button></div></sc-if>
         </div>
@@ -157,6 +176,26 @@
 
       <!-- SCHEDULE -->
       <sc-if value="{{ isSchedule }}" hint-placeholder-val="{{ boolFalse }}">
+        <sc-if value="{{ hasOnlineBookings }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;margin-bottom:18px">
+            <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:9px"><i class="fa-solid fa-globe" style="color:#16b5a7;font-size:13px"></i><span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Booked online</span></div>
+              <span style="font-size:12px;color:#6b7884">Arriving from the website and patient portal · {{ onlineCount }} in the queue</span>
+            </div>
+            <sc-for list="{{ onlineBookings }}" as="ob" hint-placeholder-count="2">
+              <div style="padding:14px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="min-width:96px"><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ ob.time }}</div><div style="font-size:11px;color:#6b7884">{{ ob.date }}</div></div>
+                <div style="flex:1;min-width:200px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ ob.patient }}</div><div style="font-size:12px;color:#6b7884">{{ ob.detail }}</div></div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ ob.badgeColor }}" size="sm" hint-size="auto,22px">{{ ob.status }}</x-import>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <sc-if value="{{ ob.canCheckIn }}" hint-placeholder-val="{{ boolTrue }}"><button onClick="{{ ob.onCheckIn }}" style="background:#16b5a7;border:none;border-radius:999px;padding:8px 15px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Check in</button></sc-if>
+                  <sc-if value="{{ ob.canComplete }}" hint-placeholder-val="{{ boolFalse }}"><button onClick="{{ ob.onComplete }}" style="background:#14202e;border:none;border-radius:999px;padding:8px 15px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Complete</button></sc-if>
+                  <sc-if value="{{ ob.canNoShow }}" hint-placeholder-val="{{ boolTrue }}"><button onClick="{{ ob.onNoShow }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">No-show</button></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px">
           <div style="display:flex;align-items:center;gap:12px">
             <button onClick="{{ prevDay }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #e2e7ec;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-chevron-left" style="font-size:12px;color:#14202e"></i></button>
@@ -192,10 +231,10 @@
         <div class="g4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Total Revenue (Month)</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£12,480</div><div style="font-size:12px;color:#27ae60;margin-top:4px">All payments via Stripe</div></div>
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Invoices This Month</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">{{ invoiceCount }}</div></div>
-          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Outstanding</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£0</div><div style="font-size:12px;color:#27ae60;margin-top:4px">No outstanding dues</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Outstanding</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:{{ arColor }}">£{{ arOutstanding }}</div><div style="font-size:12px;color:#6b7884;margin-top:4px">{{ arNote }}</div></div>
         </div>
         <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
-          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Stripe Ref</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th></tr></thead><tbody><sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="6"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ inv.id }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.patient }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.service }}</td><td style="padding:14px 16px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ inv.amount }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.date }}</td><td style="padding:14px 16px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif">{{ inv.stripeRef }}</td><td style="padding:14px 22px;text-align:right"><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;display:inline-flex;align-items:center;gap:4px"><i class="fa-solid fa-circle-check" style="font-size:10px"></i>Paid</span></td></tr></sc-for></tbody></table>
+          <table class="adm-table" style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Patient</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Stripe Ref</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th></tr></thead><tbody><sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="6"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e">{{ inv.id }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.patient }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.service }}</td><td style="padding:14px 16px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ inv.amount }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.date }}</td><td style="padding:14px 16px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif">{{ inv.stripeRef }}</td><td style="padding:14px 22px;text-align:right"><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;display:inline-flex;align-items:center;gap:4px"><i class="fa-solid fa-circle-check" style="font-size:10px"></i>Paid</span></td></tr></sc-for></tbody></table>
         </div>
       </sc-if>
 
@@ -218,7 +257,7 @@
       <sc-if value="{{ isBlog }}" hint-placeholder-val="{{ boolFalse }}">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e">Blog Posts</div><button onClick="{{ openAddBlog }}" style="background:#16b5a7;border:none;border-radius:999px;padding:11px 22px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.3)"><i class="fa-solid fa-plus" style="margin-right:7px"></i>New Post</button></div>
         <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Title</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Category</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Author</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ blogPosts }}" as="post" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e;max-width:240px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ post.title }}</div><div style="font-size:11px;color:#6b7884;margin-top:2px">/{{ post.slug }}</div></td><td style="padding:14px 16px"><span style="{{ post.catStyle }}">{{ post.category }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.author }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.date }}</td><td style="padding:14px 16px"><span style="{{ post.statusStyle }}">{{ post.status }}</span></td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ post.onEdit }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit</button><button onClick="{{ post.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:7px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button></div></td></tr></sc-for></tbody></table>
+          <table class="adm-table" style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Title</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Category</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Author</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Actions</th></tr></thead><tbody><sc-for list="{{ blogPosts }}" as="post" hint-placeholder-count="5"><tr style="border-top:1px solid #f5f7f9"><td style="padding:14px 22px;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#14202e;max-width:240px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ post.title }}</div><div style="font-size:11px;color:#6b7884;margin-top:2px">/{{ post.slug }}</div></td><td style="padding:14px 16px"><span style="{{ post.catStyle }}">{{ post.category }}</span></td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.author }}</td><td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ post.date }}</td><td style="padding:14px 16px"><span style="{{ post.statusStyle }}">{{ post.status }}</span></td><td style="padding:14px 22px;text-align:right"><div style="display:flex;align-items:center;justify-content:flex-end;gap:7px"><button onClick="{{ post.onEdit }}" style="background:#f0faf9;border:1px solid rgba(22,181,167,.2);border-radius:7px;padding:7px 13px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7">Edit</button><button onClick="{{ post.onDelete }}" style="background:#fff8f8;border:1px solid rgba(231,76,60,.2);border-radius:7px;padding:7px 12px;cursor:pointer;color:#e74c3c"><i class="fa-solid fa-trash" style="font-size:12px"></i></button></div></td></tr></sc-for></tbody></table>
         </div>
       </sc-if>
 
@@ -359,11 +398,37 @@
         </div>
       </sc-if>
 
+      <!-- WAITLIST -->
+      <sc-if value="{{ isWaitlist }}" hint-placeholder-val="{{ boolFalse }}">
+        <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+          <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Waitlist</span>
+            <span style="font-size:12px;color:#6b7884">Offers are sent in clinic hours only and expire if unclaimed · first claim wins</span>
+          </div>
+          <sc-if value="{{ hasWaitlist }}" hint-placeholder-val="{{ boolFalse }}">
+            <sc-for list="{{ waitlistRows }}" as="wl" hint-placeholder-count="2">
+              <div style="padding:16px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="flex:1;min-width:200px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ wl.patient }}</div><div style="font-size:12px;color:#6b7884">{{ wl.detail }}</div></div>
+                <div style="min-width:120px;font-size:12px;color:#6b7884">{{ wl.windows }}</div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ wl.badgeColor }}" size="sm" hint-size="auto,22px">{{ wl.status }}</x-import>
+                <div style="display:flex;gap:8px">
+                  <sc-if value="{{ wl.canOffer }}" hint-placeholder-val="{{ boolTrue }}"><button onClick="{{ wl.onOffer }}" style="background:#16b5a7;border:none;border-radius:999px;padding:8px 15px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Send offer</button></sc-if>
+                  <button onClick="{{ wl.onRemove }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:7px 14px;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Remove</button>
+                </div>
+              </div>
+            </sc-for>
+          </sc-if>
+          <sc-if value="{{ noWaitlist }}" hint-placeholder-val="{{ boolTrue }}">
+            <div style="padding:52px 24px;text-align:center"><i class="fa-solid fa-hourglass-half" style="font-size:28px;color:#cbd3da;display:block;margin-bottom:12px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:6px">Nobody is waiting</div><p style="font-size:13px;color:#6b7884;margin:0">When a patient hits a full day on the website they can join the waitlist — entries appear here for the front desk to work.</p></div>
+          </sc-if>
+        </div>
+      </sc-if>
+
       <!-- AUDIT LOG -->
       <sc-if value="{{ isAuditLog }}" hint-placeholder-val="{{ boolFalse }}">
         <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)">
           <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">System Audit Log</div>
-          <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Timestamp</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">User</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Details</th></tr></thead><tbody><sc-for list="{{ auditLog }}" as="log" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif;white-space:nowrap">{{ log.timestamp }}</td><td style="padding:13px 16px;font-size:13px;font-weight:600;color:#14202e">{{ log.user }}</td><td style="padding:13px 16px"><span style="{{ log.actionStyle }}">{{ log.action }}</span></td><td style="padding:13px 22px;font-size:13px;color:#6b7884">{{ log.details }}</td></tr></sc-for></tbody></table>
+          <table class="adm-table" style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Timestamp</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">User</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Action</th><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Details</th></tr></thead><tbody><sc-for list="{{ auditLog }}" as="log" hint-placeholder-count="8"><tr style="border-top:1px solid #f5f7f9"><td style="padding:13px 22px;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif;white-space:nowrap">{{ log.timestamp }}</td><td style="padding:13px 16px;font-size:13px;font-weight:600;color:#14202e">{{ log.user }}</td><td style="padding:13px 16px"><span style="{{ log.actionStyle }}">{{ log.action }}</span></td><td style="padding:13px 22px;font-size:13px;color:#6b7884">{{ log.details }}</td></tr></sc-for></tbody></table>
         </div>
       </sc-if>
 
@@ -532,6 +597,7 @@ class Component extends DCLogic {
     searchQ: '', patientFilter: 'All', selectedPatientId: null, drawerOpen: false,
     addPatientOpen: false, apFirst:'',apLast:'',apEmail:'',apPhone:'',apCondition:'',apTherapist:'',
     scheduleDay: 0, bookSlotOpen: false, signoutOpen: false, toast: null,
+    storeBookings: [], storeWaitlist: [], storeEnquiries: [], storeAudit: [], storeInvoices: [], wlOffered: {},
     // CRUD state
     crudModal: null, // {type, mode, data, fields}
     // Contact messages
@@ -650,7 +716,25 @@ class Component extends DCLogic {
     const role=s.loginRole;
     const userName=this.ROLE_USERS[role];
     const initView = role==='doctor'?'myAppts':'overview';
+    try { if (window.SpineSyncStore) { window.SpineSyncStore.setSession({ name:userName, email:s.loginEmail.trim(), role, surface:'staff' }); window.SpineSyncStore.log(userName, 'Signed in as ' + (this.ROLE_LABELS[role]||role), ''); } } catch(e) {}
     this.setState({authView:'app',loginErrors:false,role,userName,view:initView});
+  }
+  syncStore(data) {
+    const d = data || (window.SpineSyncStore ? window.SpineSyncStore.data() : null);
+    if (!d) return;
+    this.setState({
+      storeBookings: d.bookings || [], storeWaitlist: d.waitlist || [],
+      storeEnquiries: d.enquiries || [], storeAudit: d.audit || [], storeInvoices: d.invoices || [],
+    });
+  }
+  componentDidMount() {
+    this.syncStore();
+    if (window.SpineSyncStore) this._unsub = window.SpineSyncStore.subscribe((d)=>this.syncStore(d));
+  }
+  componentWillUnmount() { if (this._unsub) this._unsub(); clearTimeout(this._t); }
+  setBookingStatus(ref, status, msg) {
+    try { if (window.SpineSyncStore) window.SpineSyncStore.updateBooking(ref, { status }); } catch(e) {}
+    this.toast(msg || ('Appointment marked ' + status.toLowerCase()));
   }
   go(view){this.setState({view});}
   toast(msg){this.setState({toast:msg});clearTimeout(this._t);this._t=setTimeout(()=>this.setState({toast:null}),2600);}
@@ -701,11 +785,15 @@ class Component extends DCLogic {
     const navItem=(key,label,icon,badge=0)=>({label,icon,style:navStyle(key),badge:badge?String(badge):'',badgeStyle:badge?`margin-left:auto;background:rgba(22,181,167,.25);color:${teal};border-radius:999px;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;padding:2px 7px`:'display:none',onSelect:()=>this.go(key)});
 
     const pendingComments=s.blogComments.filter(c=>c.status==='pending').length;
-    const unreadMsgs=s.contactMessages.filter(m=>m.unread).length;
+    const unreadMsgs=s.contactMessages.filter(m=>m.unread).length + s.storeEnquiries.filter(e=>e.status==='New').length;
+    const waitingCount=s.storeWaitlist.length;
+    const onlineNew=s.storeBookings.filter(b=>b.status==='Confirmed').length;
+    const onlineNames=s.storeBookings.map(b=>String(b.patient||'').trim().toLowerCase()).filter(Boolean);
+    const patientTotal=this.PATIENTS.length + onlineNames.filter((n,i)=>onlineNames.indexOf(n)===i && !this.PATIENTS.some(p=>p.name.toLowerCase()===n)).length;
 
     let navGroups=[];
     if(s.role==='admin'||s.role==='staff'){
-      navGroups.push({label:'Main',items:[navItem('overview','Overview','fa-solid fa-house-chimney'),navItem('patients','Patients','fa-solid fa-users',247),navItem('schedule','Schedule','fa-solid fa-calendar-days'),navItem('invoices','Invoices','fa-solid fa-file-invoice-dollar')]});
+      navGroups.push({label:'Main',items:[navItem('overview','Overview','fa-solid fa-house-chimney'),navItem('patients','Patients','fa-solid fa-users',patientTotal),navItem('schedule','Schedule','fa-solid fa-calendar-days',onlineNew),navItem('waitlist','Waitlist','fa-solid fa-hourglass-half',waitingCount),navItem('invoices','Invoices','fa-solid fa-file-invoice-dollar')]});
     }
     if(s.role==='doctor'){
       navGroups.push({label:'My Work',items:[navItem('myAppts','My Appointments','fa-solid fa-calendar-days'),navItem('patients','Patients','fa-solid fa-users')]});
@@ -720,15 +808,52 @@ class Component extends DCLogic {
     // Patients
     const statusStyle=(st)=>{const m={Active:'background:rgba(22,181,167,.1);color:#16b5a7',Pending:'background:rgba(249,168,40,.1);color:#f39c12',Completed:'background:rgba(100,100,100,.1);color:#6b7884'};return `${m[st]||m['Active']};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.04em`;};
     const searchLower=s.searchQ.toLowerCase();
-    const filtered=this.PATIENTS.filter(p=>{
+    // patients created by online bookings that are not yet in the clinic list
+    const seenNames = this.PATIENTS.map(p=>p.name.toLowerCase());
+    const onlinePatients = [];
+    s.storeBookings.forEach(b => {
+      const nm = (b.patient||'').trim();
+      if (!nm || seenNames.indexOf(nm.toLowerCase()) >= 0) return;
+      seenNames.push(nm.toLowerCase());
+      onlinePatients.push({ id: b.ref, name: nm, condition: b.serviceLabel || 'Assessment', therapist: b.pracLabel || 'Unassigned', status: b.status === 'Cancelled' ? 'Completed' : 'Pending', lastVisit: '—', avBg: 'linear-gradient(135deg,#16b5a7,#0a4f47)', isOnline: true });
+    });
+    const ALL_PATIENTS = onlinePatients.concat(this.PATIENTS);
+    const filtered=ALL_PATIENTS.filter(p=>{
       const matchS=!s.searchQ||p.name.toLowerCase().includes(searchLower)||p.id.toLowerCase().includes(searchLower)||p.condition.toLowerCase().includes(searchLower);
       const matchF=s.patientFilter==='All'||p.status===s.patientFilter;
       return matchS&&matchF;
     });
     const ptCard=(p)=>({...p,initials:p.name.split(' ').map(w=>w[0]).join(''),statusStyle:statusStyle(p.status),onView:()=>this.setState({selectedPatientId:p.id,drawerOpen:true})});
     const filteredPatients=filtered.map(ptCard);
-    const recentPatients=this.PATIENTS.slice(0,5).map(ptCard);
-    const filterChips=['All','Active','Pending','Completed'].map(f=>{const cnt=f==='All'?this.PATIENTS.length:this.PATIENTS.filter(p=>p.status===f).length;return{label:f,count:String(cnt),style:`padding:8px 16px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:1px solid ${s.patientFilter===f?teal:'#e2e7ec'};background:${s.patientFilter===f?teal:'#fff'};color:${s.patientFilter===f?'#fff':'#6b7884'}`,onSelect:()=>this.setState({patientFilter:f})};});
+    const recentPatients=ALL_PATIENTS.slice(0,5).map(ptCard);
+    const filterChips=['All','Active','Pending','Completed'].map(f=>{const cnt=f==='All'?ALL_PATIENTS.length:ALL_PATIENTS.filter(p=>p.status===f).length;return{label:f,count:String(cnt),style:`padding:8px 16px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:1px solid ${s.patientFilter===f?teal:'#e2e7ec'};background:${s.patientFilter===f?teal:'#fff'};color:${s.patientFilter===f?'#fff':'#6b7884'}`,onSelect:()=>this.setState({patientFilter:f})};});
+
+    // Online bookings arriving from the website / portal
+    const bookingBadge=(st)=>({'Confirmed':'teal','Requested':'warning','Checked In':'warning','Completed':'success','No-show':'danger','Cancelled':'navy','Waiting':'teal','Offer sent':'warning'}[st]||'teal');
+    const onlineBookings=s.storeBookings.map(b=>({
+      ref:b.ref, patient:b.patient||'Unnamed patient', date:b.date||'—', time:b.time||'—',
+      detail:[b.serviceLabel, b.pracLabel, b.ref].filter(Boolean).join(' · ') + (b.guardian ? ' · guardian: ' + b.guardian.name : ''),
+      status:b.status||'Confirmed', badgeColor:bookingBadge(b.status||'Confirmed'),
+      canCheckIn:b.status==='Confirmed', canComplete:b.status==='Checked In',
+      canNoShow:b.status==='Confirmed'||b.status==='Checked In',
+      onCheckIn:()=>this.setBookingStatus(b.ref,'Checked In','Patient checked in'),
+      onComplete:()=>this.setBookingStatus(b.ref,'Completed','Visit completed — ready to invoice'),
+      onNoShow:()=>this.setBookingStatus(b.ref,'No-show','Marked as a no-show'),
+    }));
+
+    // Waitlist (front desk)
+    const waitlistRows=s.storeWaitlist.map(w=>{
+      const offered=!!s.wlOffered[w.id];
+      return {
+        patient:w.patient||w.email||'Waiting patient',
+        detail:[w.serviceLabel||'Any treatment', w.pracLabel||'First available', w.email].filter(Boolean).join(' · '),
+        windows:(w.dayparts||['Any time']).join(', '),
+        status:offered?'Offer sent':'Waiting', badgeColor:bookingBadge(offered?'Offer sent':'Waiting'),
+        canOffer:!offered,
+        onOffer:()=>{ this.setState({wlOffered:Object.assign({}, s.wlOffered, {[w.id]:true})}); try{ if(window.SpineSyncStore) window.SpineSyncStore.log(s.userName,'Waitlist offer sent',w.serviceLabel||''); }catch(e){} this.toast('Offer sent — expires in 2 hours'); },
+        onRemove:()=>{ try{ if(window.SpineSyncStore) window.SpineSyncStore.removeWaitlist(w.id); }catch(e){} this.toast('Removed from the waitlist'); },
+      };
+    });
 
     // Schedule
     const slotTagStyle=(st)=>{const m={Completed:'background:rgba(39,174,96,.1);color:#27ae60','In Progress':'background:rgba(249,168,40,.12);color:#f39c12',Upcoming:'background:rgba(22,181,167,.1);color:#16b5a7',Available:'display:none'};return `${m[st]||''};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0`;};
@@ -751,19 +876,36 @@ class Component extends DCLogic {
     // Locations
     const locations=s.locations.map(loc=>({...loc,onEdit:()=>this.openCrudModal('location','edit',{...loc}),onDelete:()=>{this.setState({locations:s.locations.filter(x=>x.id!==loc.id)});this.toast('Location removed');}}));
 
-    // Invoices
-    const invoices=s.invoices;
+    // Invoices — payments taken in the patient portal appear first
+    const invoices=s.storeInvoices.map(i=>({
+      id:i.id, patient:i.patient||'Patient', service:i.service||'—', amount:i.amount||'—',
+      date:i.date||'—', stripeRef:i.stripeRef||'—',
+    })).concat(s.invoices);
+    const arOpen=s.storeInvoices.filter(i=>i.status && i.status!=='Paid' && i.status!=='Void');
+    const arDue=arOpen.reduce((sum,i)=>sum+((parseInt(String(i.amount).replace(/[^0-9]/g,''),10)||0)-(i.paid||0)),0);
 
     // Contact messages
-    const contactMessages=s.contactMessages.map(msg=>({...msg,itemStyle:`display:flex;align-items:flex-start;gap:11px;padding:14px 16px;border:none;border-bottom:1px solid #f5f7f9;cursor:pointer;width:100%;background:${msg.id===s.selectedMsgId?'#f0faf9':'#fff'}`,onSelect:()=>this.setState({selectedMsgId:msg.id,contactMessages:s.contactMessages.map(m=>m.id===msg.id?{...m,unread:false}:m)})}));
-    const activeMsg=s.contactMessages.find(m=>m.id===s.selectedMsgId)||null;
+    const enquiryMsgs=s.storeEnquiries.map(e=>({
+      id:e.id, name:e.name, email:e.email, subject:e.subject||'Website enquiry', body:e.message||'',
+      time:'From the website', unread:e.status==='New', fromWebsite:true,
+    }));
+    const allMessages=enquiryMsgs.concat(s.contactMessages);
+    const contactMessages=allMessages.map(msg=>({...msg,itemStyle:`display:flex;align-items:flex-start;gap:11px;padding:14px 16px;border:none;border-bottom:1px solid #f5f7f9;cursor:pointer;width:100%;background:${msg.id===s.selectedMsgId?'#f0faf9':'#fff'}`,onSelect:()=>{
+      if(msg.fromWebsite){ try{ if(window.SpineSyncStore) window.SpineSyncStore.updateEnquiry(msg.id,{status:'Read'}); }catch(e){} }
+      this.setState({selectedMsgId:msg.id,contactMessages:s.contactMessages.map(m=>m.id===msg.id?{...m,unread:false}:m)});
+    }}));
+    const activeMsg=allMessages.find(m=>m.id===s.selectedMsgId)||null;
 
     // Comments
     const blogComments=s.blogComments.map(c=>({...c,statusStyle:`background:${c.status==='approved'?'rgba(39,174,96,.1)':'rgba(249,168,40,.1)'};color:${c.status==='approved'?'#27ae60':'#f39c12'};border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:2px 8px`,statusLabel:c.status==='approved'?'Approved':'Pending',canApprove:c.status==='pending',rowStyle:`padding:18px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:flex-start;gap:16px`,onApprove:()=>{this.setState({blogComments:s.blogComments.map(x=>x.id===c.id?{...x,status:'approved'}:x)});this.toast('Comment approved');},onDelete:()=>{this.setState({blogComments:s.blogComments.filter(x=>x.id!==c.id)});this.toast('Comment deleted');}}));
 
     // Audit log
     const actionColors={'LOGIN':'background:rgba(22,181,167,.1);color:#16b5a7','APPT_CANCEL':'background:rgba(231,76,60,.1);color:#e74c3c','BLOG_PUBLISH':'background:rgba(45,90,142,.1);color:#2d5a8e','NOTE_ADDED':'background:rgba(249,168,40,.1);color:#f39c12','TEAM_UPDATED':'background:rgba(155,89,182,.1);color:#9b59b6','SERVICE_ADDED':'background:rgba(39,174,96,.1);color:#27ae60','INVOICE_VIEWED':'background:rgba(100,100,100,.1);color:#6b7884'};
-    const auditLog=s.auditLog.map(log=>({...log,actionStyle:`${actionColors[log.action]||'background:#f0f0f0;color:#666'};border-radius:6px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.04em`}));
+    const auditLog=s.storeAudit.map(a=>({
+      timestamp: String(a.at||'').replace('T',' ').slice(0,16), user: a.actor||'System',
+      action: 'CROSS_SURFACE', details: a.action + (a.target ? ' — ' + a.target : ''),
+      actionStyle: 'background:rgba(22,181,167,.1);color:#16b5a7;border-radius:6px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.04em',
+    })).concat(s.auditLog.map(log=>({...log,actionStyle:`${actionColors[log.action]||'background:#f0f0f0;color:#666'};border-radius:6px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.04em`})));
 
     // Admin forms
     const adminForms=s.adminForms.map(f=>({...f,fieldCount:String(f.fieldCount||0),responseCount:String((f.responses||[]).length),onViewResponses:()=>this.setState({viewFormResponsesId:f.id}),onEdit:()=>this.openCrudModal('form','edit',{name:f.name,description:''}),onDelete:()=>{this.setState({adminForms:s.adminForms.filter(x=>x.id!==f.id)});this.toast('Form deleted');}}));
@@ -788,6 +930,12 @@ class Component extends DCLogic {
       grp.items.forEach(item => { sidebarItems.push({isHeader:false, isNav:true, ...item}); });
     });
 
+    const mobileNavItems = sidebarItems.filter(it => it.isNav).map(it => ({
+      label: it.label, icon: it.icon,
+      style: `display:flex;align-items:center;gap:7px;flex-shrink:0;padding:8px 14px;border-radius:999px;border:1px solid ${/font-weight:700/.test(it.style)?'rgba(22,181,167,.5)':'rgba(255,255,255,.12)'};background:${/font-weight:700/.test(it.style)?'rgba(22,181,167,.18)':'transparent'};color:${/font-weight:700/.test(it.style)?teal:'rgba(255,255,255,.6)'};font-family:Poppins,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap`,
+      onSelect: it.onSelect,
+    }));
+
     const roleOptions=['admin','doctor','staff'].map(r=>({label:{admin:'Admin',doctor:'Doctor',staff:'Staff'}[r],style:`flex:1;padding:9px 0;border-radius:8px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${s.loginRole===r?teal:'rgba(255,255,255,.12)'};background:${s.loginRole===r?'rgba(22,181,167,.15)':'transparent'};color:${s.loginRole===r?teal:'rgba(255,255,255,.5)'}`,onSelect:()=>this.setState({loginRole:r})}));
 
     const inp=this.inpStyle();
@@ -809,7 +957,7 @@ class Component extends DCLogic {
 
       userInitials:s.userName.split(' ').filter(w=>w[0]===w[0].toUpperCase()).slice(0,2).map(w=>w[0]).join(''),
       userName:s.userName, userRoleLabel:this.ROLE_LABELS[s.role]||'',
-      navGroups, sidebarItems, inpStyle:inp,
+      navGroups, sidebarItems, mobileNavItems, inpStyle:inp,
 
       isOverview:s.view==='overview', isPatients:s.view==='patients', isSchedule:s.view==='schedule',
       isInvoices:s.view==='invoices', isServices:s.view==='services', isBlog:s.view==='blog',
@@ -817,6 +965,10 @@ class Component extends DCLogic {
       isSiteSettings:s.view==='siteSettings', isContactMessages:s.view==='contactMessages',
       isComments:s.view==='comments', isFormsBuilder:s.view==='formsBuilder',
       isAuditLog:s.view==='auditLog', isMyAppts:s.view==='myAppts',
+      isWaitlist:s.view==='waitlist',
+      onlineBookings, hasOnlineBookings:onlineBookings.length>0, onlineCount:String(onlineBookings.length),
+      waitlistRows, hasWaitlist:waitlistRows.length>0, noWaitlist:waitlistRows.length===0,
+      goWaitlist:()=>this.go('waitlist'),
 
       goPatients:()=>this.go('patients'), goSchedule:()=>this.go('schedule'),
       goInvoices:()=>this.go('invoices'), goContactMessages:()=>this.go('contactMessages'),
@@ -826,16 +978,28 @@ class Component extends DCLogic {
       setApFirst:(e)=>this.setState({apFirst:e.target.value}),setApLast:(e)=>this.setState({apLast:e.target.value}),
       setApEmail:(e)=>this.setState({apEmail:e.target.value}),setApPhone:(e)=>this.setState({apPhone:e.target.value}),
       setApCondition:(e)=>this.setState({apCondition:e.target.value}),setApTherapist:(e)=>this.setState({apTherapist:e.target.value}),
-      submitAddPatient:()=>{if(!s.apFirst.trim()||!s.apLast.trim()){this.toast('Please fill required fields');return;}this.setState({addPatientOpen:false});this.toast('Patient added: '+s.apFirst+' '+s.apLast);},
+      submitAddPatient:()=>{
+        const name=(s.apFirst+' '+s.apLast).trim();
+        const emailOk=!s.apEmail.trim()||/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.apEmail.trim());
+        if(!s.apFirst.trim()||!s.apLast.trim()){this.toast('First and last name are required');return;}
+        if(!emailOk){this.toast('That email address is not valid');return;}
+        const dupe=ALL_PATIENTS.find(p=>p.name.toLowerCase()===name.toLowerCase()||(s.apEmail.trim()&&p.email&&p.email.toLowerCase()===s.apEmail.trim().toLowerCase()));
+        if(dupe){this.toast('Possible duplicate of '+dupe.name+' ('+dupe.id+') — open that record to compare');return;}
+        try{ if(window.SpineSyncStore) window.SpineSyncStore.log(s.userName,'Patient record created',name); }catch(e){}
+        this.setState({addPatientOpen:false});
+        this.toast('Patient added: '+name);
+      },
 
-      recentPatients,todaySlots,todayApptCount:String(this.TODAY_SLOTS.filter(sl=>sl.status!=='Available').length),
+      recentPatients,todaySlots,activePatientCount:String(patientTotal),todayApptCount:String(this.TODAY_SLOTS.filter(sl=>sl.status!=='Available').length),
       filteredPatients,hasFilteredPatients:filteredPatients.length>0,noFilteredPatients:filteredPatients.length===0,
       filterChips,searchQ:s.searchQ,setSearchQ:(e)=>this.setState({searchQ:e.target.value,view:'patients'}),
       clearSearch:()=>this.setState({searchQ:'',patientFilter:'All'}),
       scheduleSlots,scheduleDay:this.DAYS[((s.scheduleDay%this.DAYS.length)+this.DAYS.length)%this.DAYS.length],
       prevDay:()=>this.setState({scheduleDay:s.scheduleDay-1}),nextDay:()=>this.setState({scheduleDay:s.scheduleDay+1}),
       openBookSlot:()=>this.toast('Book slot — select a patient and time'),
-      invoices,invoiceCount:String(s.invoices.length),
+      invoices,invoiceCount:String(invoices.length),
+      arOutstanding:String(arDue), arColor: arDue>0?'#b9740f':'#27ae60',
+      arNote: arDue>0 ? (arOpen.length + ' invoice(s) awaiting payment') : 'No outstanding dues',
 
       services,openAddService:()=>this.openCrudModal('service','add',{name:'',blurb:'',price:'',duration:'',icon:'fa-solid fa-stethoscope'}),
       blogPosts,openAddBlog:()=>this.openCrudModal('blog','add',{title:'',slug:'',excerpt:'',category:'',author:'',seoTitle:'',metaDesc:''}),
@@ -883,7 +1047,7 @@ class Component extends DCLogic {
 
       signoutOpen:s.signoutOpen,confirmSignout:()=>this.setState({signoutOpen:true}),
       closeSignout:()=>this.setState({signoutOpen:false}),
-      doSignout:()=>this.setState({authView:'login',signoutOpen:false,loginEmail:'',loginPassword:'',loginErrors:false}),
+      doSignout:()=>{ try { if (window.SpineSyncStore) window.SpineSyncStore.clearSession(); } catch(e) {} this.setState({authView:'login',signoutOpen:false,loginEmail:'',loginPassword:'',loginErrors:false}); },
       toastShown:!!s.toast,toast:s.toast||'',
       stop:(e)=>e.stopPropagation(),
     };

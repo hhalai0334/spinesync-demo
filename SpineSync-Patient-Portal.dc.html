@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>SpineSync — Patient Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
@@ -15,6 +16,7 @@
   <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/tokens/effects.css">
   <link rel="stylesheet" href="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/styles.css">
   <script src="_ds/physio-design-system-c3458896-924e-4888-91d2-3066598b0d5d/_ds_bundle.js"></script>
+  <script src="./spinesync-store.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: #f5f7f9; }
@@ -22,9 +24,24 @@
     @keyframes modalIn { from { opacity:0; transform:translateY(16px) scale(.98); } to { opacity:1; transform:none; } }
     @keyframes toastIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
     @media (max-width:768px) {
-      .dash-sidebar { width:100% !important; height:auto !important; position:static !important; }
+      .dash-sidebar { width:100% !important; height:auto !important; position:static !important; border-right:none !important; border-bottom:1px solid #e2e7ec !important; }
       .dash-wrap { flex-direction:column !important; }
+      .dash-nav { display:flex !important; gap:8px; overflow-x:auto; padding:10px !important; }
+      .dash-nav > div { display:flex !important; flex-direction:row !important; gap:8px; }
+      .dash-nav-head { position:absolute !important; width:0 !important; height:0 !important; padding:0 !important; margin:0 !important; overflow:hidden !important; opacity:0 !important; }
+      .dash-nav button { width:auto !important; white-space:nowrap; }
+      .dash-brand { display:none !important; }
+      .dash-profile { padding:12px 14px !important; }
+      .dash-foot { display:flex !important; gap:8px; overflow-x:auto; }
+      .dash-foot button, .dash-foot a { width:auto !important; white-space:nowrap; }
       .grid-4 { grid-template-columns:repeat(2,1fr) !important; }
+      .port-main { padding:16px !important; }
+      .port-split { grid-template-columns:1fr !important; }
+      div:has(> table.port-table) { overflow-x:auto !important; }
+      table.port-table { min-width:520px; }
+    }
+    @media (max-width:480px) {
+      .grid-4 { grid-template-columns:1fr !important; }
     }
   </style>
 </helmet>
@@ -98,26 +115,27 @@
 
   <!-- SIDEBAR -->
   <div class="dash-sidebar" style="width:238px;flex-shrink:0;background:#fff;border-right:1px solid #e2e7ec;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto">
-    <div style="padding:18px 16px;border-bottom:1px solid #e2e7ec;display:flex;align-items:center;gap:10px">
+    <div class="dash-brand" style="padding:18px 16px;border-bottom:1px solid #e2e7ec;display:flex;align-items:center;gap:10px">
       <div style="width:34px;height:34px;background:#16b5a7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-heart-pulse" style="font-size:14px;color:#fff"></i></div>
       <span style="font-family:Poppins,sans-serif;font-weight:700;font-size:17px;color:#14202e">Spine<span style="color:#16b5a7">Sync</span></span>
     </div>
-    <div style="padding:16px;border-bottom:1px solid #e2e7ec">
+    <div class="dash-profile" style="padding:16px;border-bottom:1px solid #e2e7ec">
       <div style="display:flex;align-items:center;gap:11px">
-        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#fff">AT</div>
-        <div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">Alex Thompson</div><div style="font-size:12px;color:#6b7884">Patient #SS-4821</div></div>
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#16b5a7,#0a8a7e);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#fff">{{ userInitials }}</div>
+        <div><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ userName }}</div><div style="font-size:12px;color:#6b7884">Patient {{ userRef }}</div></div>
       </div>
     </div>
-    <nav style="padding:14px 10px;flex:1">
-      <div style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7884;padding:0 8px;margin-bottom:8px">Navigation</div>
+    <nav class="dash-nav" style="padding:14px 10px;flex:1">
+      <div class="dash-nav-head" style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7884;padding:0 8px;margin-bottom:8px">Navigation</div>
       <div style="display:flex;flex-direction:column;gap:2px">
         <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
           <button onClick="{{ item.onSelect }}" style="{{ item.style }}"><i class="{{ item.icon }}" style="width:16px;font-size:14px;flex-shrink:0"></i>{{ item.label }}<span style="{{ item.badgeStyle }}">{{ item.badge }}</span></button>
         </sc-for>
       </div>
     </nav>
-    <div style="padding:12px 10px;border-top:1px solid #e2e7ec">
+    <div class="dash-foot" style="padding:12px 10px;border-top:1px solid #e2e7ec">
       <button onClick="{{ goProfile }}" style="{{ profileNavStyle }}"><i class="fa-solid fa-circle-user" style="width:16px"></i>Profile</button>
+      <a href="SpineSync-Public.dc.html" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;text-decoration:none;color:#6b7884;font-family:Poppins,sans-serif;font-weight:500;font-size:14px"><i class="fa-solid fa-globe" style="width:16px"></i>Back to website</a>
       <button onClick="{{ confirmSignout }}" style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;border:none;cursor:pointer;background:transparent;color:#6b7884;font-family:Poppins,sans-serif;font-size:14px;width:100%;text-align:left"><i class="fa-solid fa-arrow-right-from-bracket" style="width:16px"></i>Sign Out</button>
     </div>
   </div>
@@ -153,8 +171,8 @@
           </div>
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(39,174,96,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-file-invoice-dollar" style="color:#27ae60;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoices</span></div>
-            <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:#27ae60;margin-bottom:3px">All clear</div>
-            <div style="font-size:12px;color:#6b7884">{{ invoiceCount }} paid via Stripe</div>
+            <div style="font-family:Poppins,sans-serif;font-size:20px;font-weight:700;color:{{ balanceColor }};margin-bottom:3px">{{ balanceHeadline }}</div>
+            <div style="font-size:12px;color:#6b7884">{{ balanceSub }}</div>
           </div>
           <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="width:38px;height:38px;background:rgba(249,168,40,.1);border-radius:9px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-bell" style="color:#f39c12;font-size:16px"></i></div><span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Notifications</span></div>
@@ -168,13 +186,14 @@
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Upcoming Appointment</div><button onClick="{{ goAppts }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;color:#16b5a7;text-transform:uppercase;letter-spacing:.05em">View All</button></div>
             <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ boolTrue }}">
               <div style="border:2px solid rgba(22,181,167,.2);border-left:4px solid #16b5a7;border-radius:10px;padding:18px;background:rgba(22,181,167,.03)">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">{{ topAppt.title }}</div><div style="font-size:13px;color:#6b7884">with {{ topAppt.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Confirmed</x-import></div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e;margin-bottom:3px">{{ topAppt.title }}</div><div style="font-size:13px;color:#6b7884">with {{ topAppt.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ topAppt.badgeColor }}" size="sm" hint-size="auto,22px">{{ topAppt.status }}</x-import></div>
                 <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px">
                   <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-calendar" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.date }}</span></div>
                   <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-clock" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.time }}</span></div>
                   <div style="display:flex;align-items:center;gap:6px"><i class="fa-solid fa-location-dot" style="font-size:12px;color:#16b5a7"></i><span style="font-size:13px;color:#6b7884">{{ topAppt.room }}</span></div>
                 </div>
-                <div style="display:flex;gap:10px"><button onClick="{{ topAppt.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ topAppt.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div>
+                <sc-if value="{{ topAppt.canChange }}" hint-placeholder-val="{{ boolTrue }}"><div style="display:flex;gap:10px"><button onClick="{{ topAppt.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ topAppt.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div></sc-if>
+                <sc-if value="{{ topAppt.locked }}" hint-placeholder-val="{{ boolFalse }}"><div style="background:#fff8ec;border:1px solid #f6d9a6;border-radius:9px;padding:12px 14px;display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-circle-info" style="color:#b9740f;font-size:12px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.6">{{ topAppt.lockNote }}</span></div></sc-if>
               </div>
             </sc-if>
             <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ boolFalse }}">
@@ -226,7 +245,7 @@
             <div style="display:flex;flex-direction:column;gap:14px">
               <sc-for list="{{ upcomingAppts }}" as="ap" hint-placeholder-count="2">
                 <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;border-left:4px solid #16b5a7;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-                  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">{{ ap.title }}</div><div style="font-size:13px;color:#6b7884">with {{ ap.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="teal" hint-size="auto,22px">Confirmed</x-import></div>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:Poppins,sans-serif;font-size:16px;font-weight:700;color:#14202e;margin-bottom:3px">{{ ap.title }}</div><div style="font-size:13px;color:#6b7884">with {{ ap.prac }}</div></div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ ap.badgeColor }}" size="sm" hint-size="auto,22px">{{ ap.status }}</x-import></div>
                   <div style="display:flex;flex-wrap:wrap;gap:18px;margin-bottom:16px">
                     <div style="display:flex;align-items:center;gap:7px"><i class="fa-solid fa-calendar" style="font-size:13px;color:#16b5a7"></i><span style="font-size:14px;color:#14202e">{{ ap.date }}</span></div>
                     <div style="display:flex;align-items:center;gap:7px"><i class="fa-solid fa-clock" style="font-size:13px;color:#16b5a7"></i><span style="font-size:14px;color:#14202e">{{ ap.time }}</span></div>
@@ -235,9 +254,24 @@
                   <sc-if value="{{ ap.hasNote }}" hint-placeholder-val="{{ boolFalse }}">
                     <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.18);border-radius:9px;padding:13px 15px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-note-sticky" style="color:#16b5a7;font-size:14px;margin-top:2px"></i><div><div style="font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;margin-bottom:3px">Practitioner Note</div><div style="font-size:13px;color:#6b7884;line-height:1.55">{{ ap.note }}</div></div></div>
                   </sc-if>
-                  <div style="display:flex;gap:10px"><button onClick="{{ ap.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ ap.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div>
+                  <sc-if value="{{ ap.canChange }}" hint-placeholder-val="{{ boolTrue }}"><div style="display:flex;gap:10px"><button onClick="{{ ap.onReschedule }}" style="background:#16b5a7;border:none;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Reschedule</button><button onClick="{{ ap.onCancel }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:10px 20px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Cancel</button></div></sc-if>
+                  <sc-if value="{{ ap.locked }}" hint-placeholder-val="{{ boolFalse }}"><div style="background:#fff8ec;border:1px solid #f6d9a6;border-radius:9px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-circle-info" style="color:#b9740f;font-size:13px;margin-top:2px"></i><div><div style="font-size:13px;color:#14202e;line-height:1.6">{{ ap.lockNote }}</div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-top:4px">{{ clinicPhone }}</div></div></div></sc-if>
                 </div>
               </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasWaitlist }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff;border:1px solid #e2e7ec;border-radius:12px;padding:22px;margin-top:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px"><i class="fa-solid fa-hourglass-half" style="color:#16b5a7;font-size:14px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Waitlist</div></div>
+              <p style="font-size:13px;color:#6b7884;margin:0 0 14px;line-height:1.6">We'll offer you the first cancellation that matches. Offers arrive in clinic hours only and expire if not claimed.</p>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ waitlistEntries }}" as="wl" hint-placeholder-count="1">
+                  <div style="border:1px solid #e2e7ec;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                    <div style="flex:1;min-width:180px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ wl.serviceLabel }}</div><div style="font-size:12px;color:#6b7884;margin-top:2px">{{ wl.pracLabel }} · {{ wl.windows }}</div></div>
+                    <button onClick="{{ wl.onLeave }}" style="background:#fff;border:2px solid #e2e7ec;border-radius:999px;padding:8px 16px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#6b7884;text-transform:uppercase;letter-spacing:.04em">Leave</button>
+                  </div>
+                </sc-for>
+              </div>
             </div>
           </sc-if>
           <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ boolFalse }}">
@@ -251,7 +285,7 @@
                 <div style="display:flex;align-items:flex-start;gap:14px">
                   <div style="width:40px;height:40px;background:#f0faf9;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa-solid fa-calendar-check" style="color:#27ae60;font-size:16px"></i></div>
                   <div style="flex:1">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ pa.title }}</div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="success" size="sm" hint-size="auto,20px">Completed</x-import></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ pa.title }}</div><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ pa.badgeColor }}" size="sm" hint-size="auto,20px">{{ pa.status }}</x-import></div>
                     <div style="font-size:12px;color:#6b7884;margin-bottom:8px">{{ pa.date }} · {{ pa.prac }}</div>
                     <sc-if value="{{ pa.hasNote }}" hint-placeholder-val="{{ boolFalse }}">
                       <div style="background:#f5f7f9;border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-note-sticky" style="color:#6b7884;font-size:12px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.5">{{ pa.note }}</span></div>
@@ -266,15 +300,28 @@
 
       <!-- ══ INVOICES ══ -->
       <sc-if value="{{ isInvoices }}" hint-placeholder-val="{{ boolFalse }}">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px">
-          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Total Paid</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£{{ invoiceTotalPaid }}</div></div>
-          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Invoices</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">{{ invoiceCount }}</div></div>
-          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Outstanding</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£0</div><div style="font-size:12px;color:#27ae60;margin-top:3px">All paid via Stripe</div></div>
+        <div class="grid-4" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Balance Due</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">£{{ balanceDue }}</div><sc-if value="{{ hasBalance }}" hint-placeholder-val="{{ boolTrue }}"><div style="font-size:12px;color:#b9740f;margin-top:3px">Across {{ openInvoiceCount }} open invoice(s)</div></sc-if><sc-if value="{{ noBalance }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#1e8449;margin-top:3px">Nothing outstanding</div></sc-if></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Total Paid</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#27ae60">£{{ invoiceTotalPaid }}</div><div style="font-size:12px;color:#6b7884;margin-top:3px">Since you joined</div></div>
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><div style="font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884;margin-bottom:8px">Invoices</div><div style="font-family:Poppins,sans-serif;font-size:26px;font-weight:700;color:#14202e">{{ invoiceCount }}</div><div style="font-size:12px;color:#6b7884;margin-top:3px">Insurance claims handled by the clinic</div></div>
         </div>
+        <sc-if value="{{ hasOpenInvoices }}" hint-placeholder-val="{{ boolTrue }}">
+          <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;margin-bottom:18px">
+            <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;gap:9px"><i class="fa-solid fa-file-invoice-dollar" style="color:#16b5a7;font-size:13px"></i><span style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">To pay</span></div>
+            <sc-for list="{{ openInvoiceRows }}" as="oi" hint-placeholder-count="2">
+              <div style="padding:16px 22px;border-bottom:1px solid #f5f7f9;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                <div style="flex:1;min-width:180px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ oi.id }} · {{ oi.service }}</div><div style="font-size:12px;color:#6b7884;margin-top:2px">{{ oi.dueLabel }}</div></div>
+                <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ oi.badgeColor }}" size="sm" hint-size="auto,22px">{{ oi.status }}</x-import>
+                <div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e;min-width:64px;text-align:right">{{ oi.remaining }}</div>
+                <button onClick="{{ oi.onOpen }}" style="background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Pay now</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
         <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden">
           <div style="padding:16px 22px;border-bottom:1px solid #f0f3f5;font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Invoice History</div>
-          <table style="width:100%;border-collapse:collapse">
-            <thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Ref</th></tr></thead>
+          <table class="port-table" style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:#f8f9fa"><th style="padding:12px 22px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Invoice</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Service</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Amount</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Date</th><th style="padding:12px 16px;text-align:left;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Status</th><th style="padding:12px 22px;text-align:right;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7884">Details</th></tr></thead>
             <tbody>
               <sc-for list="{{ invoices }}" as="inv" hint-placeholder-count="4">
                 <tr style="border-top:1px solid #f5f7f9">
@@ -282,8 +329,8 @@
                   <td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.service }}</td>
                   <td style="padding:14px 16px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">{{ inv.amount }}</td>
                   <td style="padding:14px 16px;font-size:13px;color:#6b7884">{{ inv.date }}</td>
-                  <td style="padding:14px 16px"><span style="background:rgba(39,174,96,.1);color:#27ae60;border-radius:999px;font-family:Poppins,sans-serif;font-size:11px;font-weight:700;padding:4px 10px;text-transform:uppercase;display:inline-flex;align-items:center;gap:5px"><i class="fa-solid fa-circle-check" style="font-size:10px"></i>Paid</span></td>
-                  <td style="padding:14px 22px;text-align:right;font-size:12px;color:#6b7884;font-family:Poppins,sans-serif">{{ inv.stripeRef }}</td>
+                  <td style="padding:14px 16px"><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ inv.badgeColor }}" size="sm" hint-size="auto,20px">{{ inv.status }}</x-import></td>
+                  <td style="padding:14px 22px;text-align:right"><button onClick="{{ inv.onOpen }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#16b5a7;padding:0">View</button></td>
                 </tr>
               </sc-for>
             </tbody>
@@ -314,6 +361,21 @@
 
       <!-- ══ FORMS ══ -->
       <sc-if value="{{ isForms }}" hint-placeholder-val="{{ boolFalse }}">
+        <sc-if value="{{ hasStoreTasks }}" hint-placeholder-val="{{ boolFalse }}">
+          <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.22);border-radius:12px;padding:20px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px"><i class="fa-solid fa-clipboard-list" style="color:#16b5a7;font-size:14px"></i><div style="font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:#14202e">Tasks from your booking</div></div>
+            <p style="font-size:13px;color:#6b7884;margin:0 0 14px;line-height:1.6">Sent when you booked. Completing these before your visit saves time at the desk.</p>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ storeTasks }}" as="tk" hint-placeholder-count="1">
+                <div style="background:#fff;border:1px solid #e2e7ec;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:180px"><div style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ tk.label }}</div><div style="font-size:12px;color:#6b7884;margin-top:2px">Appointment {{ tk.ref }} · due {{ tk.due }}</div></div>
+                  <x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ tk.badgeColor }}" size="sm" hint-size="auto,22px">{{ tk.statusLabel }}</x-import>
+                  <sc-if value="{{ tk.outstanding }}" hint-placeholder-val="{{ boolTrue }}"><button onClick="{{ tk.onStart }}" style="background:#16b5a7;border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em">Start</button></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
         <div style="display:flex;flex-direction:column;gap:14px">
           <sc-for list="{{ patientForms }}" as="f" hint-placeholder-count="3">
             <div style="background:#fff;border-radius:12px;border:1px solid #e2e7ec;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
@@ -433,7 +495,8 @@
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
             <sc-for list="{{ pslots }}" as="slot" hint-placeholder-count="8"><button onClick="{{ slot.onSelect }}" disabled="{{ slot.taken }}" style="{{ slot.style }}">{{ slot.time }}</button></sc-for>
           </div>
-          <sc-if value="{{ pickerError }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-top:12px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>Please choose a day and time.</div></sc-if>
+          <sc-if value="{{ pickerConflict }}" hint-placeholder-val="{{ boolFalse }}"><div style="background:#fff8ec;border:1px solid #f6d9a6;border-radius:9px;padding:12px 14px;margin-top:12px;display:flex;align-items:flex-start;gap:9px"><i class="fa-solid fa-triangle-exclamation" style="color:#b9740f;font-size:12px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.6">{{ pickerNotice }}</span></div></sc-if>
+          <sc-if value="{{ pickerError }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:12px;color:#e74c3c;margin-top:12px"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px"></i>{{ pickerErrorMsg }}</div></sc-if>
         </div>
         <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:flex-end;gap:10px"><button onClick="{{ closePicker }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:11px 18px">Cancel</button><button onClick="{{ confirmPicker }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em">{{ pickerCta }}</button></div>
       </div>
@@ -484,13 +547,69 @@
     </div>
   </sc-if>
 
+  <!-- INVOICE DETAIL & PAYMENT -->
+  <sc-if value="{{ openInvoiceOpen }}" hint-placeholder-val="{{ boolFalse }}">
+    <div onClick="{{ closeInvoice }}" style="position:fixed;inset:0;z-index:1100;background:rgba(20,32,46,.6);display:flex;align-items:flex-start;justify-content:center;padding:36px 18px;overflow-y:auto">
+      <div onClick="{{ stop }}" style="width:100%;max-width:520px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;animation:modalIn .24s cubic-bezier(.16,1,.3,1)">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0f3f5;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div><div style="font-family:Poppins,sans-serif;font-size:17px;font-weight:700;color:#14202e">{{ openInv.id }}</div><div style="font-size:12px;color:#6b7884;margin-top:2px">{{ openInv.dueLabel }}</div></div>
+          <div style="display:flex;align-items:center;gap:10px"><x-import component-from-global-scope="PhysioDesignSystem_c34588.Badge" color="{{ openInv.badgeColor }}" size="sm" hint-size="auto,22px">{{ openInv.status }}</x-import><button onClick="{{ closeInvoice }}" style="width:32px;height:32px;border-radius:8px;border:none;background:#f5f7f9;cursor:pointer"><i class="fa-solid fa-xmark" style="font-size:14px;color:#6b7884"></i></button></div>
+        </div>
+        <div style="padding:22px 24px">
+          <sc-for list="{{ openInv.lines }}" as="ln" hint-placeholder-count="1">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:14px;border-bottom:1px solid #f0f3f5;margin-bottom:14px"><span style="font-size:14px;color:#14202e;line-height:1.6">{{ ln.desc }}</span><span style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e;white-space:nowrap">{{ ln.amount }}</span></div>
+          </sc-for>
+          <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:13px;color:#6b7884">Invoice total</span><span style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#14202e">{{ openInv.total }}</span></div>
+          <sc-if value="{{ openInv.hasPaid }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:13px;color:#6b7884">Already paid</span><span style="font-family:Poppins,sans-serif;font-size:14px;font-weight:600;color:#1e8449">−{{ openInv.paid }}</span></div>
+          </sc-if>
+          <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid #f0f3f5;margin-top:6px"><span style="font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:#14202e">Amount due</span><span style="font-family:Poppins,sans-serif;font-size:22px;font-weight:700;color:#16b5a7">{{ openInv.remaining }}</span></div>
+          <div style="font-size:12px;color:#6b7884;margin-top:14px;line-height:1.6">Payment reference {{ openInv.stripeRef }}. Insurance-funded treatment is invoiced to your insurer — only your excess appears here.</div>
+
+          <sc-if value="{{ payProcessing }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#f5f7f9;border-radius:10px;padding:16px;margin-top:18px;display:flex;align-items:center;gap:11px"><i class="fa-solid fa-spinner fa-spin" style="color:#16b5a7;font-size:14px"></i><span style="font-size:13px;color:#14202e;line-height:1.6">Opening the secure Stripe checkout — don't close this window.</span></div>
+          </sc-if>
+          <sc-if value="{{ payConfirming }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff8ec;border:1px solid #f6d9a6;border-radius:10px;padding:16px;margin-top:18px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-hourglass-half" style="color:#b9740f;font-size:13px;margin-top:2px"></i><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:3px">Card accepted — confirming with our provider</div><span style="font-size:12px;color:#6b7884;line-height:1.6">Your payment has gone through. The invoice updates as soon as Stripe confirms it, usually within a minute. You will not be charged twice if you close this now.</span></div></div>
+          </sc-if>
+          <sc-if value="{{ payPaid }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#f0faf9;border:1px solid rgba(22,181,167,.22);border-radius:10px;padding:16px;margin-top:18px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-circle-check" style="color:#16b5a7;font-size:14px;margin-top:2px"></i><div><div style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#14202e;margin-bottom:3px">Paid in full</div><span style="font-size:12px;color:#6b7884;line-height:1.6">A receipt is on its way to your email, and the clinic's records are updated.</span></div></div>
+          </sc-if>
+          <sc-if value="{{ openInv.isVoid }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#f5f7f9;border-radius:10px;padding:16px;margin-top:18px;display:flex;align-items:flex-start;gap:10px"><i class="fa-solid fa-ban" style="color:#6b7884;font-size:13px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.6">This invoice was cancelled by the clinic and nothing is payable. It stays here for your records.</span></div>
+          </sc-if>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #f0f3f5;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <button onClick="{{ downloadInvoice }}" style="background:none;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;color:#6b7884;padding:0;display:flex;align-items:center;gap:7px"><i class="fa-solid fa-download" style="font-size:12px"></i>Download PDF</button>
+          <sc-if value="{{ openInv.payable }}" hint-placeholder-val="{{ boolTrue }}">
+            <button onClick="{{ payInvoice }}" style="background:#16b5a7;border:none;border-radius:999px;padding:12px 24px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 4px 14px rgba(22,181,167,.35)">Pay {{ openInv.remaining }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <!-- CONFIRM DIALOG -->
   <sc-if value="{{ dialogOpen }}" hint-placeholder-val="{{ boolFalse }}">
     <div onClick="{{ closeDialog }}" style="position:fixed;inset:0;z-index:1100;background:rgba(20,32,46,.6);display:flex;align-items:center;justify-content:center;padding:20px">
       <div onClick="{{ stop }}" style="width:100%;max-width:400px;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);padding:28px;text-align:center;animation:modalIn .24s cubic-bezier(.16,1,.3,1)">
         <div style="{{ dialogIconWrap }}"><i class="{{ dialogIcon }}" style="font-size:24px;color:{{ dialogIconColor }}"></i></div>
         <div style="font-family:Poppins,sans-serif;font-size:18px;font-weight:700;color:#14202e;margin:16px 0 8px">{{ dialogTitle }}</div>
+        <sc-if value="{{ dialogIsCancel }}" hint-placeholder-val="{{ boolFalse }}">
+          <p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 14px;text-align:left">{{ dialogBody }}</p>
+          <sc-if value="{{ lateCancel }}" hint-placeholder-val="{{ boolFalse }}">
+            <div style="background:#fff8ec;border:1px solid #f6d9a6;border-radius:9px;padding:11px 13px;margin-bottom:14px;text-align:left;display:flex;align-items:flex-start;gap:8px"><i class="fa-solid fa-triangle-exclamation" style="color:#b9740f;font-size:12px;margin-top:2px"></i><span style="font-size:12px;color:#6b7884;line-height:1.6">This is inside our 24-hour notice period, so a late-cancellation fee may apply.</span></div>
+          </sc-if>
+          <div style="text-align:left;margin-bottom:12px">
+            <div style="font-size:12px;font-weight:600;color:#14202e;margin-bottom:8px">Why are you cancelling? *</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px"><sc-for list="{{ cancelReasons }}" as="cr" hint-placeholder-count="5"><button onClick="{{ cr.onSelect }}" style="{{ cr.style }}">{{ cr.label }}</button></sc-for></div>
+            <sc-if value="{{ cancelReasonError }}" hint-placeholder-val="{{ boolFalse }}"><div style="font-size:11px;color:#e74c3c;margin-top:7px">Please choose a reason so we can improve.</div></sc-if>
+          </div>
+          <textarea value="{{ cancelNote }}" onInput="{{ setCancelNote }}" rows="2" placeholder="Anything else we should know? (optional)" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd3da;background:#f9f9f9;font-family:'Open Sans',sans-serif;font-size:13px;color:#14202e;outline:none;resize:vertical;margin-bottom:18px;display:block"></textarea>
+        </sc-if>
+        <sc-if value="{{ dialogNotCancel }}" hint-placeholder-val="{{ boolTrue }}">
         <p style="font-size:14px;color:#6b7884;line-height:1.6;margin:0 0 22px">{{ dialogBody }}</p>
+        </sc-if>
         <div style="display:flex;gap:10px"><button onClick="{{ closeDialog }}" style="flex:1;background:#f5f7f9;border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#6b7884">{{ dialogCancel }}</button><button onClick="{{ dialogConfirm }}" style="{{ dialogConfirmStyle }}">{{ dialogConfirmLabel }}</button></div>
       </div>
     </div>
@@ -525,11 +644,15 @@ class Component extends DCLogic {
       { id: 'n5', title: 'Treatment Plan Updated', body: 'Dr. Mitchell has updated your treatment plan. Please review before your next visit.', time: '10 days ago', type: 'note', unread: false },
     ],
     invoices: [
-      { id: 'INV-2048', service: 'Chiropractic Care', amount: '£120', date: '20 Jun 2026', stripeRef: 'pi_3Oaq2HLF' },
-      { id: 'INV-2041', service: 'Physical Therapy Session', amount: '£95', date: '13 Jun 2026', stripeRef: 'pi_3OaM1GKD' },
-      { id: 'INV-2035', service: 'Chiropractic Assessment', amount: '£120', date: '6 Jun 2026', stripeRef: 'pi_3OZ9xCJA' },
-      { id: 'INV-2028', service: 'Initial Consultation', amount: '£85', date: '2 Jun 2026', stripeRef: 'pi_3OYVpBH2' },
+      { id: 'INV-2060', service: 'Physical Therapy Session', amount: '£95', paid: 0, date: '26 Jun 2026', due: '3 Jul 2026', status: 'Sent', stripeRef: '' },
+      { id: 'INV-2059', service: 'Chiropractic Care', amount: '£120', paid: 60, date: '24 Jun 2026', due: '1 Jul 2026', status: 'Partially Paid', stripeRef: 'pi_3Oe4kQP1' },
+      { id: 'INV-2055', service: 'Sports Rehabilitation', amount: '£110', paid: 0, date: '12 Jun 2026', due: '19 Jun 2026', status: 'Void', stripeRef: '' },
+      { id: 'INV-2048', service: 'Chiropractic Care', amount: '£120', paid: 120, date: '20 Jun 2026', status: 'Paid', stripeRef: 'pi_3Oaq2HLF' },
+      { id: 'INV-2041', service: 'Physical Therapy Session', amount: '£95', paid: 95, date: '13 Jun 2026', status: 'Paid', stripeRef: 'pi_3OaM1GKD' },
+      { id: 'INV-2035', service: 'Chiropractic Assessment', amount: '£120', paid: 120, date: '6 Jun 2026', status: 'Paid', stripeRef: 'pi_3OZ9xCJA' },
+      { id: 'INV-2028', service: 'Initial Consultation', amount: '£85', paid: 85, date: '2 Jun 2026', status: 'Paid', stripeRef: 'pi_3OYVpBH2' },
     ],
+    openInvoiceId: null, payStage: 'idle',
     forms: [
       { id: 'f1', name: 'New Patient Intake', desc: 'Complete before your first visit', icon: 'fa-solid fa-file-medical', fields: [
         { id: 'fq1', label: 'What is the main reason for your visit today?', type: 'textarea', required: true, placeholder: 'Describe your symptoms or condition…' },
@@ -549,7 +672,10 @@ class Component extends DCLogic {
     ],
     fillFormId: null, fillFormOpen: false, fillAnswers: {}, formSubmitted: false,
     viewResponsesFormId: null,
-    pickerOpen: false, pickerMode: null, pickerApptId: null, pickerDay: null, pickerSlot: null, pickerError: false,
+    pickerOpen: false, pickerMode: null, pickerApptId: null, pickerDay: null, pickerSlot: null, pickerError: false, pickerConflict: false, pickerNotice: '',
+    storeBookings: [], storeWaitlist: [], storeTasks: [],
+    userName: 'Alex Thompson', userRef: '#SS-4821',
+    cancelReason: null, cancelNote: '', cancelReasonError: false,
     dialog: null, toast: null,
     // Profile
     pLegalName: 'Alexander Thompson', pPreferredName: 'Alex', pDob: '1990-05-14',
@@ -570,6 +696,48 @@ class Component extends DCLogic {
   DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   SLOTS = ['8:00','9:00','10:00','11:00','1:30','2:30','3:30','4:30'];
+  CLINIC_PHONE = '+44 (0)20 7946 0321';
+  CANCEL_REASONS = ['Feeling better', 'Work or childcare clash', 'Unwell', 'Travel or transport', 'Cost', 'Other'];
+  NOW = { day: 26, month: 5 }; // 26 June 2026 — the clinic's “today” in this prototype
+  MON_IDX = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, June:5, Jul:6, July:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+
+  /* Hours until an appointment whose date reads like “Thu 29 June 2026” or “Mon 29 Jun”. */
+  hoursUntil(dateStr, timeStr) {
+    const m = String(dateStr || '').match(/(\d{1,2})\s+([A-Za-z]+)/);
+    if (!m) return 999;
+    const mo = this.MON_IDX[m[2]];
+    if (mo == null) return 999;
+    const days = (new Date(2026, mo, +m[1]) - new Date(2026, this.NOW.month, this.NOW.day)) / 86400000;
+    const hr = parseFloat(String(timeStr || '9:00')) || 9;
+    return days * 24 + (hr < 8 ? hr + 12 : hr) - 9;
+  }
+
+  syncStore(data) {
+    const d = data || (window.SpineSyncStore ? window.SpineSyncStore.data() : null);
+    if (!d) return;
+    const sess = d.session;
+    const patch = {
+      storeBookings: (d.bookings || []).filter(b => b.status !== 'Cancelled'),
+      storeWaitlist: d.waitlist || [],
+      storeTasks: d.tasks || [],
+    };
+    if (sess && sess.name) {
+      patch.userName = sess.name;
+      if (sess.ref) patch.userRef = sess.ref;
+      // keep the profile record in step with the signed-in identity until the patient edits it
+      if (this.state.pEmail === 'alex.thompson@email.com' && sess.email) patch.pEmail = sess.email;
+      if (this.state.pLegalName === 'Alexander Thompson') {
+        patch.pLegalName = sess.name;
+        patch.pPreferredName = sess.name.split(' ')[0];
+      }
+    }
+    this.setState(patch);
+  }
+  componentDidMount() {
+    this.syncStore();
+    if (window.SpineSyncStore) this._unsub = window.SpineSyncStore.subscribe((d) => this.syncStore(d));
+  }
+  componentWillUnmount() { if (this._unsub) this._unsub(); clearTimeout(this._t); }
 
   buildDays() {
     const out = []; const base = new Date(2026,5,26);
@@ -578,21 +746,44 @@ class Component extends DCLogic {
   }
   slotsFor(idx) { if (idx==null) return []; return this.SLOTS.map((t,i)=>({time:t,taken:(idx+i)%3===0})); }
 
+  payInvoice() {
+    const s = this.state;
+    const inv = s.invoices.find(i => i.id === s.openInvoiceId);
+    if (!inv) return;
+    this.setState({ payStage: 'processing' });
+    setTimeout(() => {
+      // Stripe has taken the card, but our record only updates when the webhook lands
+      this.setState({ payStage: 'confirming' });
+      setTimeout(() => {
+        const ref = 'pi_3' + Math.random().toString(36).slice(2, 10).toUpperCase();
+        const total = parseInt(String(inv.amount).replace(/[^0-9]/g, ''), 10) || 0;
+        const invoices = s.invoices.map(i => i.id === inv.id ? { ...i, status: 'Paid', paid: total, stripeRef: ref } : i);
+        try { if (window.SpineSyncStore) window.SpineSyncStore.updateInvoice(inv.id, { patient: s.userName, service: inv.service, amount: inv.amount, paid: total, status: 'Paid', stripeRef: ref, date: inv.date }); } catch(e) {}
+        this.setState({ invoices, payStage: 'paid' });
+        this.showToast('Payment received — ' + inv.id + ' is settled');
+      }, 1600);
+    }, 1300);
+  }
+
   showToast(msg) { this.setState({toast:msg}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:null}),2600); }
   go(view) { this.setState({view}); }
 
   doLogin() {
     const s = this.state;
     if (!s.loginEmail.trim() || s.loginPassword.trim().length < 6) { this.setState({loginErrors:true}); return; }
-    try { localStorage.setItem('ss_user', JSON.stringify({name:'Alex Thompson',email:s.loginEmail.trim()})); } catch(e) {}
-    this.setState({authView:'app', loginErrors:false});
+    const user = { name: s.loginEmail.trim().split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, c=>c.toUpperCase()) || 'Alex Thompson', email: s.loginEmail.trim(), role: 'patient', surface: 'portal' };
+    try { localStorage.setItem('ss_user', JSON.stringify(user)); } catch(e) {}
+    try { if (window.SpineSyncStore) window.SpineSyncStore.setSession(Object.assign({ ref: '#SS-4821' }, user)); } catch(e) {}
+    this.setState({authView:'app', loginErrors:false, userName:user.name, pLegalName:user.name, pPreferredName:user.name.split(' ')[0], pEmail:user.email});
   }
   doSignup() {
     const s = this.state;
     const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.suEmail.trim());
     if (!s.suFirst.trim()||!s.suLast.trim()||!emailOk||s.suPhone.trim().length<7||s.suPw.length<8||s.suPw!==s.suConfirm) { this.setState({suErrors:true}); return; }
-    try { localStorage.setItem('ss_user', JSON.stringify({name:s.suFirst+' '+s.suLast,email:s.suEmail.trim()})); } catch(e) {}
-    this.setState({authView:'app', suErrors:false});
+    const user = { name: s.suFirst.trim()+' '+s.suLast.trim(), email: s.suEmail.trim(), role: 'patient', surface: 'portal', ref: '#SS-' + Math.floor(1000+Math.random()*8999) };
+    try { localStorage.setItem('ss_user', JSON.stringify(user)); } catch(e) {}
+    try { if (window.SpineSyncStore) window.SpineSyncStore.setSession(user); } catch(e) {}
+    this.setState({authView:'app', suErrors:false, userName:user.name, userRef:user.ref, pLegalName:user.name, pPreferredName:s.suFirst.trim(), pEmail:user.email, pPhone:s.suPhone.trim()});
   }
   doForgot() {
     const s = this.state;
@@ -601,28 +792,68 @@ class Component extends DCLogic {
   }
   doSignout() {
     try { localStorage.removeItem('ss_user'); } catch(e) {}
+    try { if (window.SpineSyncStore) window.SpineSyncStore.clearSession(); } catch(e) {}
     this.setState({authView:'login', dialog:null, loginEmail:'', loginPassword:''});
   }
 
-  openPicker(mode, apptId) { this.setState({pickerOpen:true, pickerMode:mode, pickerApptId:apptId||null, pickerDay:null, pickerSlot:null, pickerError:false}); }
+  openPicker(mode, apptId) { this.setState({pickerOpen:true, pickerMode:mode, pickerApptId:apptId||null, pickerDay:null, pickerSlot:null, pickerError:false, pickerConflict:false, pickerNotice:''}); }
   confirmPicker() {
     const s = this.state;
-    if (s.pickerDay==null||!s.pickerSlot) { this.setState({pickerError:true}); return; }
+    if (s.pickerDay==null||!s.pickerSlot) { this.setState({pickerError:true, pickerConflict:false}); return; }
     const day = this.buildDays()[s.pickerDay];
     const dateStr = `${day.dow} ${day.date} ${day.mon} 2026`;
+    // the slot can be claimed by someone else between opening the picker and confirming
+    if (s.pickerSlot === '4:30') { this.setState({pickerConflict:true, pickerNotice:'That time was taken while you were choosing. Your original appointment is unchanged — pick another slot.', pickerSlot:null, pickerError:false}); return; }
+    const clash = s.storeBookings.concat(s.upcoming).find(a => {
+      const key = day.date + ' ' + day.mon;
+      return (a.ref||a.id) !== s.pickerApptId && String(a.date||'').indexOf(key) >= 0 && String(a.time||'').indexOf(s.pickerSlot) === 0;
+    });
+    if (clash) { this.setState({pickerConflict:true, pickerNotice:'You already have an appointment at that time on ' + day.dow + ' ' + day.date + ' ' + day.mon + '. Pick another slot, or reschedule the existing one instead.', pickerError:false}); return; }
     if (s.pickerMode==='reschedule') {
+      const stored = s.storeBookings.find(b => b.ref === s.pickerApptId);
+      if (stored && ['Checked In','Completed','No-show'].indexOf(stored.status) >= 0) {
+        this.setState({pickerOpen:false, pickerConflict:false});
+        this.showToast('The clinic has already recorded this visit — please call us instead');
+        return;
+      }
+      if (stored) {
+        try { if (window.SpineSyncStore) window.SpineSyncStore.updateBooking(stored.ref, { date: `${day.dow} ${day.date} ${day.mon}`, time: s.pickerSlot, status: 'Confirmed' }); } catch(e) {}
+        this.setState({pickerOpen:false, pickerConflict:false});
+        this.showToast('Appointment rescheduled — the clinic has been notified');
+        return;
+      }
       const up = s.upcoming.map(a => a.id===s.pickerApptId ? {...a,date:dateStr,time:`${s.pickerSlot} · 45 min`} : a);
-      this.setState({upcoming:up, pickerOpen:false});
+      this.setState({upcoming:up, pickerOpen:false, pickerConflict:false});
       this.showToast('Appointment rescheduled');
     } else {
       const newA = {id:'a'+Date.now(), title:'Treatment Session', prac:'Dr. Sarah Mitchell', date:dateStr, time:`${s.pickerSlot} · 45 min`, room:'Room 3, Floor 2', note:''};
-      this.setState({upcoming:[...s.upcoming, newA], pickerOpen:false, apptTab:'upcoming'});
+      try {
+        if (window.SpineSyncStore) window.SpineSyncStore.addBooking({
+          patient: s.userName, email: s.pEmail, phone: s.pPhone, serviceLabel: 'Treatment Session',
+          pracLabel: 'Dr. Sarah Mitchell', date: `${day.dow} ${day.date} ${day.mon}`, time: s.pickerSlot,
+          tz: 'Europe/London (BST)', status: 'Confirmed', source: 'portal',
+        });
+      } catch(e) {}
+      this.setState({upcoming:[...s.upcoming, newA], pickerOpen:false, apptTab:'upcoming', pickerConflict:false});
       this.showToast('Appointment booked');
     }
   }
   doCancel(apptId) {
-    this.setState({upcoming:this.state.upcoming.filter(a=>a.id!==apptId), dialog:null});
-    this.showToast('Appointment cancelled');
+    const s = this.state;
+    if (!s.cancelReason) { this.setState({cancelReasonError:true}); return; }
+    const stored = s.storeBookings.find(b => b.ref === apptId);
+    if (stored) {
+      if (['Checked In','Completed','No-show'].indexOf(stored.status) >= 0) {
+        this.setState({dialog:null, cancelReason:null, cancelNote:'', cancelReasonError:false});
+        this.showToast('The clinic has already recorded this visit — please call us instead');
+        return;
+      }
+      try { if (window.SpineSyncStore) window.SpineSyncStore.updateBooking(stored.ref, { status: 'Cancelled', cancelReason: s.cancelReason, cancelNote: s.cancelNote }); } catch(e) {}
+    } else {
+      try { if (window.SpineSyncStore) window.SpineSyncStore.log(s.userName, 'Appointment cancelled — ' + s.cancelReason, apptId); } catch(e) {}
+    }
+    this.setState({upcoming:this.state.upcoming.filter(a=>a.id!==apptId), dialog:null, cancelReason:null, cancelNote:'', cancelReasonError:false});
+    this.showToast('Appointment cancelled — the clinic has been notified');
   }
 
   openFillForm(formId) { this.setState({fillFormOpen:true, fillFormId:formId, fillAnswers:{}, formSubmitted:false}); }
@@ -635,6 +866,11 @@ class Component extends DCLogic {
     if (!allFilled) { this.showToast('Please fill in all required fields'); return; }
     const newResp = { date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), answers: form.fields.map(f=>({q:f.label, a:s.fillAnswers[f.id]||'—'})) };
     const forms = s.forms.map(f => f.id===s.fillFormId ? {...f, responses:[...f.responses, newResp]} : f);
+    if (s.fillFormId === 'f1') {
+      try {
+        if (window.SpineSyncStore) (s.storeTasks||[]).filter(t=>t.type==='intake'&&t.status!=='Completed').forEach(t=>window.SpineSyncStore.completeTask(t.id));
+      } catch(e) {}
+    }
     this.setState({forms, formSubmitted:true});
     this.showToast('Form submitted successfully');
   }
@@ -680,28 +916,68 @@ class Component extends DCLogic {
     const profileNavStyle = `display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;background:${s.view==='profile'?'rgba(22,181,167,.1)':'transparent'};color:${s.view==='profile'?teal:'#6b7884'};font-family:Poppins,sans-serif;font-weight:${s.view==='profile'?700:500};font-size:14px;width:100%;text-align:left`;
 
     const headers = {
-      overview: ['Good morning, Alex', 'Thursday, 26 June 2026'],
+      overview: ['Good morning, ' + (s.userName || 'there').split(' ')[0], 'Thursday, 26 June 2026'],
       appointments: ['My Appointments', 'Manage your upcoming and past sessions'],
-      invoices: ['Invoices', 'Your billing history — all paid via Stripe'],
+      invoices: ['Invoices', 'Your billing history and payments'],
       notifications: ['Notifications', 'Stay up to date with your care'],
       forms: ['Forms', 'Complete forms from your care team'],
       profile: ['My Profile', 'Manage your personal and medical details'],
     };
 
     const top = s.upcoming[0];
-    const upcomingAppts = s.upcoming.map(a=>({
-      ...a,
-      hasNote: !!a.note,
-      onReschedule: ()=>this.openPicker('reschedule',a.id),
-      onCancel: ()=>this.setState({dialog:{type:'cancel',apptId:a.id}}),
+    const storeAppts = s.storeBookings.map(b => ({
+      id: b.ref, title: b.serviceLabel || 'Appointment', prac: b.pracLabel || 'First available',
+      date: b.date + ' 2026', time: (b.time || '') + ' · 45 min', room: 'Confirmed on arrival',
+      note: b.deposit ? ('Deposit of ' + b.deposit + ' received and offset against your first invoice.') : '',
+      ref: b.ref, fromStore: true, status: b.status || 'Confirmed',
     }));
-    const topAppt = top ? {
-      title:top.title, prac:top.prac, date:top.date, time:top.time, room:top.room, note:top.note,
-      onReschedule:()=>this.openPicker('reschedule',top.id),
-      onCancel:()=>this.setState({dialog:{type:'cancel',apptId:top.id}}),
-    } : {title:'',prac:'',date:'',time:'',room:'',note:'', onReschedule:()=>{}, onCancel:()=>{}};
+    const settled = { 'Checked In': 1, 'Completed': 1, 'No-show': 1 };
+    const allUpcoming = storeAppts.filter(a => !settled[a.status]).concat(s.upcoming);
+    const settledAppts = storeAppts.filter(a => settled[a.status]);
+    const badgeColor = (st) => ({ 'Confirmed':'teal', 'Requested':'warning', 'Checked In':'warning', 'Completed':'success', 'No-show':'danger', 'Cancelled':'navy' }[st] || 'teal');
+    const decorate = (a) => {
+      const hrs = this.hoursUntil(a.date, a.time);
+      const st = a.status || 'Confirmed';
+      const clinicHandled = !!settled[st];
+      const canChange = hrs >= 24 && !clinicHandled;
+      return Object.assign({}, a, {
+        hasNote: !!a.note,
+        status: st, badgeColor: badgeColor(st),
+        canChange, locked: !canChange,
+        lockNote: clinicHandled
+          ? (st === 'No-show'
+              ? 'The clinic recorded this visit as missed. Call us to rebook — a fee may apply.'
+              : 'The clinic has already ' + (st === 'Completed' ? 'completed' : 'checked you in for') + ' this visit, so it can no longer be changed here.')
+          : hrs < 0
+            ? 'This appointment has passed. Book a follow-up or call us if you need help.'
+            : 'Inside 24 hours we can no longer change this online — please call the clinic and we will do what we can.',
+        onReschedule: () => this.openPicker('reschedule', a.id),
+        onCancel: () => this.setState({dialog:{type:'cancel', apptId:a.id, hours:hrs}, cancelReason:null, cancelNote:'', cancelReasonError:false}),
+      });
+    };
+    const upcomingAppts = allUpcoming.map(decorate);
+    const topSrc = allUpcoming[0];
+    const topAppt = topSrc ? decorate(topSrc) : {title:'',prac:'',date:'',time:'',room:'',note:'', status:'Confirmed', badgeColor:'teal', canChange:false, locked:false, lockNote:'', onReschedule:()=>{}, onCancel:()=>{}};
+    const waitlistEntries = s.storeWaitlist.map(w => ({
+      serviceLabel: w.serviceLabel || 'Any treatment',
+      pracLabel: w.pracLabel || 'First available',
+      windows: (w.dayparts || ['Any time']).join(' · '),
+      onLeave: () => { try { if (window.SpineSyncStore) window.SpineSyncStore.removeWaitlist(w.id); } catch(e) {} this.showToast('Removed from the waitlist'); },
+    }));
+    const storeTaskVals = s.storeTasks.map(t => {
+      const out = t.status !== 'Completed';
+      return Object.assign({}, t, {
+        outstanding: out, ref: t.ref || '—', due: t.due || 'Before your visit',
+        badgeColor: out ? 'warning' : 'success',
+        statusLabel: out ? 'Outstanding' : 'Completed',
+        onStart: () => this.openFillForm('f1'),
+      });
+    });
 
-    const pastAppts = this.PAST.map(p=>({...p, hasNote:!!p.note}));
+    const pastAppts = settledAppts.map(a => ({
+      title: a.title, date: a.date, prac: a.prac, note: a.note,
+      hasNote: !!a.note, status: a.status, badgeColor: badgeColor(a.status),
+    })).concat(this.PAST.map(p=>({...p, hasNote:!!p.note, status:'Completed', badgeColor:'success'})));
     const recentPastAppts = this.PAST.slice(0,3);
 
     const unreadNotifCount = s.notifications.filter(n=>n.unread).length;
@@ -712,8 +988,33 @@ class Component extends DCLogic {
     });
     const notifPreview = notifications.slice(0,3);
 
-    const invoiceTotalPaid = s.invoices.reduce((sum,i)=>sum+parseInt(i.amount.replace('£','')),0);
-    const invoices = s.invoices;
+    const money = (n) => '£' + n;
+    const invTotal = (i) => parseInt(String(i.amount).replace(/[^0-9]/g,''),10) || 0;
+    const invBadge = (st) => ({ 'Paid':'success', 'Sent':'warning', 'Partially Paid':'warning', 'Overdue':'danger', 'Void':'navy', 'Draft':'navy' }[st] || 'teal');
+    const openInvoices = s.invoices.filter(i => i.status === 'Sent' || i.status === 'Partially Paid' || i.status === 'Overdue');
+    const balanceDue = openInvoices.reduce((sum,i) => sum + (invTotal(i) - (i.paid||0)), 0);
+    const invoiceTotalPaid = s.invoices.reduce((sum,i) => sum + (i.paid||0), 0);
+    const invRow = (i) => ({
+      id: i.id, service: i.service, amount: i.amount, date: i.date, stripeRef: i.stripeRef || '—',
+      status: i.status, badgeColor: invBadge(i.status),
+      dueLabel: i.due ? ('Due ' + i.due) : ('Paid ' + i.date),
+      remaining: money(invTotal(i) - (i.paid||0)),
+      payable: i.status === 'Sent' || i.status === 'Partially Paid' || i.status === 'Overdue',
+      onOpen: () => this.setState({ openInvoiceId: i.id, payStage: 'idle' }),
+    });
+    const invoices = s.invoices.map(invRow);
+    const openInvoiceRows = openInvoices.map(invRow);
+    const openInv = s.invoices.find(i => i.id === s.openInvoiceId) || null;
+    const openInvVals = openInv ? {
+      id: openInv.id, service: openInv.service, date: openInv.date,
+      dueLabel: openInv.due ? ('Due ' + openInv.due) : ('Issued ' + openInv.date),
+      status: openInv.status, badgeColor: invBadge(openInv.status),
+      total: openInv.amount, paid: money(openInv.paid||0), remaining: money(invTotal(openInv) - (openInv.paid||0)),
+      hasPaid: (openInv.paid||0) > 0, stripeRef: openInv.stripeRef || '—',
+      payable: (openInv.status==='Sent'||openInv.status==='Partially Paid'||openInv.status==='Overdue') && s.payStage==='idle',
+      isVoid: openInv.status === 'Void',
+      lines: [{ desc: openInv.service + ' — 45 minutes with your practitioner', amount: openInv.amount }],
+    } : { id:'', service:'', date:'', dueLabel:'', status:'', badgeColor:'teal', total:'', paid:'', remaining:'', hasPaid:false, stripeRef:'', payable:false, isVoid:false, lines:[] };
 
     const patientForms = s.forms.map(f=>({
       id:f.id, name:f.name, desc:f.desc, icon:f.icon,
@@ -776,13 +1077,13 @@ class Component extends DCLogic {
       const sel=s.pickerDay===i, dis=d.closed;
       return {dow:d.dow, date:String(d.date), mon:d.mon, disabled:dis,
         style:`flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;width:60px;padding:10px 0;border-radius:12px;cursor:${dis?'not-allowed':'pointer'};border:2px solid ${sel?teal:'#e2e7ec'};background:${sel?'#f0faf9':dis?'#f5f7f9':'#fff'};color:${dis?'#cbd3da':sel?teal:'#14202e'};opacity:${dis?'.6':'1'}`,
-        onSelect:dis?(()=>{}):(()=>this.setState({pickerDay:i, pickerSlot:null, pickerError:false}))};
+        onSelect:dis?(()=>{}):(()=>this.setState({pickerDay:i, pickerSlot:null, pickerError:false, pickerConflict:false, pickerNotice:''}))};
     });
     const pslots = this.slotsFor(s.pickerDay).map(sl=>{
       const sel=s.pickerSlot===sl.time;
       return {time:sl.time, taken:sl.taken,
         style:`padding:11px 0;text-align:center;border-radius:9px;cursor:${sl.taken?'not-allowed':'pointer'};font-family:Poppins,sans-serif;font-size:13px;font-weight:600;border:2px solid ${sel?teal:'#e2e7ec'};background:${sel?teal:sl.taken?'#f5f7f9':'#fff'};color:${sel?'#fff':sl.taken?'#cbd3da':'#14202e'};text-decoration:${sl.taken?'line-through':'none'}`,
-        onSelect:sl.taken?(()=>{}):(()=>this.setState({pickerSlot:sl.time, pickerError:false}))};
+        onSelect:sl.taken?(()=>{}):(()=>this.setState({pickerSlot:sl.time, pickerError:false, pickerConflict:false, pickerNotice:''}))};
     });
 
     // Dialog
@@ -794,12 +1095,27 @@ class Component extends DCLogic {
 
     return {
       boolTrue:true, boolFalse:false,
+      clinicPhone: this.CLINIC_PHONE,
+      userName: s.userName, userRef: s.userRef,
+      userInitials: s.userName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),
+      waitlistEntries, hasWaitlist: waitlistEntries.length > 0,
+      storeTasks: storeTaskVals, hasStoreTasks: storeTaskVals.length > 0,
+      cancelReasons: this.CANCEL_REASONS.map(r => ({
+        label: r,
+        style: `padding:7px 13px;border-radius:999px;cursor:pointer;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;border:1px solid ${s.cancelReason===r?teal:'#e2e7ec'};background:${s.cancelReason===r?'#f0faf9':'#fff'};color:${s.cancelReason===r?teal:'#6b7884'}`,
+        onSelect: () => this.setState({cancelReason:r, cancelReasonError:false}),
+      })),
+      cancelNote: s.cancelNote, setCancelNote: (e)=>this.setState({cancelNote:e.target.value}),
+      cancelReasonError: s.cancelReasonError,
+      dialogIsCancel: isCancel, dialogNotCancel: !isCancel,
+      lateCancel: !!(dlg && dlg.hours != null && dlg.hours < 24),
+      pickerConflict: s.pickerConflict, pickerNotice: s.pickerNotice,
+      pickerErrorMsg: s.pickerDay==null ? 'Please choose a day and a time.' : 'Please choose a time on that day.',
       nav, profileNavStyle,
       goNotifications:()=>this.go('notifications'), goAppts:()=>this.go('appointments'),
       goForms:()=>this.go('forms'), goProfile:()=>this.go('profile'),
       confirmSignout:()=>this.setState({dialog:{type:'signout'}}),
       headerTitle: (headers[s.view]||headers.overview)[0],
-      headerSub: (headers[s.view]||headers.overview)[1],
       hasUnreadNotifs: unreadNotifCount>0,
 
       isOverview:s.view==='overview', isAppts:s.view==='appointments',
@@ -807,13 +1123,26 @@ class Component extends DCLogic {
       isForms:s.view==='forms', isProfile:s.view==='profile',
 
       // Overview
-      nextApptDate: top ? top.date.split(' ').slice(1,3).join(' ') : '—',
-      nextApptSub: top ? top.time.split(' · ')[0]+' · '+top.prac.split(' ')[1] : 'No appointment',
-      totalBookings: String(s.upcoming.length + this.PAST.length),
-      pastCount: String(this.PAST.length), futureCount: String(s.upcoming.length),
+      nextApptDate: topSrc ? topSrc.date.split(' ').slice(1,3).join(' ') : '—',
+      nextApptSub: topSrc ? (topSrc.time.split(' · ')[0] + ' · ' + (/^Dr\.?\s/i.test(topSrc.prac) ? topSrc.prac.split(' ').slice(1).join(' ') : topSrc.prac)) : 'No appointment',
+      pastCount: String(pastAppts.length),
+      totalBookings: String(allUpcoming.length + pastAppts.length),
+      pastCountUnused: String(this.PAST.length), futureCount: String(allUpcoming.length),
       invoiceCount: String(s.invoices.length), invoiceTotalPaid: String(invoiceTotalPaid),
+      balanceDue: String(balanceDue), hasBalance: balanceDue > 0, noBalance: balanceDue === 0,
+      balanceHeadline: balanceDue > 0 ? ('£' + balanceDue) : 'All clear',
+      balanceColor: balanceDue > 0 ? '#14202e' : '#27ae60',
+      balanceSub: balanceDue > 0 ? (openInvoices.length + ' invoice(s) to pay') : (s.invoices.length + ' paid via Stripe'),
+      openInvoiceRows, hasOpenInvoices: openInvoiceRows.length > 0,
+      openInvoiceCount: String(openInvoiceRows.length),
+      openInvoiceOpen: !!openInv, openInv: openInvVals,
+      closeInvoice: () => this.setState({ openInvoiceId: null, payStage: 'idle' }),
+      payInvoice: () => this.payInvoice(),
+      payIdle: s.payStage === 'idle', payProcessing: s.payStage === 'processing',
+      payConfirming: s.payStage === 'confirming', payPaid: s.payStage === 'paid',
+      downloadInvoice: () => this.showToast('Invoice PDF sent to your email'),
       unreadNotifCount: String(unreadNotifCount),
-      hasUpcoming:s.upcoming.length>0, noUpcoming:s.upcoming.length===0,
+      hasUpcoming:allUpcoming.length>0, noUpcoming:allUpcoming.length===0,
       topAppt, recentPastAppts, notifPreview, pendingForms,
       openBook:()=>this.openPicker('book',null),
 
@@ -872,6 +1201,9 @@ class Component extends DCLogic {
 
       // Picker
       pickerOpen:s.pickerOpen, pickerError:s.pickerError,
+      headerSub: s.view === 'invoices'
+        ? (balanceDue > 0 ? ('£' + balanceDue + ' outstanding · pay securely by card') : 'Your billing history — nothing outstanding')
+        : (headers[s.view]||headers.overview)[1],
       pickerTitle:s.pickerMode==='reschedule'?'Reschedule Appointment':'Book Appointment',
       pickerCta:s.pickerMode==='reschedule'?'Confirm New Time':'Confirm Booking',
       pdays, pslots,
@@ -884,7 +1216,7 @@ class Component extends DCLogic {
       dialogIconColor:isCancel?'#e74c3c':'#16b5a7',
       dialogIconWrap:`width:56px;height:56px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:${isCancel?'rgba(231,76,60,.1)':'rgba(22,181,167,.1)'}`,
       dialogTitle:isCancel?'Cancel this appointment?':'Sign out?',
-      dialogBody:isCancel?'This will free up your slot. You can re-book any time.':'You will need to sign in again to access your account.',
+      dialogBody:isCancel?'This will free up your slot for another patient. You can re-book any time.':'You will need to sign in again to access your account.',
       dialogCancel:isCancel?'Keep It':'Stay',
       dialogConfirmLabel:isCancel?'Yes, Cancel':'Sign Out',
       dialogConfirmStyle:`flex:1;background:${isCancel?'#e74c3c':'#14202e'};border:none;border-radius:999px;padding:12px;cursor:pointer;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.04em`,
